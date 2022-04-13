@@ -33,6 +33,36 @@ run project in development mode
 ```bash
 npm start
 ```
+### Pull Request from dev
+if not sure where you are... always use
+```bash
+git status
+```
+checkout to branch "dev"
+```bash
+git checkout dev
+```
+new feature, Example -> LoginPage
+```bash
+git checkout -b feature/loginPage
+```
+done...
+### Push from local to remote repository
+if not sure where you are... always use
+```bash
+git status
+```
+```bash
+git add .
+git commit -m "comments what you have done"
+git push origin feature/loginPage
+```
+go to github website </br>
+merge pull request from feature/loginPage to dev
+
+after merge, delete your feature branch.
+
+done...
 
 ## Authors
 - [@Sirawit Sukwattanavit (62010948)](https://github.com/sirawit-suk)

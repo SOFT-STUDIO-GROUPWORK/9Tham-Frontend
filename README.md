@@ -1,3 +1,44 @@
+# 9Tham Frontend
+
+## VS-code Extension
+### Recommended (Must have)
+1. JavaScript and TypeScript Nightly
+2. ESLint
+3. ES7+ React/Redux/React-Native snippets
+4. Prettier - Code formatter
+5. [Deprecated] Bracket Pair Colorizer 2
+6. TSLint
+6. Tailwind CSS IntelliSense
+7. Path Intellisense
+8. npm Intellisense
+9. IntelliSense for CSS class names in HTML
+10. HTML Snippets
+11. HTML CSS Support
+12. GitLens — Git supercharged
+13. Live Server
+14. Auto Rename Tag
+15. Color Highlight
+16. CSS Peek
+17. Material Icon Theme
+
+### Personalize (Should have)
+1. Atom One Dark Theme
+
+## Dev Locally
+install package from package.json
+```bash
+npm install
+```
+run project in development mode
+```bash
+npm start
+```
+
+## Authors
+- [@Sirawit Sukwattanavit (62010948)](https://github.com/sirawit-suk)
+- Add yours
+- Add yours
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

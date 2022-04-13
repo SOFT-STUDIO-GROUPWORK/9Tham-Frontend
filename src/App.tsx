@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HomePage, ManageAccountPage, ProfilePage } from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
-
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 //React Router v6 -> change "Switch" to "Routes"
 
 function App() {
@@ -20,6 +21,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/Profile/:id" element={<ProfilePage />} />
           <Route path="/ManageAccount" element={<ManageAccountPage />} />
+          <Route path="/Login" element={<LoginPage />} />
+          <Route path="/Register" element={<RegisterPage />} />
           {/* insert path here */}
 
           {/* redirect if path not found */}

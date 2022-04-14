@@ -1,6 +1,11 @@
 // import { FaBeer } from 'react-icons/fa';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { HomePage, ManageAccountPage, ProfilePage } from "./pages";
+import {
+  HomePage,
+  ManageAccountPage,
+  ProfilePage,
+  DetailAccountPage,
+} from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 
@@ -21,7 +26,7 @@ function App() {
           <Route path="/Profile/:id" element={<ProfilePage />} />
           <Route path="/ManageAccount" element={<ManageAccountPage />} />
           {/* insert path here */}
-
+          <Route path="/DetailAccount" element={<DetailAccountPage />} />
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

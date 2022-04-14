@@ -69,13 +69,13 @@ const ManageAccountPage = (props: Props) => {
           <tbody>
             {Account.map((e) => (
               <tr className="text-sm text-left hover:bg-gray-100">
-                <th className="text-center">รูปภาพ</th>
-                <th>{e.id}</th>
-                <th>{e.username}</th>
-                <th>{e.name}</th>
-                <th>{e.surname}</th>
-                <th>{e.role}</th>
-                <th>{e.status}</th>
+                <td className="text-center">รูปภาพ</td>
+                <td>{e.id}</td>
+                <td>{e.username}</td>
+                <td>{e.name}</td>
+                <td>{e.surname}</td>
+                <td>{e.role}</td>
+                <td>{e.status}</td>
               </tr>
             ))}
           </tbody>

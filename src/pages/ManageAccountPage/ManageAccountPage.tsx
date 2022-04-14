@@ -68,7 +68,7 @@ const ManageAccountPage = (props: Props) => {
           </thead>
           <tbody>
             {Account.map((e) => (
-              <tr className="text-sm text-left">
+              <tr className="text-sm text-left hover:bg-gray-100">
                 <th className="text-center">รูปภาพ</th>
                 <th>{e.id}</th>
                 <th>{e.username}</th>

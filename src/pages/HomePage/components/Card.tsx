@@ -8,7 +8,7 @@ type Props = {
 const Card = (props: Props) => {
   return (
     <Link to="/">
-      <div className="p-1 px-1.5 flex flex-col items-center bg-white rounded-lg border shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+      <div className="p-1 px-1.5 flex flex-col items-center bg-white rounded-lg border shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
         {/* left */}
         <div className="flex flex-col justify-between">
           <img
@@ -19,7 +19,7 @@ const Card = (props: Props) => {
         </div>
         {/* right */}
         <div className="flex flex-col justify-between p-4">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
             {props.title}
           </h5>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="fixed w-full bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600  p-3 shadow-2xl z-50">
+    <div className="fixed w-full bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600  p-3 shadow-lg z-50">
       <nav className="container w-3/4 mx-auto flex items-center justify-between flex-wrap">
         <Link to="/">
           <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -32,24 +32,24 @@ const Navbar = () => {
         </div>
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
           <div className="text-sm lg:flex-grow">
-            <a
-              href="#responsive-header"
+            <Link
+              to={"/"}
               className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               หน้าแรก
-            </a>
+            </Link>
             <Link
               to={"/login"}
               className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               เข้าสู่ระบบ
             </Link>
-            <a
-              href="#responsive-header"
+            <Link
+              to={"/post"}
               className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
             >
-              Blog
-            </a>
+              บทความ
+            </Link>
           </div>
           <div>
             {/* register page */}

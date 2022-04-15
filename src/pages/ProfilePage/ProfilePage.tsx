@@ -5,13 +5,18 @@
 // (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
 // by Pop (delete if already read)
 
-import React from "react";
+import React, { useState } from "react";
 import Card from "../HomePage/components/Card";
+import { Link } from "react-router-dom";
+import "./ProfilePage.css";
 
 type Props = {};
-
 const ProfilePage = (props: Props) => {
-  // check at my homePage before proceed by pop (delete if already read)
+  const [toggleState, setToggleState] = useState(1);
+
+  const toggleTab = (index: any) => {
+    setToggleState(index);
+  };
   return (
     <div className="container mx-auto">
       <div>
@@ -35,15 +40,21 @@ const ProfilePage = (props: Props) => {
         <div className="border border-fGrey mt-6 border-opacity-10" />
         <div className="flex justify-between px-10">
           <div className="flex items-center space-x-4">
-            <button className="min-w-fit w-1/2 h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
-              เพิ่มบทความใหม่
-            </button>
-            <button className="min-w-fit w-1/2 h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
-              ประชาสัมพันธ์
-            </button>
-            <button className="min-w-fit w-1/2 h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
-              จัดการบัญชีผู้ใช้
-            </button>
+            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+              <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
+                เพิ่มบทความใหม่
+              </button>
+            </Link>
+            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+              <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
+                ประชาสัมพันธ์
+              </button>
+            </Link>
+            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+              <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
+                จัดการบัญชีผู้ใช้
+              </button>
+            </Link>
           </div>
           <div className="flex items-center space-x-2">
             <img
@@ -60,55 +71,54 @@ const ProfilePage = (props: Props) => {
         <div className="border border-fGrey border-opacity-10" />
       </div>
       <div>
-        <div className="flex space-x-4 justify-start px-96">
-          <button className="min-w-fit w-36 h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 text-white text-md">
-            บทความ
-          </button>
-          <button className="min-w-fit w-36 h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 text-white text-md">
-            ฉบับร่าง
-          </button>
-        </div>
-        <div className="grid grid-cols-1 gap-4 px-96">
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
-          <Card
-            title="เข้าวัดทำบุญ ได้อะไร"
-            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-            type="ความรู้ธรรมะ"
-          />
+        <div className="container px-96 pt-10">
+          <div className="bloc-tabs">
+            <button
+              className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+              onClick={() => toggleTab(1)}
+            >
+              บทความ
+            </button>
+            <button
+              className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+              onClick={() => toggleTab(2)}
+            >
+              ฉบับร่าง
+            </button>
+          </div>
+          <div className="w-full content-tabs">
+            <div
+              className={
+                toggleState === 1
+                  ? "w-full content  active-content"
+                  : "w-full content"
+              }
+            >
+              <Card
+                title="เข้าวัดทำบุญ ได้อะไร"
+                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+                type="ความรู้ธรรมะ"
+              />
+              <Card
+                title="เข้าวัดทำบุญ ได้อะไร"
+                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+                type="ความรู้ธรรมะ"
+              />
+              <Card
+                title="เข้าวัดทำบุญ ได้อะไร"
+                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+                type="ความรู้ธรรมะ"
+              />
+            </div>
+
+            <div
+              className={
+                toggleState === 2 ? "content  active-content" : "content"
+              }
+            >
+              <h2>Content 2</h2>
+            </div>
+          </div>
         </div>
       </div>
     </div>

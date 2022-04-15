@@ -46,9 +46,15 @@ const Navbar = () => {
             </Link>
             <Link
               to={"/post"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
+              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               บทความ
+            </Link>
+            <Link
+              to={"/editPost"}
+              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
+            >
+              แก้ไขบทความ
             </Link>
           </div>
           <div>

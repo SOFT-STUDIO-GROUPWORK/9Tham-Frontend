@@ -1,6 +1,6 @@
 // import { FaBeer } from 'react-icons/fa';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { HomePage, ManageAccountPage, ProfilePage, PostPage } from "./pages";
+import { HomePage, ManageAccountPage, ProfilePage, PostPage, EditPostPage } from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -24,6 +24,7 @@ function App() {
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Register" element={<RegisterPage />} />
           <Route path="/Post" element={<PostPage />} />
+          <Route path="/EditPost" element={<EditPostPage />} />
           {/* insert path here */}
 
           {/* redirect if path not found */}

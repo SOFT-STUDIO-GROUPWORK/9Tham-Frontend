@@ -3,6 +3,7 @@
 // Pop
 export { default as HomePage } from "./HomePage/HomePage"; // Pop
 export { default as PostPage } from "./PostPage/PostPage"; // Pop
+export { default as EditPostPage } from "./EditPostPage/EditPostPage"; // Pop
 
 // Pufa
 export { default as ProfilePage } from "./ProfilePage/ProfilePage"; //Pufa

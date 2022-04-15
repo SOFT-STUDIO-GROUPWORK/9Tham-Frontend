@@ -1,7 +1,12 @@
 import Selector from "./components/Selector";
 import Searchbar from "./components/Searchbar";
 import Card from "./components/Card";
-import Pagination from "./components/Pagination"
+import Pagination from "./components/Pagination";
+
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
+
+import MOCK_BANNER from "../../mocks/SildeBanner/sildingBanner.json";
 
 type Props = {};
 const sortOptions: string[] = ["ล่าสุด", "เก่าสุด"];
@@ -26,7 +31,24 @@ const HomePage = (props: Props) => {
       >
         {/* content start*/}
         {/* Banner */}
-        <div className="border-4 border-red-200 w-full h-60">banner</div>
+        <div className="border-0 border-red-200 w-full h-60">
+          <Carousel
+            autoPlay
+            infiniteLoop
+            swipeable
+            emulateTouch
+            showThumbs={false}
+            showStatus={false}
+          >
+            {MOCK_BANNER.map((obj) => {
+              return (
+                <div className="h-60">
+                  <img className="object-cover h-60" src={obj.src} alt={obj.src} />
+                </div>
+              );
+            })}
+          </Carousel>
+        </div>
 
         {/* TopBar start*/}
         <div className="my-6 border-0 border-red-200 w-full flex flex-row gap-x-5 items-center">
@@ -39,19 +61,51 @@ const HomePage = (props: Props) => {
         </div>
         {/* TopBar end*/}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
+          <Card
+            title="เข้าวัดทำบุญ ได้อะไร"
+            description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
+            type="ความรู้ธรรมะ"
+          />
         </div>
 
-        <Pagination/>
-
+        <div className="w-full my-3 shadow">
+          <Pagination />
+        </div>
 
         {/* content end */}
       </div>

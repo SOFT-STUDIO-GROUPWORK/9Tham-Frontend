@@ -27,11 +27,11 @@ const HomePage = (props: Props) => {
     <div className="container mx-auto">
       <div
         className="flex flex-col items-center mx-auto w-3/4 bg-slate-50  px-2"
-        style={{ minHeight: "calc(100vh - 88px)" }}
+        style={{ minHeight: "calc(100vh - 64px)" }}
       >
         {/* content start*/}
         {/* Banner */}
-        <div className="border-0 border-red-200 w-full h-60">
+        <div className="border-0 border-red-200 w-full h-60 mt-24">
           <Carousel
             autoPlay
             infiniteLoop

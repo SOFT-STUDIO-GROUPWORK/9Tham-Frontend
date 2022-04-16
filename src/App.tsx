@@ -5,10 +5,12 @@ import {
   ManageAccountPage,
   ProfilePage,
   DetailAccountPage,
+  AnnoucementFormPage,
 } from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
-
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 //React Router v6 -> change "Switch" to "Routes"
 
 function App() {
@@ -25,8 +27,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/Profile/:id" element={<ProfilePage />} />
           <Route path="/ManageAccount" element={<ManageAccountPage />} />
+          <Route path="/Login" element={<LoginPage />} />
+          <Route path="/Register" element={<RegisterPage />} />
           {/* insert path here */}
           <Route path="/DetailAccount" element={<DetailAccountPage />} />
+          <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

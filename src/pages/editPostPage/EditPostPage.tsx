@@ -2,7 +2,6 @@ import TextEditor from "./components/TextEditor";
 import Input from "./components/Input";
 import ProfileTopBar from "../PostPage/components/ProfileTopBar";
 
-
 import MOCK_POST from "../../mocks/Post/post.json";
 
 type Props = {};
@@ -29,20 +28,13 @@ const EditPostPage = (props: Props) => {
           <span className="text-amber-500">*</span>
           หัวข้อเรื่อง
         </h4>
-        <Input placeholder="หัวข้อเรื่อง..."/>
+        <Input placeholder="หัวข้อเรื่อง..." />
 
         <h4 className="w-full">
           <span className="text-amber-500">*</span>
           คำอธิบายขนาดสั้น
         </h4>
-        <Input placeholder="คำอธิบายขนาดสั้น"/>
-
-
-        <h4 className="w-full">
-          <span className="text-amber-500">*</span>
-          เนื้อหา
-        </h4>
-        <Input placeholder="เนื้อหา"/>
+        <Input placeholder="คำอธิบายขนาดสั้น" />
 
         <h4 className="w-full">
           <span className="text-amber-500">*</span>
@@ -55,6 +47,10 @@ const EditPostPage = (props: Props) => {
         </h4>
         <input type="file" />
 
+        <h4 className="w-full">
+          <span className="text-amber-500">*</span>
+          เนื้อหา
+        </h4>
         <div className="w-full h-96">
           <TextEditor />
         </div>

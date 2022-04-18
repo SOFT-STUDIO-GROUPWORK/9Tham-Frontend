@@ -27,16 +27,19 @@ function App() {
 
         {/* Main */}
         <Routes>
+          {/* General */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/Profile/:id" element={<ProfilePage />} />
-          <Route path="/ManageAccount" element={<ManageAccountPage />} />
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Register" element={<RegisterPage />} />
+          <Route path="/Profile/:id" element={<ProfilePage />} />
           <Route path="/Post" element={<PostPage />} />
-          <Route path="/EditPost" element={<EditPostPage />} />
-          {/* insert path here */}
           <Route path="/DetailAccount" element={<DetailAccountPage />} />
+
+          {/* Admin Only */}
+          <Route path="/EditPost" element={<EditPostPage />} />
+          <Route path="/ManageAccount" element={<ManageAccountPage />} />
           <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
+
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

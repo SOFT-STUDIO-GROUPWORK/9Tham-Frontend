@@ -52,9 +52,21 @@ const Navbar = () => {
             </Link>
             <Link
               to={"/editPost"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
+              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               แก้ไขบทความ
+            </Link>
+            <Link
+              to={"/profile"}
+              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+            >
+              หน้าโปรไฟล์ Admin
+            </Link>
+            <Link
+              to={"/detailAccount"}
+              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
+            >
+              ข้อมูลส่วนตัว
             </Link>
           </div>
           <div>

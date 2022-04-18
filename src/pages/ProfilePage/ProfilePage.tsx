@@ -40,17 +40,17 @@ const ProfilePage = (props: Props) => {
         <div className="border border-fGrey mt-6 border-opacity-10" />
         <div className="flex justify-between px-10">
           <div className="flex items-center space-x-4">
-            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+            <Link className="w-full min-w-fit" to={"/editPost"}>
               <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
                 เพิ่มบทความใหม่
               </button>
             </Link>
-            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+            <Link className="w-full min-w-fit" to={"/annoucementForm"}>
               <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
                 ประชาสัมพันธ์
               </button>
             </Link>
-            <Link className="w-full min-w-fit" to={"/ManageAccount"}>
+            <Link className="w-full min-w-fit" to={"/manageAccount"}>
               <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
                 จัดการบัญชีผู้ใช้
               </button>
@@ -63,9 +63,11 @@ const ProfilePage = (props: Props) => {
               height="16"
               width="16"
             ></img>
-            <button className="w-36 h-10 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
-              แก้ไขโปรไฟล์
-            </button>
+            <Link className="w-full min-w-fit" to={"/detailAccount"}>
+              <button className="w-36 h-10 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
+                แก้ไขโปรไฟล์
+              </button>
+            </Link>
           </div>
         </div>
         <div className="border border-fGrey border-opacity-10" />

@@ -5,6 +5,7 @@ import {
   ManageAccountPage,
   ProfilePage,
   DetailAccountPage,
+  AnnoucementFormPage,
 } from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/Register" element={<RegisterPage />} />
           {/* insert path here */}
           <Route path="/DetailAccount" element={<DetailAccountPage />} />
+          <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -43,7 +43,11 @@ const HomePage = (props: Props) => {
             {MOCK_BANNER.map((obj) => {
               return (
                 <div className="h-60">
-                  <img className="object-cover h-60" src={obj.src} alt={obj.src} />
+                  <img
+                    className="object-cover h-60"
+                    src={obj.src}
+                    alt={obj.src}
+                  />
                 </div>
               );
             })}

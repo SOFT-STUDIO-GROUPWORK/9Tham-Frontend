@@ -4,9 +4,12 @@ import {
   HomePage,
   ManageAccountPage,
   ProfilePage,
+  PostPage,
+  EditPostPage,
   DetailAccountPage,
   AnnoucementFormPage,
 } from "./pages";
+
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -24,14 +27,20 @@ function App() {
 
         {/* Main */}
         <Routes>
+          {/* General */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/Profile/:id" element={<ProfilePage />} />
-          <Route path="/ManageAccount" element={<ManageAccountPage />} />
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Register" element={<RegisterPage />} />
-          {/* insert path here */}
+          <Route path="/Profile" element={<ProfilePage />} />
+          {/* /:id */}
+          <Route path="/Post" element={<PostPage />} />
           <Route path="/DetailAccount" element={<DetailAccountPage />} />
+
+          {/* Admin Only */}
+          <Route path="/EditPost" element={<EditPostPage />} />
+          <Route path="/ManageAccount" element={<ManageAccountPage />} />
           <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
+
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

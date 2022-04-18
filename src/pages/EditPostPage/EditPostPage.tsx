@@ -6,6 +6,8 @@ import MOCK_POST from "../../mocks/Post/post.json";
 import { useEffect, useState } from "react";
 
 import { BsFillImageFill } from "react-icons/bs";
+import { AiOutlineGlobal } from "react-icons/ai";
+import { FiLock } from "react-icons/fi";
 
 import axios from "axios";
 import $ from "jquery";
@@ -78,9 +80,9 @@ const EditPostPage = (props: Props) => {
   };
 
   return (
-    <div className="container mx-auto pb-32">
+    <div className="container mx-auto ">
       <div
-        className="flex flex-col items-center mx-auto w-3/4 bg-slate-50  px-2"
+        className="flex flex-col items-center mx-auto w-3/4 bg-slate-50  px-2 pb-32"
         style={{ minHeight: "calc(100vh - 64px)" }}
       >
         <div className="mt-24"></div>
@@ -172,7 +174,7 @@ const EditPostPage = (props: Props) => {
           </p>
         </div>
 
-        <h4 className="w-full mb-2">
+        <h4 className="w-full mb-2 sticky bg-slate-50 py-3 z-10" style={{top:"66px"}}>
           <span className="text-amber-500">*</span>
           เนื้อหา
         </h4>
@@ -180,17 +182,53 @@ const EditPostPage = (props: Props) => {
           <TextEditor />
         </div>
 
-        <div className="w-full flex flex-col items-center gap-3">
+        <div className="w-full flex flex-col items-center gap-5">
+          <div className="w-full flex flex-col items-center my-8">
+            <h4 className="mb-5">รูปแบบการโพสต์</h4>
+            <ul className="flex flex-row gap-5">
+              <li className="relative">
+                <input
+                  className="sr-only peer"
+                  type="radio"
+                  value="0"
+                  name="visibility"
+                  id="private"
+                />
+                <label
+                  className="text-lg flex items-center py-2 px-4 rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"
+                  htmlFor="private"
+                >
+                  <FiLock className="mr-2" /> เฉพาะฉัน
+                </label>
+              </li>
+              <li className="relative">
+                <input
+                  className="sr-only peer"
+                  type="radio"
+                  value="1"
+                  name="visibility"
+                  id="public"
+                  checked
+                />
+                <label
+                  className="text-lg flex items-center py-2 px-4 bg-slate-50  rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"
+                  htmlFor="public"
+                >
+                  <AiOutlineGlobal className="mr-2" /> สาธารณะ
+                </label>
+              </li>
+            </ul>
+          </div>
           <Button
             onClick={() => {}}
-            className="w-1/4"
+            className="w-2/5 rounded-full"
             children="บันทึกแบบร่าง"
             color="amber"
             mode="outline"
           />
           <Button
             onClick={() => {}}
-            className="w-1/4"
+            className="w-2/5 rounded-full"
             children="โพสต์"
             color="amber"
           />

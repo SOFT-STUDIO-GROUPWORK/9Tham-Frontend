@@ -41,6 +41,7 @@ const TextEditor = (props: Props) => {
         }}
         //top-48 z-50
         toolbarClassName="flex sticky shadow !justify-center mx-auto z-10"
+        toolbarStyle={{top:"120px"}}
         editorClassName="bg-white shadow-sm mb-12 mx-auto border px-10 py-2"
         editorStyle={{minHeight: "50vh"}}
         toolbar={{

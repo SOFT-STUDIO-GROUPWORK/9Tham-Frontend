@@ -16,13 +16,13 @@ const ProfileTopBar = (props: Props) => {
       <div className="flex flex-row">
         <BsPersonCircle className="w-14 h-full mr-4" />
         <div className="flex flex-col">
-          <h4>{props.firstname} {props.lastname}</h4>
+          <p>{props.firstname} {props.lastname}</p>
           <p><span className="font-semibold text-amber-500">@{props.username}</span> {props.date}</p>
         </div>
       </div>
       <div className="flex flex-row gap-2">
         <AiFillLike className="w-auto h-1/2" />
-        <h4>100</h4>
+        <p>100</p>
         <FiMoreHorizontal className="ml-2 w-auto h-1/2" />
       </div>
     </div>

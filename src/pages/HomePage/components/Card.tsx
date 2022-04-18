@@ -19,10 +19,10 @@ const Card = (props: Props) => {
         </div>
         {/* right */}
         <div className="flex flex-col justify-between p-4">
-          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          <h4 className="mb-2 font-semibold tracking-tight text-gray-900 dark:text-white">
             {props.title}
-          </h5>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          </h4>
+          <p className="mb-3 text-gray-700 dark:text-gray-400">
             {props.description}
           </p>
           <button className="btn bg-amber-600 rounded-full text-white px-2 py-1 max-w-fit">

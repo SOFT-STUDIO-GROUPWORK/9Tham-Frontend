@@ -25,7 +25,7 @@ const PostPage = (props: Props) => {
           />
         </div>
 
-        <h2 className="text-4xl w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
+        <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
           เข้าวัดทำบุญ ได้อะไร
         </h2>
         <img

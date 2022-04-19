@@ -20,7 +20,7 @@ const LoginPage = (props: Props) => {
   };
   return (
     <div className="flex flex-row justify-around">
-      <div className="min-h-screen flex flex-col justify-center">
+      <div className="min-h-screen flex flex-col justify-center mt-48">
         <div className="max-w-md w-full mx-auto text-center text-5xl">
           เข้าสู่ระบบ
         </div>

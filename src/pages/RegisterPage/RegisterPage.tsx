@@ -1,31 +1,69 @@
 import React, { useState } from "react";
+import axios from "axios";
+import $ from "jquery";
 type Props = {};
 
 const RegisterPage = (props: Props) => {
-  const [username, setUsername] = useState("");
+  const [usernameReg, setUsernameReg] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [password, setPassword] = useState("");
+  const [passwordReg, setPasswordReg] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [term, setTerm] = useState(false);
+
+  // const register = () => {
+  //   console.log("hello");
+  //   axios
+  //     .post("https://localhost:7265/api/Auth/register", {
+  //       email: usernameReg,
+  //       password: passwordReg,
+  //       firstName: name,
+  //       lastName: surname,
+  //       nickName: "test",
+  //       role: 0,
+  //     })
+  //     .then((response) => {
+  //       console.log("1234");
+  //       console.log(response.data);
+  //     });
+  // };
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const payload = {
-      username,
-      name,
-      surname,
-      password,
-      confirmpassword,
-      term,
-    };
+    // const payload = {
+    //   username: usernameReg,
+    //   name,
+    //   surname,
+    //   password: passwordReg,
+    //   confirmpassword: confirmpassword,
+    //   term,
+    // };
 
-    console.log("submit payload", payload);
+    // console.log("submit payload", payload);
+    axios
+      .post("https://localhost:7265/api/Auth/register", {
+        email: usernameReg,
+        password: passwordReg,
+        firstName: name,
+        lastName: surname,
+        nickName: "test",
+        role: 0,
+      })
+      .then(
+        (response) => {
+          console.log(response.status);
+          console.log(response.data);
+        },
+        (error) => {
+          alert("Username already used");
+          console.log(error);
+        }
+      );
   };
   return (
     <div className="flex flex-row justify-around flex-auto">
-      <div className="min-h-screen flex flex-col justify-center">
+      <div className="min-h-screen flex flex-col justify-center mt-48">
         <div className="max-w-xl w-full mx-auto text-center text-5xl">
           สมัครสมาชิก
         </div>
@@ -42,7 +80,7 @@ const RegisterPage = (props: Props) => {
                 type="text"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsernameReg(e.target.value)}
               />
             </div>
             <div className="flex flex-row flex-auto justify-between ">
@@ -87,7 +125,7 @@ const RegisterPage = (props: Props) => {
                   type="password"
                   className="w-full p-1 border border-grey-300 rounded mt-1"
                   id="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPasswordReg(e.target.value)}
                 />
               </div>
               <div>

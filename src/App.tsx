@@ -6,6 +6,7 @@ import {
   ProfilePage,
   DetailAccountPage,
   AnnoucementFormPage,
+  TagEditPage,
 } from "./pages";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
@@ -32,6 +33,7 @@ function App() {
           {/* insert path here */}
           <Route path="/DetailAccount" element={<DetailAccountPage />} />
           <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
+          <Route path="/TagEdit" element={<TagEditPage />} />
           {/* redirect if path not found */}
           {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}
           <Route path="*" element={<Navigate to="/" replace />} />

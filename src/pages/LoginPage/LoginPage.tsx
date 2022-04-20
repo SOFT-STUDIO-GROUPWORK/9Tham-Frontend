@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+import $ from "jquery";
+import { useForm } from "react-hook-form";
 
 type Props = {};
 
@@ -11,12 +14,27 @@ const LoginPage = (props: Props) => {
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const payload = {
-      username,
-      password,
-    };
+    // const payload = {
+    //   username,
+    //   password,
+    // };
 
-    console.log("submit payload", payload);
+    // console.log("submit payload", payload);
+    axios
+      .post("https://localhost:7265/api/Auth/login", {
+        email: username,
+        password: password,
+      })
+      .then(
+        (response) => {
+          console.log(response.status);
+          console.log(response.data);
+        },
+        (error) => {
+          alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
+          console.log(error);
+        }
+      );
   };
   return (
     <div className="flex flex-row justify-around">

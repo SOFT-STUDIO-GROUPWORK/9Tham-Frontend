@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import $ from "jquery";
+import { useForm } from "react-hook-form";
 type Props = {};
 
 const RegisterPage = (props: Props) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({ mode: "onTouched" });
   const [usernameReg, setUsernameReg] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -11,6 +18,7 @@ const RegisterPage = (props: Props) => {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [term, setTerm] = useState(false);
 
+  const password = watch("password");
   // const register = () => {
   //   console.log("hello");
   //   axios
@@ -47,7 +55,7 @@ const RegisterPage = (props: Props) => {
         password: passwordReg,
         firstName: name,
         lastName: surname,
-        nickName: "test",
+        nickName: name + surname,
         role: 0,
       })
       .then(
@@ -56,7 +64,7 @@ const RegisterPage = (props: Props) => {
           console.log(response.data);
         },
         (error) => {
-          alert("Username already used");
+          alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว");
           console.log(error);
         }
       );
@@ -113,36 +121,66 @@ const RegisterPage = (props: Props) => {
                 />
               </div>
             </div>
-            <div className="flex flex-row justify-between ">
-              <div className="mr-2">
-                <label
-                  htmlFor=""
-                  className="text-lg font-medium text-grey-600 block"
-                >
-                  รหัสผ่าน
-                </label>
-                <input
-                  type="password"
-                  className="w-full p-1 border border-grey-300 rounded mt-1"
-                  id="password"
-                  onChange={(e) => setPasswordReg(e.target.value)}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor=""
-                  className="text-lg font-medium text-grey-600 block"
-                >
-                  ยืนยันรหัสผ่าน
-                </label>
-                <input
-                  type="password"
-                  className="w-full p-1 border border-grey-300 rounded mt-1"
-                  id="confirmpassword"
-                  onChange={(e) => setConfirmpassword(e.target.value)}
-                />
-              </div>
+
+            <div className="mr-2 relative">
+              <label
+                htmlFor=""
+                className="text-lg font-medium text-grey-600 block"
+              >
+                รหัสผ่าน
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full p-1 border border-grey-300 rounded mt-1 "
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: "Minimum Required length is 8",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Maximum Required length is 20",
+                  },
+                })}
+                onChange={(e) => setPasswordReg(e.target.value)}
+              />
+              {errors.password && (
+                <span className="text-sm text-red-500">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
+            <div>
+              <label
+                htmlFor=""
+                className="text-lg font-medium text-grey-600 block"
+              >
+                ยืนยันรหัสผ่าน
+              </label>
+              <input
+                type="password"
+                className="w-full p-1 border border-grey-300 rounded mt-1"
+                id="confirmpassword"
+                onPaste={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
+                {...register("confirmPassword", {
+                  required: "confirm password is required",
+                  validate: (value) =>
+                    value === password || "The passwords do not match",
+                })}
+                onChange={(e) => setConfirmpassword(e.target.value)}
+              />
+              {errors.confirmPassword && (
+                <span className="text-sm text-red-500">
+                  {errors.confirmPassword.message}
+                </span>
+              )}
+            </div>
+
             <div className="flex items-center">
               <input
                 type="checkbox"

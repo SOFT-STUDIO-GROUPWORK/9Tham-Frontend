@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import $ from "jquery";
-import { useForm } from "react-hook-form";
 
 type Props = {};
 
@@ -13,13 +12,10 @@ const LoginPage = (props: Props) => {
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     // const payload = {
     //   username,
     //   password,
     // };
-
-    // console.log("submit payload", payload);
     axios
       .post("https://localhost:7265/api/Auth/login", {
         email: username,
@@ -36,6 +32,7 @@ const LoginPage = (props: Props) => {
         }
       );
   };
+
   return (
     <div className="flex flex-row justify-around">
       <div className="min-h-screen flex flex-col justify-center mt-48">
@@ -55,6 +52,8 @@ const LoginPage = (props: Props) => {
                 type="text"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
+                name="username"
+                // onChange={(e) => setUsername(e.target.value)}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -69,6 +68,8 @@ const LoginPage = (props: Props) => {
                 type="password"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="password"
+                name="password"
+                // onChange={(e) => setPassword(e.target.value)}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import $ from "jquery";
 
 type Props = {};
 
@@ -7,20 +9,37 @@ const LoginPage = (props: Props) => {
   const [password, setPassword] = useState("");
 
   //console.log("render username", username, password);
-
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    // if(!e.target.value){
 
-    const payload = {
-      username,
-      password,
-    };
-
-    console.log("submit payload", payload);
+    // }
+    // { preventDefault: () => void }
+    // const payload = {
+    //   username,
+    //   password,
+    // };
+    axios
+      .post("https://localhost:7265/api/Auth/login", {
+        email: username,
+        password: password,
+      })
+      .then(
+        (response) => {
+          alert("เข้าสู่ระบบ สำเร็จ");
+          console.log(response.status);
+          console.log(response.data);
+        },
+        (error) => {
+          alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
+          console.log(error);
+        }
+      );
   };
+
   return (
     <div className="flex flex-row justify-around">
-      <div className="min-h-screen flex flex-col justify-center">
+      <div className="min-h-screen flex flex-col justify-center mt-48">
         <div className="max-w-md w-full mx-auto text-center text-5xl">
           เข้าสู่ระบบ
         </div>
@@ -37,6 +56,8 @@ const LoginPage = (props: Props) => {
                 type="text"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
+                name="username"
+                required
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -51,6 +72,8 @@ const LoginPage = (props: Props) => {
                 type="password"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="password"
+                name="password"
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

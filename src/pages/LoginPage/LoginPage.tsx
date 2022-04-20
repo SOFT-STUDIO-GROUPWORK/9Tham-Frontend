@@ -9,9 +9,12 @@ const LoginPage = (props: Props) => {
   const [password, setPassword] = useState("");
 
   //console.log("render username", username, password);
-
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    // if(!e.target.value){
+
+    // }
+    // { preventDefault: () => void }
     // const payload = {
     //   username,
     //   password,
@@ -23,6 +26,7 @@ const LoginPage = (props: Props) => {
       })
       .then(
         (response) => {
+          alert("เข้าสู่ระบบ สำเร็จ");
           console.log(response.status);
           console.log(response.data);
         },
@@ -53,6 +57,7 @@ const LoginPage = (props: Props) => {
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
                 name="username"
+                required
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -68,6 +73,7 @@ const LoginPage = (props: Props) => {
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="password"
                 name="password"
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

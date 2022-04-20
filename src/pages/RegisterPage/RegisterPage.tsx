@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import { useForm } from "react-hook-form";
@@ -19,26 +20,13 @@ const RegisterPage = (props: Props) => {
   const [term, setTerm] = useState(false);
 
   const password = watch("password");
-  // const register = () => {
-  //   console.log("hello");
-  //   axios
-  //     .post("https://localhost:7265/api/Auth/register", {
-  //       email: usernameReg,
-  //       password: passwordReg,
-  //       firstName: name,
-  //       lastName: surname,
-  //       nickName: "test",
-  //       role: 0,
-  //     })
-  //     .then((response) => {
-  //       console.log("1234");
-  //       console.log(response.data);
-  //     });
-  // };
 
-  const onSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const onSubmit = (e: { [x: string]: any }) => {
+    //e.preventDefault();
+    // if(confirmpassword!=password){
 
+    // }{ preventDefault: () => void }
     // const payload = {
     //   username: usernameReg,
     //   name,
@@ -60,8 +48,10 @@ const RegisterPage = (props: Props) => {
       })
       .then(
         (response) => {
+          alert("ลงทะเบียน สำเร็จ");
           console.log(response.status);
           console.log(response.data);
+          navigate("/Login");
         },
         (error) => {
           alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว");
@@ -76,7 +66,11 @@ const RegisterPage = (props: Props) => {
           สมัครสมาชิก
         </div>
         <div className="max-w-md w-full mx-auto mt-4 p-20 border border-grey-300">
-          <form action="" className="space-y-6" onSubmit={onSubmit}>
+          <form
+            action=""
+            className="space-y-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div>
               <label
                 htmlFor=""
@@ -88,6 +82,7 @@ const RegisterPage = (props: Props) => {
                 type="text"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
+                required
                 onChange={(e) => setUsernameReg(e.target.value)}
               />
             </div>
@@ -103,6 +98,7 @@ const RegisterPage = (props: Props) => {
                   type="text"
                   className="w-full p-1 border border-grey-300 rounded mt-1"
                   id="name"
+                  required
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -117,6 +113,7 @@ const RegisterPage = (props: Props) => {
                   type="text"
                   className="w-full p-1 border border-grey-300 rounded mt-1"
                   id="surname"
+                  required
                   onChange={(e) => setSurname(e.target.value)}
                 />
               </div>
@@ -134,16 +131,17 @@ const RegisterPage = (props: Props) => {
                 id="password"
                 className="w-full p-1 border border-grey-300 rounded mt-1 "
                 {...register("password", {
-                  required: "Password is required",
+                  required: "จำเป็นต้องกรอก",
                   minLength: {
                     value: 8,
-                    message: "Minimum Required length is 8",
+                    message: "รหัสผ่านขั้นต่ำ 8 ตัวอักษร",
                   },
                   maxLength: {
                     value: 20,
-                    message: "Maximum Required length is 20",
+                    message: "รหัสผ่านไม่เกิน 20 ตัวอักษร",
                   },
                 })}
+                required
                 onChange={(e) => setPasswordReg(e.target.value)}
               />
               {errors.password && (
@@ -168,10 +166,11 @@ const RegisterPage = (props: Props) => {
                   return false;
                 }}
                 {...register("confirmPassword", {
-                  required: "confirm password is required",
+                  required: "จำเป็นต้องกรอก",
                   validate: (value) =>
-                    value === password || "The passwords do not match",
+                    value === password || "ไม่ตรงกับรหัสผ่านที่ใช้",
                 })}
+                required
                 onChange={(e) => setConfirmpassword(e.target.value)}
               />
               {errors.confirmPassword && (
@@ -186,6 +185,7 @@ const RegisterPage = (props: Props) => {
                 type="checkbox"
                 className="h-4 w-4 text-amber-600 rounded"
                 id="term"
+                required
                 onChange={(e) => setTerm(e.target.checked)}
               />
               <label htmlFor="" className="ml-2 text-sm text-amber-600">

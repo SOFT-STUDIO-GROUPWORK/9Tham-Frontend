@@ -53,7 +53,6 @@ const LoginPage = (props: Props) => {
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
                 name="username"
-                // onChange={(e) => setUsername(e.target.value)}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -69,7 +68,6 @@ const LoginPage = (props: Props) => {
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="password"
                 name="password"
-                // onChange={(e) => setPassword(e.target.value)}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

@@ -1,48 +1,23 @@
-import { useState } from "react";
-
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-type Props = {};
+
+type Props = {
+  uploadSingleImage: any;
+  onEditorStateChange: any;
+  editorState: any;
+};
 
 const TextEditor = (props: Props) => {
-  const [content, setContent] = useState<string>("");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-  function uploadImageCallBack(file: string | Blob) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "https://api.imgur.com/3/image");
-      xhr.setRequestHeader("Authorization", "Client-ID 4af9b03c56bbbae");
-      const data = new FormData();
-      data.append("image", file);
-      xhr.send(data);
-      xhr.addEventListener("load", () => {
-        const response = JSON.parse(xhr.responseText);
-        console.log(response);
-        resolve(response);
-      });
-      xhr.addEventListener("error", () => {
-        const error = JSON.parse(xhr.responseText);
-        console.log(error);
-        reject(error);
-      });
-    });
-  }
-
   return (
     <div>
       <Editor
-        editorState={editorState}
-        onEditorStateChange={(newState) => {
-          setEditorState(newState);
-        }}
+        editorState={props.editorState}
+        onEditorStateChange={props.onEditorStateChange}
         //top-48 z-50
         toolbarClassName="flex sticky shadow !justify-center mx-auto z-10"
+        toolbarStyle={{ top: "120px" }}
         editorClassName="bg-white shadow-sm mb-12 mx-auto border px-10 py-2"
-        editorStyle={{minHeight: "50vh"}}
+        editorStyle={{ minHeight: "50vh" }}
         toolbar={{
           options: [
             "inline",
@@ -81,8 +56,10 @@ const TextEditor = (props: Props) => {
 
           history: { inDropdown: true },
           image: {
-            uploadCallback: uploadImageCallBack,
+            uploadCallback: props.uploadSingleImage,
+            previewImage: true,
             alt: { present: true, mandatory: false },
+            // inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
           },
         }}
       />

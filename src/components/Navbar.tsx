@@ -1,8 +1,10 @@
-import React from "react";
 import logo from "../assets/budda-logo.png";
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../contexts/AuthContext";
+
 const Navbar = () => {
+  const { isAuth, user, logout } = useAuth();
   return (
     <div className="fixed w-full bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600  p-3 shadow-lg z-50">
       <nav className="container w-3/4 mx-auto flex items-center justify-between flex-wrap">
@@ -38,12 +40,7 @@ const Navbar = () => {
             >
               หน้าแรก
             </Link>
-            <Link
-              to={"/login"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
-            >
-              เข้าสู่ระบบ
-            </Link>
+
             <Link
               to={"/post"}
               className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
@@ -69,13 +66,35 @@ const Navbar = () => {
               ข้อมูลส่วนตัว
             </Link>
           </div>
-          <div>
-            {/* register page */}
-            <Link to={"/register"}>
-              <button className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-                ลงทะเบียน
-              </button>
-            </Link>
+          <div className="text-gray-50 text-sm">
+            {isAuth ? (
+              <>
+                <span className="text-md mr-4">
+                  <Link to="detailAccount">
+                    {user?.firstName} {user?.lastName}{" "}
+                  </Link>{" "}
+                </span>
+
+                <button onClick={logout} className="inline-block text-sm px-2 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-amber-500 hover:bg-white mt-4 lg:mt-0">
+                  ออกจากระบบ
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to={"/login"}
+                  className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+                >
+                  เข้าสู่ระบบ
+                </Link>
+
+                <Link to={"/register"}>
+                  <button className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-amber-500 hover:bg-white mt-4 lg:mt-0">
+                    ลงทะเบียน
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

@@ -11,8 +11,17 @@ import {
 interface IAuthContext {
   isAuth: boolean;
   isLoading: boolean;
+  user?: any;
   login?: (email: string, password: string) => Promise<void>;
   getUser?: () => Promise<any>;
+  logout?: () => Promise<void>;
+  createUser?: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    nickName: string
+  ) => Promise<void>;
 }
 
 const initAuthContext = {
@@ -28,7 +37,7 @@ type Children = {
 };
 
 const LOGIN_URL = "api/Auth/login";
-const USER_POST_URL = "api/Auth/register";
+const REGISTER_URL = "api/Auth/register";
 const USER_GETMY_URL = "api/Blogger"; // get my info
 const USER_GET_URL = "api/Blogger/:id"; // get
 const USER_PUT_URL = "api/Blogger/:id"; // put
@@ -37,11 +46,14 @@ const USER_DELETE_URL = "api/Auth/:id"; // delete
 export const AuthProvider = ({ children }: Children) => {
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState();
   const navigate = useNavigate();
 
+  // visit page first time
   useEffect(() => {
+    console.log("beginfirst");
     getUser();
-  }, []);
+  }, [isAuth]);
 
   // auth function
   const login = async (email: string, password: string) => {
@@ -62,7 +74,7 @@ export const AuthProvider = ({ children }: Children) => {
           (err) => {
             setIsAuth(false);
             alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
-            throw Object.assign(new Error(err));
+            throw Object.assign(new Error(`${err.response.status}:` + err));
           }
         );
     } catch (err) {
@@ -72,15 +84,49 @@ export const AuthProvider = ({ children }: Children) => {
     }
   };
 
+  const createUser = async (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    nickName: string
+  ) => {
+    try {
+      await axios
+        .post(REGISTER_URL, {
+          email,
+          password,
+          firstName,
+          lastName,
+          nickName,
+          role: 0,
+        })
+        .then(
+          (res) => {
+            alert("ลงทะเบียน สำเร็จ");
+            console.log(res.data);
+            navigate("/Login");
+          },
+          (err) => {
+            alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว");
+            throw Object.assign(
+              new Error(`${err.response.status}: Found same user`)
+            );
+          }
+        );
+    } catch (err) {
+      console.error("Auth createUser(): " + err);
+    }
+  };
+
   const logout = async () => {
     setIsLoading(true);
-
-    //   wait api logout
+    console.log("begin");
     setIsAuth(false);
     removeTokenLocalStorage();
-
+    alert("ออกจากระบบเรียบร้อย");
+    console.log("end");
     setIsLoading(false);
-    return;
   };
 
   const getUser = async () => {
@@ -91,13 +137,16 @@ export const AuthProvider = ({ children }: Children) => {
       await axios
         .get(USER_GETMY_URL, config(loadToken))
         .then((res) => {
-          response = res.data;
+          response = res.data[0];
+          setUser(response);
           setIsAuth(true);
         })
         .catch((err) => {
           setIsAuth(false);
           if (err.response.status === 401)
-            throw Object.assign(new Error("401: No user found log-in"));
+            throw Object.assign(
+              new Error(`${err.response.status}: No user found log-in`)
+            );
           else throw err;
         });
     } catch (err) {
@@ -112,8 +161,10 @@ export const AuthProvider = ({ children }: Children) => {
     isAuth,
     isLoading,
     login,
+    createUser,
     logout,
     getUser,
+    user,
   };
 
   return (

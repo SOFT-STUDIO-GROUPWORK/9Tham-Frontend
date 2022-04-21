@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import $ from "jquery";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const LoginPage = (props: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
+  const [loginStatus, setLoginStatus] = useState(Boolean);
+  const navigate = useNavigate();
 
-  //console.log("render username", username, password);
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // if(!e.target.value){
@@ -26,17 +29,38 @@ const LoginPage = (props: Props) => {
       })
       .then(
         (response) => {
-          alert("เข้าสู่ระบบ สำเร็จ");
-          console.log(response.status);
+          localStorage.setItem("token", "bearer " + response.data);
+          //setToken("bearer " + response.data);
+          setLoginStatus(true);
           console.log(response.data);
+          //console.log(token);
+          userAuth();
+          alert("เข้าสู่ระบบ สำเร็จ");
+          // navigate("/");
         },
         (error) => {
-          alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
+          setLoginStatus(false);
           console.log(error);
+          console.log(loginStatus);
+          alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
         }
       );
   };
 
+  const userAuth = () => {
+    console.log(localStorage.getItem("token"));
+    axios
+      .get("https://localhost:7265/api/Auth", {
+        headers: { Authorization: localStorage.getItem("token") || "" },
+        //headers: { Authorization: `${token}` },
+        //headers: { Authorization: token },
+      })
+      .then((response) => {
+        setLoginStatus(true);
+        console.log(response.data);
+        console.log(loginStatus);
+      });
+  };
   return (
     <div className="flex flex-row justify-around">
       <div className="min-h-screen flex flex-col justify-center mt-48">

@@ -43,13 +43,13 @@ const RegisterPage = (props: Props) => {
         password: passwordReg,
         firstName: name,
         lastName: surname,
-        nickName: name + surname,
+        nickName: name + " " + surname,
         role: 0,
       })
       .then(
         (response) => {
           alert("ลงทะเบียน สำเร็จ");
-          console.log(response.status);
+          //console.log(response.status);
           console.log(response.data);
           navigate("/Login");
         },
@@ -133,8 +133,8 @@ const RegisterPage = (props: Props) => {
                 {...register("password", {
                   required: "จำเป็นต้องกรอก",
                   minLength: {
-                    value: 8,
-                    message: "รหัสผ่านขั้นต่ำ 8 ตัวอักษร",
+                    value: 4,
+                    message: "รหัสผ่านขั้นต่ำ 4 ตัวอักษร",
                   },
                   maxLength: {
                     value: 20,

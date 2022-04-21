@@ -60,12 +60,12 @@ const RegisterPage = (props: Props) => {
       );
   };
   return (
-    <div className="flex flex-row justify-around flex-auto">
-      <div className="min-h-screen flex flex-col justify-center mt-36">
+    <div className="flex flex-row justify-around flex-auto h-screen">
+      <div className="min-h-screen flex flex-col justify-center mt-24">
         <div className="max-w-xl w-full mx-auto text-center text-5xl">
           สมัครสมาชิก
         </div>
-        <div className="max-w-md w-full mx-auto mt-4 p-20 border border-grey-300">
+        <div className="max-w-md w-full mx-auto mt-4 px-20 py-12 border border-grey-300">
           <form
             action=""
             className="space-y-6"

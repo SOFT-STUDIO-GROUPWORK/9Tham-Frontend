@@ -1,73 +1,27 @@
-import React, { useState } from "react";
-import axios from "axios";
-import $ from "jquery";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Props = {};
 
 const LoginPage = (props: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
-  const [loginStatus, setLoginStatus] = useState(Boolean);
-  const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // if(!e.target.value){
-
-    // }
-    // { preventDefault: () => void }
-    // const payload = {
-    //   username,
-    //   password,
-    // };
-    axios
-      .post("https://localhost:7265/api/Auth/login", {
-        email: username,
-        password: password,
-      })
-      .then(
-        (response) => {
-          localStorage.setItem("token", "bearer " + response.data);
-          //setToken("bearer " + response.data);
-          setLoginStatus(true);
-          console.log(response.data);
-          //console.log(token);
-          userAuth();
-          alert("เข้าสู่ระบบ สำเร็จ");
-          // navigate("/");
-        },
-        (error) => {
-          setLoginStatus(false);
-          console.log(error);
-          console.log(loginStatus);
-          alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
-        }
-      );
+    login?.(username, password);
   };
 
-  const userAuth = () => {
-    console.log(localStorage.getItem("token"));
-    axios
-      .get("https://localhost:7265/api/Auth", {
-        headers: { Authorization: localStorage.getItem("token") || "" },
-        //headers: { Authorization: `${token}` },
-        //headers: { Authorization: token },
-      })
-      .then((response) => {
-        setLoginStatus(true);
-        console.log(response.data);
-        console.log(loginStatus);
-      });
-  };
   return (
-    <div className="flex flex-row justify-around">
-      <div className="min-h-screen flex flex-col justify-center mt-48">
+    <div className="flex flex-row justify-around h-screen">
+      <div className="min-h-screen flex flex-col justify-center mt-16">
         <div className="max-w-md w-full mx-auto text-center text-5xl">
           เข้าสู่ระบบ
         </div>
-        <div className="max-w-md w-full mx-auto mt-4 p-20 border border-grey-300">
+        <div className="max-w-md w-full mx-auto mt-4 px-20 py-16 border border-grey-300">
           <form action="" className="space-y-6" onSubmit={onSubmit}>
             <div>
               <label
@@ -100,11 +54,11 @@ const LoginPage = (props: Props) => {
                 required
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
-            <div>
-              <a href="" className="font-semibold text-sm">
-                ลืมรหัสผ่าน?
-              </a>
+              <div className="mt-2">
+                <Link to="/login" className="text-sm text-gray-400">
+                  <u>ลืมรหัสผ่าน?</u>
+                </Link>
+              </div>
             </div>
 
             <div>
@@ -116,10 +70,10 @@ const LoginPage = (props: Props) => {
               </button>
             </div>
             <div className="flex items-center">
-              <div>ยังไม่ได้เป็นสมาชิก?</div>
-              <a href="" className="font-semibold text-sm">
-                คลิ๊กเพื่อสมัคร
-              </a>
+              <p className="text-sm">ยังไม่ได้เป็นสมาชิก?&nbsp;</p>
+              <Link to="/register" className="font-semibold text-sm">
+                <u>คลิกเพื่อสมัคร</u>
+              </Link>
             </div>
           </form>
         </div>

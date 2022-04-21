@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import $ from "jquery";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../contexts/AuthContext";
+
 type Props = {};
 
 const RegisterPage = (props: Props) => {
@@ -12,6 +11,7 @@ const RegisterPage = (props: Props) => {
     watch,
     formState: { errors },
   } = useForm({ mode: "onTouched" });
+
   const [usernameReg, setUsernameReg] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -19,53 +19,22 @@ const RegisterPage = (props: Props) => {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [term, setTerm] = useState(false);
 
+  const { createUser } = useAuth();
+
   const password = watch("password");
 
-  const navigate = useNavigate();
   const onSubmit = (e: { [x: string]: any }) => {
-    //e.preventDefault();
-    // if(confirmpassword!=password){
-
-    // }{ preventDefault: () => void }
-    // const payload = {
-    //   username: usernameReg,
-    //   name,
-    //   surname,
-    //   password: passwordReg,
-    //   confirmpassword: confirmpassword,
-    //   term,
-    // };
-
-    // console.log("submit payload", payload);
-    axios
-      .post("https://localhost:7265/api/Auth/register", {
-        email: usernameReg,
-        password: passwordReg,
-        firstName: name,
-        lastName: surname,
-        nickName: name + " " + surname,
-        role: 0,
-      })
-      .then(
-        (response) => {
-          alert("ลงทะเบียน สำเร็จ");
-          //console.log(response.status);
-          console.log(response.data);
-          navigate("/Login");
-        },
-        (error) => {
-          alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว");
-          console.log(error);
-        }
-      );
+    // e.preventDefault();
+    let nick = name + " " + surname;
+    createUser?.(usernameReg, passwordReg, name, surname, nick);
   };
   return (
-    <div className="flex flex-row justify-around flex-auto">
-      <div className="min-h-screen flex flex-col justify-center mt-36">
+    <div className="flex flex-row justify-around flex-auto h-screen">
+      <div className="min-h-screen flex flex-col justify-center mt-24">
         <div className="max-w-xl w-full mx-auto text-center text-5xl">
           สมัครสมาชิก
         </div>
-        <div className="max-w-md w-full mx-auto mt-4 p-20 border border-grey-300">
+        <div className="max-w-md w-full mx-auto mt-4 px-20 py-12 border border-grey-300">
           <form
             action=""
             className="space-y-6"

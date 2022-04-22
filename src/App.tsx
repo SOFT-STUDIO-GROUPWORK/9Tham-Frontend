@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import {
   HomePage,
@@ -17,7 +18,6 @@ import {
   TagEditPage,
 } from "./pages";
 
-import { useState } from "react";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -71,6 +71,11 @@ export default App;
 
 const AuthRoutes = () => {
   const { isAuth } = useAuth();
+  let location = useLocation();
 
-  return isAuth ? <Outlet /> : <Navigate to="/Login" replace />;
+  return isAuth ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/Login" state={{ from: location }} replace />
+  );
 };

@@ -55,6 +55,11 @@ const ProfilePage = (props: Props) => {
                 จัดการบัญชีผู้ใช้
               </button>
             </Link>
+            <Link className="w-full min-w-fit" to={"/tagEdit"}>
+              <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
+                จัดการหมวดหมู่
+              </button>
+            </Link>
           </div>
           <div className="flex items-center space-x-2">
             <img

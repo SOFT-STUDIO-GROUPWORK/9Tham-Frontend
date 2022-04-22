@@ -14,6 +14,7 @@ import {
   EditPostPage,
   DetailAccountPage,
   AnnoucementFormPage,
+  TagEditPage,
 } from "./pages";
 
 import { useState } from "react";
@@ -48,6 +49,7 @@ function App() {
               {/* Admin Only */}
               <Route path="/EditPost" element={<EditPostPage />} />
               <Route path="/ManageAccount" element={<ManageAccountPage />} />
+              <Route path="/TagEdit" element={<TagEditPage />} />
               <Route
                 path="/AnnoucementForm"
                 element={<AnnoucementFormPage />}

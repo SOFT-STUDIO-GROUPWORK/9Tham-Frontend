@@ -1,4 +1,4 @@
-import Selector from "./components/Selector";
+import Selector from "../../components/Selector";
 import Searchbar from "./components/Searchbar";
 import Card from "./components/Card";
 import Pagination from "./components/Pagination";
@@ -59,9 +59,17 @@ const HomePage = (props: Props) => {
           {/* Searchbar */}
           <Searchbar onClick={testClick} />
           {/* Sort by */}
-          <Selector title="เรียงตาม:" options={sortOptions} />
+          <Selector
+            title="เรียงตาม:"
+            onChange={(e: any) => e.target.value}
+            options={sortOptions}
+          />
           {/* Types */}
-          <Selector title="หมวดหมู่:" options={typeOptions} />
+          <Selector
+            title="หมวดหมู่:"
+            onChange={(e: any) => e.target.value}
+            options={typeOptions}
+          />
         </div>
         {/* TopBar end*/}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

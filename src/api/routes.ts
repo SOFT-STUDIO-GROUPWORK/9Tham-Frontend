@@ -9,7 +9,7 @@ export const USER_GETMY_URL = "api/Blogger"; // get my info
 // User
 export const USER_GET_URL = "api/Blogger/:id"; // get
 export const USER_PUT_URL = "api/Blogger/:id"; // put
-export const USER_DELETE_URL = "api/Auth/:id"; // delete
+export const USER_DELETE_URL = "api/Blogger/:id"; // delete
 
 // Tags
 export const TAGS_GET_URL = "api/Tags"; // get list

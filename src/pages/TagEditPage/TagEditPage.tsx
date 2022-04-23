@@ -10,7 +10,9 @@ import Selector from "./components/Selector";
 import Searchbar from "./components/Searchbar";
 import Pagination from "./components/Pagination";
 
-type Props = {};
+type Props = {
+  tag?: string[];
+};
 const Options: string[] = ["User", "Admin"];
 interface ITag {
   tag: string;
@@ -41,7 +43,7 @@ const TagEditPage = (props: Props) => {
             <div className="flex flex-row w-full justify-center mb-4">
               <div className="text-3xl mr-2">แก้ไขแท็ก</div>
               <Searchbar />
-              <button className="text-base rounded-full bg-amber-500 border-8 border-transparent mx-2">
+              <button className="text-base rounded-full bg-amber-500 border-8 border-transparent mx-2 hover:bg-amber-600">
                 เพิ่มแท็ก +
               </button>
             </div>
@@ -56,7 +58,12 @@ const TagEditPage = (props: Props) => {
               <tbody>
                 {tag.map((e) => (
                   <tr className="text-sm text-left hover:bg-gray-100">
-                    <td className="text-center">{e.tag}</td>
+                    <td className="text-center">
+                      <input
+                        value={e.tag}
+                        onChange={(e) => setTag.tag(e.target.value)}
+                      />
+                    </td>
                     <td>{e.status}</td>
                     <td>
                       <button className="underline hover:underline-offset-2">

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Props = {};
 
@@ -6,25 +8,20 @@ const LoginPage = (props: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  //console.log("render username", username, password);
+  const { login } = useAuth();
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
-    const payload = {
-      username,
-      password,
-    };
-
-    console.log("submit payload", payload);
+    login?.(username, password);
   };
+
   return (
-    <div className="flex flex-row justify-around">
-      <div className="min-h-screen flex flex-col justify-center">
+    <div className="flex flex-row justify-around h-screen">
+      <div className="min-h-screen flex flex-col justify-center mt-16">
         <div className="max-w-md w-full mx-auto text-center text-5xl">
           เข้าสู่ระบบ
         </div>
-        <div className="max-w-md w-full mx-auto mt-4 p-20 border border-grey-300">
+        <div className="max-w-md w-full mx-auto mt-4 px-20 py-16 border border-grey-300">
           <form action="" className="space-y-6" onSubmit={onSubmit}>
             <div>
               <label
@@ -37,6 +34,8 @@ const LoginPage = (props: Props) => {
                 type="text"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="username"
+                name="username"
+                required
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -51,13 +50,15 @@ const LoginPage = (props: Props) => {
                 type="password"
                 className="w-full p-1 border border-grey-300 rounded mt-1"
                 id="password"
+                name="password"
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
-            <div>
-              <a href="" className="font-semibold text-sm">
-                ลืมรหัสผ่าน?
-              </a>
+              <div className="mt-2">
+                <Link to="/login" className="text-sm text-gray-400">
+                  <u>ลืมรหัสผ่าน?</u>
+                </Link>
+              </div>
             </div>
 
             <div>
@@ -69,10 +70,10 @@ const LoginPage = (props: Props) => {
               </button>
             </div>
             <div className="flex items-center">
-              <div>ยังไม่ได้เป็นสมาชิก?</div>
-              <a href="" className="font-semibold text-sm">
-                คลิ๊กเพื่อสมัคร
-              </a>
+              <p className="text-sm">ยังไม่ได้เป็นสมาชิก?&nbsp;</p>
+              <Link to="/register" className="font-semibold text-sm">
+                <u>คลิกเพื่อสมัคร</u>
+              </Link>
             </div>
           </form>
         </div>

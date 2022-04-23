@@ -26,7 +26,7 @@ const RegisterPage = (props: Props) => {
   const onSubmit = (e: { [x: string]: any }) => {
     // e.preventDefault();
     let nick = name + " " + surname;
-    createUser?.(usernameReg, passwordReg, name, surname, nick);
+    createUser(usernameReg, passwordReg, name, surname, nick);
   };
   return (
     <div className="flex flex-row justify-around flex-auto h-screen">

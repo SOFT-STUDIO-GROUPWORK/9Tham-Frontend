@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { BASE_URL } from './routes';
 
 // header
 export const config = (token: string) => {
@@ -17,6 +18,6 @@ export const config = (token: string) => {
 };
 
 export default axios.create({
-    baseURL: 'https://localhost:7265' // for backend port
+    baseURL: BASE_URL // for backend port
 });
 

@@ -1,77 +1,297 @@
-// for admin gut
+import { useEffect, useState } from "react";
 
-// load extention ES7 + React/Redux/React-Native snippets
-// type "tsrafce" and enter... it will create structure
-// (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
-// by Pop (delete if already read)
-
-import React, { useState } from "react";
-import Selector from "./components/Selector";
 import Searchbar from "./components/Searchbar";
 import Pagination from "./components/Pagination";
+import Button from "../../components/Button";
+
+import { nanoid } from "nanoid";
+
+import { useAuth } from "../../contexts/AuthContext";
+
+import ReadOnlyRow from "./components/ReadOnlyRow";
+import EditableRow from "./components/EditableRow";
+
+import Input from "../../components/Input";
+import { getTags, addTag, deleteTag, updateTag } from "./services/tagsService";
 
 type Props = {};
-const Options: string[] = ["User", "Admin"];
-interface ITag {
-  tag: string;
-  status: string;
+
+export interface ITag {
+  id: number | null;
+  name: string;
 }
 let mockAccount = [
   {
-    tag: "Admin",
-    status: "Active",
+    id: 1,
+    name: "ความรู้ธรรมมะ",
   },
   {
-    tag: "User",
-    status: "Active",
+    id: 2,
+    name: "หลักคำสอน",
+  },
+  {
+    id: 3,
+    name: "หลักคำสอน",
+  },
+  {
+    id: 4,
+    name: "หลักคำสอน",
+  },
+  {
+    id: 5,
+    name: "หลักคำสอน",
+  },
+  {
+    id: 6,
+    name: "หลักคำสอน",
   },
 ];
 
 const TagEditPage = (props: Props) => {
-  // check at my homePage before proceed by pop (delete if already read)
-  const [tag, setTag] = useState<ITag[]>(mockAccount);
+  const [tags, setTags] = useState<ITag[]>(mockAccount);
+  const [isLoading, setIsLoading] = useState(false);
+
+  //add
+  const [isAdd, setIsAdd] = useState(false);
+  const [addFormData, setAddFormData] = useState({
+    name: "",
+  });
+
+  //edit
+  const [editTagId, setEditTagId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+  });
+
+  const { token } = useAuth();
+
+  useEffect(() => {
+    console.log(token);
+
+    // service getTag()
+    getTags({ setIsLoading, token, setTags });
+  }, []);
+
+  // add
+  // add value to add from, in "input box", combine as "FormData"
+  const handleAddFormChange = (event: any) => {
+    event.preventDefault();
+
+    //let fieldName:string = event.target.getAttribute('name');
+    let fieldValue: string = event.target.value;
+
+    let newFormData: { name: string } = { ...addFormData };
+    // change to variable attribute
+    newFormData.name = fieldValue;
+
+    setAddFormData(newFormData);
+  };
+
+  // when add value to new tag complete, click "add button"
+  const handleAddFormSubmit = async (event: any) => {
+    event.preventDefault();
+
+    // service addTag()
+    let newId = await addTag({ token, setIsLoading, addFormData });
+
+    if (newId == null) return;
+
+    const newTag: ITag = {
+      id: newId,
+      name: addFormData.name,
+    };
+
+    const newTags = [...tags, newTag];
+    setTags(newTags);
+  };
+
+  // edit
+  // when want to edit Readonly row and click "edit button"
+  const handleEditClick = (event: any, tag: ITag) => {
+    event.preventDefault();
+    setEditTagId(tag.id);
+
+    let formValues = {
+      name: tag.name,
+    };
+
+    setEditFormData(formValues);
+  };
+
+  // add value to edit from, in "input box", combine as "FormData"
+  const handleEditFormChange = (event: any) => {
+    event.preventDefault();
+
+    //let fieldName:string = event.target.getAttribute('name');
+    let fieldValue: string = event.target.value;
+
+    let newFormData: { name: string } = { ...addFormData };
+    // change to variable attribute
+    newFormData.name = fieldValue;
+
+    setEditFormData(newFormData);
+  };
+
+  // when want to save EditRow, click "save button"
+  const handleEditFormSubmit = async (event: any) => {
+    event.preventDefault();
+    if (editTagId === null) return;
+
+    //api service updateTag()
+    let newName = editFormData.name;
+    let result = await updateTag({ token, setIsLoading, editTagId, newName });
+    if (result === false) {
+      return;
+    }
+
+    const editTag = {
+      id: editTagId,
+      name: newName,
+    };
+
+    //Showing
+    const newTags = [...tags];
+    const index = tags.findIndex((tag) => tag.id === editTagId);
+    newTags[index] = editTag;
+
+    setTags(newTags);
+    setEditTagId(null);
+  };
+
+  // when want to cancel in EditRow, click "cancel button"
+  const handleCancelClick = () => {
+    setEditTagId(null);
+  };
+
+  // when want to delete in Readonly, click "delete button"
+  const handleDeleteClick = async (tagId: number) => {
+    // service deleteTag()
+    console.log(tagId);
+    let result = await deleteTag({ token, setIsLoading, tagId });
+    if (result === false) {
+      return;
+    }
+    //for update State for showing after delete
+    const newTags = [...tags];
+    const index = tags.findIndex((tag) => tag.id === tagId);
+    newTags.splice(index, 1);
+    setTags(newTags);
+  };
+
   return (
-    <div className="container mx-auto">
-      <div
-        className="flex flex-col items-center mx-auto w-3/4 bg-slate-50  p-4"
-        style={{ minHeight: "calc(100vh - 64px)" }}
-      >
-        <div className="border-0 border-red-200 w-full h-60 mt-24">
-          <div className="flex flex-col justify-center items-center">
-            <div className="flex flex-row w-full justify-center mb-4">
-              <div className="text-3xl mr-2">แก้ไขแท็ก</div>
-              <Searchbar />
-              <button className="text-base rounded-full bg-amber-500 border-8 border-transparent mx-2">
-                เพิ่มแท็ก +
-              </button>
+    <>
+      {isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <div
+          className="border-2 border-transparent container mx-auto"
+          style={{ minHeight: "100vh" }}
+        >
+          <div
+            className="border-2 border-transparent first-line:flex flex-col items-center mx-auto w-3/4 bg-slate-50   px-2"
+            style={{ minHeight: "calc(100vh - 72px)" }}
+          >
+            <div
+              className="border-0 border-red-500 flex flex-col justify-between w-full mt-24"
+              style={{ minHeight: "calc(100vh - 180px)" }}
+            >
+              <div className="flex flex-col items-center">
+                {/* TopBar */}
+                <div className="flex flex-row w-full justify-between items-center mb-4">
+                  <div className="flex flex-row items-center">
+                    <div className="text-3xl mr-2">จัดการหมวดหมู่</div>
+                    <div className="h-full w-96">
+                      <Searchbar />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row items-center gap-2">
+                    {isAdd ? (
+                      <>
+                        <div className="text-amber-500">เพิ่มหมวดหมู่:</div>
+                        <form onSubmit={handleAddFormSubmit}>
+                          <Input
+                            name="name"
+                            placeholder="เพิ่มหมวดหมู่ใหม่..."
+                            onChange={handleAddFormChange}
+                            className="border-amber-500 py-1.5"
+                          />
+                        </form>
+                        <Button
+                          onClick={(event: any) => {
+                            handleAddFormSubmit(event);
+                            setIsAdd(false);
+                          }}
+                          className="font-bold border border-amber-500"
+                          color={"amber"}
+                        >
+                          บันทึก
+                        </Button>
+                        <Button
+                          onClick={() => setIsAdd(false)}
+                          className="ml-1 font-bold"
+                          mode="outline"
+                          color={"amber"}
+                        >
+                          X
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        onClick={() => setIsAdd(true)}
+                        className="ml-4"
+                        color={"amber"}
+                      >
+                        เพิ่มหมวดหมู่ +
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                {/* Table */}
+                <form onSubmit={handleEditFormSubmit} className="w-full h-full">
+                  <table className="table-fixed w-full">
+                    {/* table Header */}
+                    <thead className="text-white shadow border-b-2 border-gray-300">
+                      <tr className="bg-amber-500 h-12">
+                        <th className="font-medium w-28">ลำดับ</th>
+                        <th className="font-medium pl-3 text-left">
+                          ชื่อหมวดหมู่
+                        </th>
+                        <th className="font-medium w-40"></th>
+                        <th className="font-medium w-40"></th>
+                      </tr>
+                    </thead>
+                    {/* table Content */}
+                    <tbody>
+                      {tags.map((tag, index) => (
+                        <>
+                          {editTagId === tag.id ? (
+                            <EditableRow
+                              index={index}
+                              editFormData={editFormData}
+                              handleEditFormChange={handleEditFormChange}
+                              handleCancelClick={handleCancelClick}
+                            />
+                          ) : (
+                            <ReadOnlyRow
+                              tag={tag}
+                              index={index}
+                              handleEditClick={handleEditClick}
+                              handleDeleteClick={handleDeleteClick}
+                            />
+                          )}
+                        </>
+                      ))}
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+              <Pagination />
             </div>
-            <table className="table-auto w-full border-b-2 border-gray-300">
-              <thead className="border-b-2 border-gray-300">
-                <tr className="bg-amber-500 h-12 text-left">
-                  <th className="text-center">แท็ก</th>
-                  <th>สถานะ</th>
-                  <th>ลบ / แก้ไข</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tag.map((e) => (
-                  <tr className="text-sm text-left hover:bg-gray-100">
-                    <td className="text-center">{e.tag}</td>
-                    <td>{e.status}</td>
-                    <td>
-                      <button className="underline hover:underline-offset-2">
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
-          <Pagination />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

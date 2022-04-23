@@ -1,7 +1,7 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 
 type Props = {
-  onClick: any;
+  onClick?: any;
   className?: string;
   children?: React.ReactNode;
   color: string;
@@ -21,6 +21,9 @@ const Button = (props: Props) => {
   if (props.color === "red" && mode === "normal") {
     colorClassName =
       "hover:shadow-lg active:shadow-lg focus:shadow-lg text-white bg-red-500  hover:bg-red-600 focus:bg-red-600 active:bg-red-700";
+  } else if (props.color === "red" && mode === "outline") {
+    colorClassName =
+      "text-red-500 hover:text-red-600 border border-red-500 hover:border-red-600 focus:border-red-700 active:border-red-700";
   } else if (props.color === "amber" && mode === "normal") {
     colorClassName =
       "hover:shadow-lg active:shadow-lg focus:shadow-lg text-white bg-amber-500  hover:bg-amber-600 focus:bg-amber-600 active:bg-amber-700";

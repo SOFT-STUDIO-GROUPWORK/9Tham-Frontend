@@ -32,39 +32,41 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
+        {/* all link -> add block */}
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
           <div className="text-sm lg:flex-grow">
             <Link
               to={"/"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               หน้าแรก
             </Link>
 
             <Link
               to={"/post"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               บทความ
             </Link>
             <Link
               to={"/editPost"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               แก้ไขบทความ
             </Link>
             <Link
               to={"/profile"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
               หน้าโปรไฟล์ Admin
             </Link>
             <Link
               to={"/detailAccount"}
-              className="block mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
+              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
             >
               ข้อมูลส่วนตัว
             </Link>
+
           </div>
           <div className="text-gray-50 text-sm">
             {isAuth ? (

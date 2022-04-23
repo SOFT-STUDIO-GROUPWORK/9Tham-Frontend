@@ -12,7 +12,7 @@ const LoginPage = (props: Props) => {
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    login?.(username, password);
+    login(username, password);
   };
 
   return (

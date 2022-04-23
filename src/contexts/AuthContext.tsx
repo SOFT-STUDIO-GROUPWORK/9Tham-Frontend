@@ -7,53 +7,54 @@ import {
   loadTokenLocalStorage,
   removeTokenLocalStorage,
 } from "../api/localStorage";
+import { LOGIN_URL, REGISTER_URL, USER_GETMY_URL } from "../api/routes";
 
 interface IAuthContext {
   isAuth: boolean;
-  isLoading: boolean;
-  user?: any;
-  login?: (email: string, password: string) => Promise<void>;
-  getUser?: () => Promise<any>;
-  logout?: () => Promise<void>;
-  createUser?: (
+  token: string;
+  user: any;
+  // setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  createUser: (
     email: string,
     password: string,
     firstName: string,
     lastName: string,
     nickName: string
   ) => Promise<void>;
+  getUser: () => Promise<null>;
 }
-
-const initAuthContext = {
+const AuthContext = React.createContext<IAuthContext>({
   isAuth: false,
-  isLoading: false,
-};
-
-const AuthContext = React.createContext<IAuthContext>(initAuthContext);
-export const useAuth = () => useContext(AuthContext);
+  token: "",
+  user: {},
+  login: () => new Promise((resolve) => resolve()),
+  logout: () => new Promise((resolve) => resolve()),
+  createUser: () => new Promise((resolve) => resolve()),
+  getUser: () => Promise.reject(),
+});
+export const useAuth = () => useContext<IAuthContext>(AuthContext);
 
 type Children = {
   children: ReactChild[];
 };
 
-const LOGIN_URL = "api/Auth/login";
-const REGISTER_URL = "api/Auth/register";
-const USER_GETMY_URL = "api/Blogger"; // get my info
-const USER_GET_URL = "api/Blogger/:id"; // get
-const USER_PUT_URL = "api/Blogger/:id"; // put
-const USER_DELETE_URL = "api/Auth/:id"; // delete
-
 export const AuthProvider = ({ children }: Children) => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState();
+  const [isAuth, setIsAuth] = useState<boolean>(() => {
+    let tk = loadTokenLocalStorage();
+    return tk === "" ? false : true;
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<any>();
+  const [token, setToken] = useState<string>("");
   const navigate = useNavigate();
 
   // visit page first time
   useEffect(() => {
     console.log("beginfirst");
     getUser();
-  }, [isAuth]);
+  }, []);
 
   // auth function
   const login = async (email: string, password: string) => {
@@ -132,8 +133,8 @@ export const AuthProvider = ({ children }: Children) => {
   const getUser = async () => {
     setIsLoading(true);
     let response = null;
+    let loadToken = loadTokenLocalStorage();
     try {
-      let loadToken = loadTokenLocalStorage();
       await axios
         .get(USER_GETMY_URL, config(loadToken))
         .then((res) => {
@@ -152,24 +153,47 @@ export const AuthProvider = ({ children }: Children) => {
     } catch (err) {
       console.warn("Auth getUser(): " + err);
     } finally {
+      setToken(loadToken);
       setIsLoading(false);
       return response;
     }
   };
 
+  // const passValue = useMemo(
+  //   () => ({
+  //     isAuth,
+  //     isLoading,
+  //     setIsLoading,
+  //     token,
+  //     login,
+  //     createUser,
+  //     logout,
+  //     user,
+  //   }),
+  //   [createUser, isAuth, isLoading, login, token, user]
+  // );
+
   const passValue = {
     isAuth,
-    isLoading,
+    token,
+    user,
     login,
     createUser,
     logout,
     getUser,
-    user,
   };
 
   return (
     <AuthContext.Provider value={passValue}>
-      {!isLoading && children}
+      {isLoading ? (
+        <>
+          <div className="flex flex-row items-center justify-center w-screen h-screen">
+            loading...
+          </div>
+        </>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

@@ -6,21 +6,13 @@ import Button from "../../components/Button";
 
 import { nanoid } from "nanoid";
 
-import { BiTrash } from "react-icons/bi";
-import {
-  TAGS_GET_URL,
-  TAG_POST_URL,
-  TAG_GET_URL,
-  TAG_PUT_URL,
-  TAG_DELETE_URL,
-} from "../../api/routes";
 import { useAuth } from "../../contexts/AuthContext";
-import axios, { config } from "../../api/axios";
 
 import ReadOnlyRow from "./components/ReadOnlyRow";
 import EditableRow from "./components/EditableRow";
 
 import Input from "../../components/Input";
+import { getTags, addTag, deleteTag, updateTag } from "./services/tagsService";
 
 type Props = {};
 
@@ -75,22 +67,9 @@ const TagEditPage = (props: Props) => {
 
   useEffect(() => {
     console.log(token);
-    const getTags = async () => {
-      setIsLoading(true);
-      await axios
-        .get(TAGS_GET_URL, config(token))
-        .then((res) => {
-          // setTags(res.data);
-        })
-        .catch((err) => {
-          console.error(`Tags getTags(): ${err.response.status}:` + err);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    };
 
-    getTags();
+    // service getTag()
+    getTags({ setIsLoading, token, setTags });
   }, []);
 
   // add
@@ -109,11 +88,16 @@ const TagEditPage = (props: Props) => {
   };
 
   // when add value to new tag complete, click "add button"
-  const handleAddFormSubmit = (event: any) => {
+  const handleAddFormSubmit = async (event: any) => {
     event.preventDefault();
 
+    // service addTag()
+    let newId = await addTag({ token, setIsLoading, addFormData });
+
+    if (newId == null) return;
+
     const newTag: ITag = {
-      id: parseInt(nanoid()),
+      id: newId,
       name: addFormData.name,
     };
 
@@ -149,18 +133,25 @@ const TagEditPage = (props: Props) => {
   };
 
   // when want to save EditRow, click "save button"
-  const handleEditFormSubmit = (event: any) => {
+  const handleEditFormSubmit = async (event: any) => {
     event.preventDefault();
+    if (editTagId === null) return;
+
+    //api service updateTag()
+    let newName = editFormData.name;
+    let result = await updateTag({ token, setIsLoading, editTagId, newName });
+    if (result === false) {
+      return;
+    }
 
     const editTag = {
       id: editTagId,
-      name: editFormData.name,
+      name: newName,
     };
 
+    //Showing
     const newTags = [...tags];
-
     const index = tags.findIndex((tag) => tag.id === editTagId);
-
     newTags[index] = editTag;
 
     setTags(newTags);
@@ -173,7 +164,14 @@ const TagEditPage = (props: Props) => {
   };
 
   // when want to delete in Readonly, click "delete button"
-  const handleDeleteClick = (tagId: number) => {
+  const handleDeleteClick = async (tagId: number) => {
+    // service deleteTag()
+    console.log(tagId);
+    let result = await deleteTag({ token, setIsLoading, tagId });
+    if (result === false) {
+      return;
+    }
+    //for update State for showing after delete
     const newTags = [...tags];
     const index = tags.findIndex((tag) => tag.id === tagId);
     newTags.splice(index, 1);
@@ -183,7 +181,7 @@ const TagEditPage = (props: Props) => {
   return (
     <>
       {isLoading ? (
-        <div>asdasd</div>
+        <div>Loading</div>
       ) : (
         <div
           className="border-2 border-transparent container mx-auto"

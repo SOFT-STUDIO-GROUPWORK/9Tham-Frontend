@@ -40,21 +40,19 @@ function App() {
             <Route path="/Login" element={<LoginPage />} />
             <Route path="/Register" element={<RegisterPage />} />
             <Route path="/Post" element={<PostPage />} />
+            <Route path="/TagEdit" element={<TagEditPage />} />
             {/* /:id */}
 
-            <Route element={<AuthRoutes />}>
-              <Route path="/Profile" element={<ProfilePage />} />
-              <Route path="/DetailAccount" element={<DetailAccountPage />} />
+            {/* <Route element={<AuthRoutes />}> */}
+            <Route path="/Profile" element={<ProfilePage />} />
+            <Route path="/DetailAccount" element={<DetailAccountPage />} />
 
-              {/* Admin Only */}
-              <Route path="/EditPost" element={<EditPostPage />} />
-              <Route path="/ManageAccount" element={<ManageAccountPage />} />
-              <Route path="/TagEdit" element={<TagEditPage />} />
-              <Route
-                path="/AnnoucementForm"
-                element={<AnnoucementFormPage />}
-              />
-            </Route>
+            {/* Admin Only */}
+            <Route path="/EditPost" element={<EditPostPage />} />
+            <Route path="/ManageAccount" element={<ManageAccountPage />} />
+            <Route path="/TagEdit" element={<TagEditPage />} />
+            <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
+            {/* </Route> */}
 
             {/* redirect if path not found */}
             {/* "replace" prop for history clean -> This will avoid extra redirects after the user click back */}

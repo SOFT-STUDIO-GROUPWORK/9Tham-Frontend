@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import Button from "../../components/Button";
+import { BiEdit } from "react-icons/bi";
+import Input from "..//../components/Input";
+import EditForm from "./Components/EditForm";
 
 type Props = {};
 const Options: string[] = ["User", "Admin"];
@@ -12,9 +16,23 @@ interface IAccount {
   status: string;
 }
 
+const mockAccount = {
+  pic: "pic",
+  id: "1",
+  username: "Poppy",
+  name: "Popeyeza",
+  surname: "Jubjub",
+  role: "Admin",
+  status: "Active",
+};
+
 const DetailAccountPage = (props: Props) => {
   // check at my homePage before proceed by pop (delete if already read)
-  const [Account, setAccount] = useState<IAccount[]>([]);
+  const [account, setAccount] = useState<IAccount>(mockAccount);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+
   return (
     <div>
       <div
@@ -33,31 +51,47 @@ const DetailAccountPage = (props: Props) => {
             <div className="flex flex-col flex-auto">
               <div className="flex flex-row items-center">
                 <div className="text-2xl">ข้อมูลทั่วไป</div>
-                <button className="ml-2 bg-amber-500 w-5 h-5 rounded-sm"></button>
+                <Button
+                  className="text-amber-600"
+                  color={""}
+                  onClick={() => setIsEdit(!isEdit)}
+                >
+                  <BiEdit className="w-full h-5" />
+                </Button>
               </div>
 
               <br></br>
               <tr>
                 <td>
-                  <tr>ID</tr>
-                  <tr>บัญชีผู้ใช้</tr>
-                  <tr>ชื่อ</tr>
-                  <tr>สกุล</tr>
-                  <tr>กลุ่มผู้ใช้</tr>
-                  <tr>สถานะ</tr>
-                  <tr>รหัสผ่าน</tr>
+                  <tr className="h-8">ID</tr>
+                  <tr className="h-8">บัญชีผู้ใช้</tr>
+                  <tr className="h-8">ชื่อ</tr>
+                  <tr className="h-8">สกุล</tr>
+                  <tr className="h-8">กลุ่มผู้ใช้</tr>
+                  <tr className="h-8">สถานะ</tr>
+                  <tr className="h-8">รหัสผ่าน</tr>
+                  <tr className="h-8"></tr>
                 </td>
-                <td className="pl-32">
-                  <tr>ID</tr>
-                  <tr>บัญชีผู้ใช้</tr>
-                  <tr>ชื่อ</tr>
-                  <tr>สกุล</tr>
-                  <tr>กลุ่มผู้ใช้</tr>
-                  <tr>สถานะ</tr>
-                  <button className="bg-amber-500 rounded-full text-white text-sm w-28">
-                    เปลี่ยนรหัสผ่าน
-                  </button>
-                </td>
+                {!isEdit ? (
+                  <td className="pl-32">
+                    <tr className="h-8">{account.id}</tr>
+                    <tr className="h-8">{account.username}</tr>
+                    <tr className="h-8">{account.name}</tr>
+                    <tr className="h-8">{account.surname}</tr>
+                    <tr className="h-8">{account.role}</tr>
+                    <tr className="h-8">{account.status}</tr>
+                    <tr></tr>
+                    <Button className="" color={"amber"}>
+                      เปลี่ยนรหัสผ่าน
+                    </Button>
+                  </td>
+                ) : (
+                  <EditForm
+                    account={account}
+                    setAccount={setAccount}
+                    setIsEdit={setIsEdit}
+                  />
+                )}
               </tr>
               <br></br>
               <br></br>
@@ -68,9 +102,9 @@ const DetailAccountPage = (props: Props) => {
                   <tr>ลบบัญชีผู้ใช้</tr>
                 </td>
                 <td className="pl-28">
-                  <button className="bg-amber-500 rounded-full text-white text-sm w-24">
+                  <Button className="" color={"amber"}>
                     ลบบัญชีผู้ใช้
-                  </button>
+                  </Button>
                 </td>
               </tr>
             </div>

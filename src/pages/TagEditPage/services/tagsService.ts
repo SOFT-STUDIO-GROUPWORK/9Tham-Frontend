@@ -74,7 +74,7 @@ export const updateTag = async ({ token, setIsLoading, editTagId, newName }: upd
             }
         })
         .catch((err) => {
-            console.error(`Tags addTag(): ${err.response.status}:` + err);
+            console.error(`Tags updateTag(): ${err.response.status}:` + err);
             result = false;
         })
         .finally(() => {
@@ -100,7 +100,7 @@ export const deleteTag = async ({ token, setIsLoading, tagId }: deleteTagProps) 
             }
         })
         .catch((err) => {
-            console.error(`Tags addTag(): ${err.response.status}:` + err);
+            console.error(`Tags deleteTag(): ${err.response.status}:` + err);
             result = false;
         })
         .finally(() => {

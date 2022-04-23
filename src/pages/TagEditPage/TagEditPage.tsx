@@ -4,8 +4,6 @@ import Searchbar from "./components/Searchbar";
 import Pagination from "./components/Pagination";
 import Button from "../../components/Button";
 
-import { nanoid } from "nanoid";
-
 import { useAuth } from "../../contexts/AuthContext";
 
 import ReadOnlyRow from "./components/ReadOnlyRow";

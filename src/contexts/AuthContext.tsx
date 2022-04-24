@@ -1,3 +1,4 @@
+import { Result } from "postcss";
 import React, { ReactChild, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { config } from "../api/axios";
@@ -16,6 +17,8 @@ import {
   USER_GETMYEMAIL_URL,
   USER_GET_URL,
   USER_GETALL_URL,
+  USER_CHANGEPASS_URL,
+  USER_GETMYSELF_URL,
 } from "../api/routes";
 
 interface IAuthContext {
@@ -80,15 +83,13 @@ export const AuthProvider = ({ children }: Children) => {
           async (res) => {
             saveTokenLocalStorage(res.data);
             setIsAuth(true);
-            await getUserEmail().then((res2:any) => {
-              // saveLocalStorage(token, true, res2.role); // token state not working when set here
-              saveIsAuthLocalStorage(true)
-              saveRoleLocalStorage(res2.role)
-              alert("เข้าสู่ระบบ สำเร็จ");
-              navigate("/");
-            }).catch((err)=> {
-              throw err
-            });
+
+            let res2:any = await getUserEmail(); // may error didn't catch?
+            saveIsAuthLocalStorage(true)
+            saveRoleLocalStorage(res2.role)
+            alert("เข้าสู่ระบบ สำเร็จ");
+            navigate("/");
+            return isAuth;
           },
           (err) => {
             setIsAuth(false);
@@ -161,22 +162,20 @@ export const AuthProvider = ({ children }: Children) => {
     let loadToken = loadTokenLocalStorage();
     try {
       await axios
-        .get(USER_GETMYEMAIL_URL, config(loadToken))
+        .get(USER_GETMYSELF_URL, config(loadToken))
         .then(async (res) => {
-          let email_response = res.data;
-          await getUser(email_response)
-            .then((res2) => {
-              response = res2;
-              console.log("getUser()");
-              console.log(response);
-              setUser(response);
-              setIsAuth(true);
-            })
-            .catch((err) => {
-              throw Object.assign(
-                new Error(`${err.response.status}: No user found log-in small`)
-              );
-            });
+          let response = res.data;
+          //   await getUser(email_response)
+          //     .then((res2) => {
+          //       response = res2;
+          console.log("getUser()");
+          console.log(response);
+          setUser(response);
+          setIsAuth(true);
+          //     })
+          //     .catch((err) => {
+          //       throw err;
+          //     });
         })
         .catch((err) => {
           setIsAuth(false);
@@ -197,26 +196,26 @@ export const AuthProvider = ({ children }: Children) => {
   };
 
   // chain function 2nd
-  const getUser = async (email: string) => {
-    let response = null;
-    try {
-      await axios
-        .get(USER_GET_URL.replace(":email", email))
-        .then((res) => {
-          response = res.data;
-          setRole(response.role);
-        })
-        .catch((err) => {
-          throw Object.assign(
-            new Error(`${err.response.status}: No user in Database`)
-          );
-        });
-    } catch (err) {
-      console.warn("Auth getUser(): " + err);
-    } finally {
-      return response;
-    }
-  };
+  // const getUser = async (email: string) => {
+  //   let response = null;
+  //   try {
+  //     await axios
+  //       .get(USER_GET_URL.replace(":email", email))
+  //       .then((res) => {
+  //         response = res.data;
+  //         setRole(response.role);
+  //       })
+  //       .catch((err) => {
+  //         throw Object.assign(
+  //           new Error(`${err.response.status}: No user in Database`)
+  //         );
+  //       });
+  //   } catch (err) {
+  //     console.warn("Auth getUser(): " + err);
+  //   } finally {
+  //     return response;
+  //   }
+  // };
 
   // const passValue = useMemo(
   //   () => ({

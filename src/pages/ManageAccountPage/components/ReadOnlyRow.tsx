@@ -25,7 +25,7 @@ const ReadOnlyRow = ({
       <td className="text-left pl-3">{account.username}</td>
       <td className="text-left pl-3">{account.name}</td>
       <td className="text-left pl-3">{account.surname}</td>
-      <td className="">{account.role? "User": "Admin"}</td>
+      <td className="">{account.role? "Admin": "User"}</td>
       <td className="">{account.isBanned? "Banned": "Active"}</td>
       <td className="text-right">
         <Button

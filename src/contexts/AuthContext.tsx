@@ -1,4 +1,3 @@
-import { Result } from "postcss";
 import React, { ReactChild, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { config } from "../api/axios";
@@ -7,10 +6,17 @@ import {
   loadTokenLocalStorage,
   removeTokenLocalStorage,
 } from "../api/localStorage";
-import { LOGIN_URL, REGISTER_URL, USER_GETMY_URL } from "../api/routes";
+import {
+  LOGIN_URL,
+  REGISTER_URL,
+  USER_GETMYEMAIL_URL,
+  USER_GET_URL,
+  USER_GETALL_URL,
+} from "../api/routes";
 
 interface IAuthContext {
   isAuth: boolean;
+  role: number;
   token: string;
   user: any;
   // setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,16 +29,17 @@ interface IAuthContext {
     lastName: string,
     nickName: string
   ) => Promise<void>;
-  getUser: () => Promise<null>;
+  getUserEmail: () => Promise<null>;
 }
 const AuthContext = React.createContext<IAuthContext>({
   isAuth: false,
+  role: 0, // 0 user, 1 admin
   token: "",
   user: {},
   login: () => new Promise((resolve) => resolve()),
   logout: () => new Promise((resolve) => resolve()),
   createUser: () => new Promise((resolve) => resolve()),
-  getUser: () => Promise.reject(),
+  getUserEmail: () => Promise.reject(),
 });
 export const useAuth = () => useContext<IAuthContext>(AuthContext);
 
@@ -45,6 +52,7 @@ export const AuthProvider = ({ children }: Children) => {
     let tk = loadTokenLocalStorage();
     return tk === "" ? false : true;
   });
+  const [role, setRole] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>();
   const [token, setToken] = useState<string>("");
@@ -53,7 +61,7 @@ export const AuthProvider = ({ children }: Children) => {
   // visit page first time
   useEffect(() => {
     console.log("beginfirst");
-    getUser();
+    getUserEmail();
   }, []);
 
   // auth function
@@ -66,9 +74,10 @@ export const AuthProvider = ({ children }: Children) => {
           password,
         })
         .then(
-          (res) => {
+          async (res) => {
             saveTokenLocalStorage(res.data);
             setIsAuth(true);
+            await getUserEmail();
             alert("เข้าสู่ระบบ สำเร็จ");
             navigate("/");
           },
@@ -100,11 +109,11 @@ export const AuthProvider = ({ children }: Children) => {
           firstName,
           lastName,
           nickName,
-          role: 0,
         })
         .then(
           (res) => {
             alert("ลงทะเบียน สำเร็จ");
+            console.log("ลงทะเบียน สำเร็จ");
             console.log(res.data);
             navigate("/Login");
           },
@@ -122,25 +131,36 @@ export const AuthProvider = ({ children }: Children) => {
 
   const logout = async () => {
     setIsLoading(true);
-    console.log("begin");
+
     setIsAuth(false);
+    setUser(null);
     removeTokenLocalStorage();
     alert("ออกจากระบบเรียบร้อย");
-    console.log("end");
+
+    navigate("/login");
     setIsLoading(false);
   };
 
-  const getUser = async () => {
+  const getUserEmail = async () => {
     setIsLoading(true);
     let response = null;
     let loadToken = loadTokenLocalStorage();
     try {
       await axios
-        .get(USER_GETMY_URL, config(loadToken))
-        .then((res) => {
-          response = res.data[0];
-          setUser(response);
-          setIsAuth(true);
+        .get(USER_GETMYEMAIL_URL, config(loadToken))
+        .then(async (res) => {
+          let email_response = res.data;
+          await getUser(email_response)
+            .then((res2) => {
+              response = res2;
+              console.log("getUser()");
+              console.log(response);
+              setUser(response);
+              setIsAuth(true);
+            })
+            .catch((err) => {
+              throw err;
+            });
         })
         .catch((err) => {
           setIsAuth(false);
@@ -151,10 +171,32 @@ export const AuthProvider = ({ children }: Children) => {
           else throw err;
         });
     } catch (err) {
-      console.warn("Auth getUser(): " + err);
+      console.warn("Auth getUserEmail(): " + err);
     } finally {
       setToken(loadToken);
       setIsLoading(false);
+      return response;
+    }
+  };
+
+  // chain function 2nd
+  const getUser = async (email: string) => {
+    let response = null;
+    try {
+      await axios
+        .get(USER_GET_URL.replace(":email", email))
+        .then((res) => {
+          response = res.data;
+          setRole(response.role);
+        })
+        .catch((err) => {
+          throw Object.assign(
+            new Error(`${err.response.status}: No user in Database`)
+          );
+        });
+    } catch (err) {
+      console.warn("Auth getUser(): " + err);
+    } finally {
       return response;
     }
   };
@@ -175,12 +217,13 @@ export const AuthProvider = ({ children }: Children) => {
 
   const passValue = {
     isAuth,
+    role,
     token,
     user,
     login,
     createUser,
     logout,
-    getUser,
+    getUserEmail,
   };
 
   return (

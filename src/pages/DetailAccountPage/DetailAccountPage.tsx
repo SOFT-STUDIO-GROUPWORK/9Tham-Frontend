@@ -3,6 +3,7 @@ import Button from "../../components/Button";
 import { BiEdit } from "react-icons/bi";
 import Input from "..//../components/Input";
 import EditForm from "./Components/EditForm";
+import { useAuth } from "../../contexts/AuthContext"
 
 type Props = {};
 const Options: string[] = ["User", "Admin"];
@@ -32,6 +33,8 @@ const DetailAccountPage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const {getUserEmail} = useAuth();
 
   return (
     <div>

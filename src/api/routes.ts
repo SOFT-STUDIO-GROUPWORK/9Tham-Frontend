@@ -14,6 +14,8 @@ export const USER_DELETE_URL = "api/Blogger/:email"; // delete
 
 // Tags
 export const TAGS_GET_URL = "api/Tags"; // get list
+export const TAGS_GET_PAGE_URL = "api/Tags/:page/:perPage"; // get list
+export const TAGS_SEARCH_PAGE_URL = "api/Tags/:search/:page/:perPage"; // get list
 export const TAG_POST_URL = "api/Tags/"; // post
 export const TAG_GET_URL = "api/Tags/:id"; // get
 export const TAG_PUT_URL = "api/Tags/:id"; // put

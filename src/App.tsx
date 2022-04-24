@@ -24,6 +24,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 //React Router v6 -> change "Switch" to "Routes"
 
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { useEffect } from "react";
 
 function App() {
   return (
@@ -40,10 +41,10 @@ function App() {
             <Route path="/Login" element={<LoginPage />} />
             <Route path="/Register" element={<RegisterPage />} />
             <Route path="/Post" element={<PostPage />} />
+            <Route path="/Profile" element={<ProfilePage />} />
             {/* /:id */}
 
             <Route element={<AuthRoutes />}>
-              <Route path="/Profile" element={<ProfilePage />} />
               <Route path="/DetailAccount" element={<DetailAccountPage />} />
 
               {/* Admin Only */}
@@ -75,10 +76,16 @@ const AuthRoutes = () => {
   const { isAuth } = useAuth();
   let location = useLocation();
 
-  return isAuth ? (
-    <Outlet />
+  return isAuth === true ? (
+    <>
+      {/* <div className="h-28 w-screen bg-green-500">xx{role}xx</div> */}
+      <Outlet />
+    </>
   ) : (
-    <Navigate to="/Login" state={{ from: location }} replace />
+    <>
+      {/* <div className="h-28 w-screen bg-green-500">xx{role}xx</div> */}
+      <Navigate to="/login" state={{ from: location }} replace />
+    </>
   );
 };
 
@@ -87,8 +94,14 @@ const AuthAdminRoutes = () => {
   let location = useLocation();
 
   return role === 1 ? (
-    <Outlet />
+    <>
+      {/* <div className="h-28 w-screen bg-red-500">yy{role}yy</div> */}
+      <Outlet />
+    </>
   ) : (
-    <Navigate to="/" state={{ from: location }} replace />
+    <>
+      {/* <div className="h-28 w-screen bg-red-500">yy{role}yy</div> */}
+      <Navigate to="/" state={{ from: location }} replace />
+    </>
   );
 };

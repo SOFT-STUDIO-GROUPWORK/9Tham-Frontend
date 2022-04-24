@@ -1,27 +1,88 @@
 import axios, { config } from "../../../api/axios";
 
+import { IPagination } from "../TagEditPage"
+
 import {
     TAGS_GET_URL,
     TAG_POST_URL,
-    TAG_GET_URL,
     TAG_PUT_URL,
     TAG_DELETE_URL,
+    TAGS_GET_PAGE_URL,
+    TAGS_SEARCH_PAGE_URL,
 } from "../../../api/routes";
 
 type getTagsProps = {
     setIsLoading: any;
     token: string;
     setTags: any;
+    pagination: IPagination;
+    setPagination: any
 }
-export const getTags = async ({ token, setIsLoading, setTags }: getTagsProps) => {
+export const getTags = async ({ token, setIsLoading, setTags, pagination, setPagination }: getTagsProps) => {
     setIsLoading(true);
     await axios
-        .get(TAGS_GET_URL, config(token))
-        .then((res) => {
-            setTags(res.data);
+        .get(TAGS_GET_PAGE_URL.replace(":page", pagination.currentPage.toString()).replace(":perPage", pagination.perPage.toString()), config(token))
+        .then(async (res) => {
+            setTags(res.data.tags);
+            setPagination((prev: IPagination) => (
+                {
+                    ...prev,
+                    firstPage: res.data.firstPage,
+                    lastPage: res.data.lastPage,
+                    currentPage: res.data.currentPage,
+                    currentTotal: res.data.tags.length
+                })
+            )
+            await axios.get(TAGS_GET_URL, config(token)).then((res) => {
+                setPagination((prev: IPagination) => (
+                    {
+                        ...prev,
+                        total: res.data.length
+                    })
+                )
+            }).catch((err) => {
+                console.error(`Tags getTags2(): ${err.response.status}:` + err);
+            })
         })
         .catch((err) => {
-            console.error(`Tags getTags(): ${err.response.status}:` + err);
+            console.error(`Tags getTags1(): ${err.response.status}:` + err);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
+
+export const getSearchTags = async ({ token, setIsLoading, setTags, pagination, setPagination }: getTagsProps) => {
+    setIsLoading(true);
+    await axios
+        .get(TAGS_SEARCH_PAGE_URL
+            .replace(":search", pagination.search.toString())
+            .replace(":page", pagination.currentPage.toString())
+            .replace(":perPage", pagination.perPage.toString()), config(token))
+        .then(async (res) => {
+            setTags(res.data.tags);
+            setPagination((prev: IPagination) => (
+                {
+                    ...prev,
+                    firstPage: res.data.firstPage,
+                    lastPage: res.data.lastPage,
+                    currentPage: res.data.currentPage,
+                    currentTotal: res.data.tags.length
+                })
+            )
+            await axios.get(TAGS_GET_URL, config(token)).then((res) => {
+                setPagination((prev: IPagination) => (
+                    {
+                        ...prev,
+                        total: res.data.length
+                    })
+                )
+            }).catch((err) => {
+                console.error(`Tags getSearchTags2(): ${err.response.status}:` + err);
+            })
+        })
+        .catch((err) => {
+            console.error(`Tags getSearchTags1(): ${err.response.status}:` + err);
         })
         .finally(() => {
             setIsLoading(false);

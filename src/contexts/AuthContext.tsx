@@ -2,9 +2,13 @@ import React, { ReactChild, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { config } from "../api/axios";
 import {
+  saveLocalStorage,
+  loadLocalStorage,
+  removeLocalStorage,
   saveTokenLocalStorage,
   loadTokenLocalStorage,
-  removeTokenLocalStorage,
+  saveIsAuthLocalStorage,
+  saveRoleLocalStorage,
 } from "../api/localStorage";
 import {
   LOGIN_URL,
@@ -48,14 +52,13 @@ type Children = {
 };
 
 export const AuthProvider = ({ children }: Children) => {
-  const [isAuth, setIsAuth] = useState<boolean>(() => {
-    let tk = loadTokenLocalStorage();
-    return tk === "" ? false : true;
-  });
-  const [role, setRole] = useState<number>(0);
+  const [isAuth, setIsAuth] = useState<boolean>(
+    () => loadLocalStorage().isAuth
+  );
+  const [role, setRole] = useState<number>(() => loadLocalStorage().role);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>();
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>(() => loadLocalStorage().token);
   const navigate = useNavigate();
 
   // visit page first time
@@ -77,9 +80,15 @@ export const AuthProvider = ({ children }: Children) => {
           async (res) => {
             saveTokenLocalStorage(res.data);
             setIsAuth(true);
-            await getUserEmail();
-            alert("เข้าสู่ระบบ สำเร็จ");
-            navigate("/");
+            await getUserEmail().then((res2:any) => {
+              // saveLocalStorage(token, true, res2.role); // token state not working when set here
+              saveIsAuthLocalStorage(true)
+              saveRoleLocalStorage(res2.role)
+              alert("เข้าสู่ระบบ สำเร็จ");
+              navigate("/");
+            }).catch((err)=> {
+              throw err
+            });
           },
           (err) => {
             setIsAuth(false);
@@ -88,6 +97,7 @@ export const AuthProvider = ({ children }: Children) => {
           }
         );
     } catch (err) {
+      removeLocalStorage();
       console.error("Auth login(): " + err);
     } finally {
       setIsLoading(false);
@@ -125,6 +135,7 @@ export const AuthProvider = ({ children }: Children) => {
           }
         );
     } catch (err) {
+      removeLocalStorage();
       console.error("Auth createUser(): " + err);
     }
   };
@@ -134,7 +145,10 @@ export const AuthProvider = ({ children }: Children) => {
 
     setIsAuth(false);
     setUser(null);
-    removeTokenLocalStorage();
+    setRole(1);
+    setToken("");
+    // removeTokenLocalStorage();
+    removeLocalStorage();
     alert("ออกจากระบบเรียบร้อย");
 
     navigate("/login");
@@ -159,18 +173,21 @@ export const AuthProvider = ({ children }: Children) => {
               setIsAuth(true);
             })
             .catch((err) => {
-              throw err;
+              throw Object.assign(
+                new Error(`${err.response.status}: No user found log-in small`)
+              );
             });
         })
         .catch((err) => {
           setIsAuth(false);
           if (err.response.status === 401)
             throw Object.assign(
-              new Error(`${err.response.status}: No user found log-in`)
+              new Error(`${err.response.status}: No user found log-in big`)
             );
           else throw err;
         });
     } catch (err) {
+      removeLocalStorage();
       console.warn("Auth getUserEmail(): " + err);
     } finally {
       setToken(loadToken);
@@ -235,7 +252,10 @@ export const AuthProvider = ({ children }: Children) => {
           </div>
         </>
       ) : (
-        children
+        <>
+          {/* <div className="w-screen h-44">{role}</div> */}
+          {children}
+        </>
       )}
     </AuthContext.Provider>
   );

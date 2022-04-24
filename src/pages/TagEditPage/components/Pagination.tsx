@@ -1,12 +1,28 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-type Props = {};
+import { IPagination } from "../TagEditPage";
 
-const Pagination = (props: Props) => {
+type Props = {
+  pagination: IPagination;
+  handleOnClick: (value: number) => void;
+};
+
+const Pagination = ({ pagination, handleOnClick }: Props) => {
+  let active =
+    "z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium";
+  let inactive =
+    "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium";
+
+  let disableClass = "bg-gray-100 ";
+  let normalStepClass =
+    "relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500";
+
+  let previousPage = pagination.currentPage - 1;
+  let nextPage = pagination.currentPage + 1;
+
   return (
     <div className="w-full bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-
       {/* resposive mobile start */}
       <div className="flex-1 flex justify-between sm:hidden">
         <Link
@@ -27,9 +43,16 @@ const Pagination = (props: Props) => {
       <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to{" "}
-            <span className="font-medium">10</span> of{" "}
-            <span className="font-medium">97</span> results
+            Showing{" "}
+            <span className="font-medium">
+              {pagination.perPage * (pagination.currentPage - 1) + 1}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium">
+              {pagination.perPage * (pagination.currentPage - 1) +
+                pagination.currentTotal}
+            </span>{" "}
+            of <span className="font-medium">{pagination.total}</span> results
           </p>
         </div>
         <div>
@@ -37,61 +60,55 @@ const Pagination = (props: Props) => {
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"
           >
-            <Link
-              to="/"
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            <button
+              onClick={() => handleOnClick(previousPage)}
+              disabled={previousPage < 1}
+              className={
+                previousPage < 1
+                  ? `${disableClass}  ${normalStepClass}  rounded-l-md`
+                  : `${normalStepClass}  rounded-l-md`
+              }
             >
               <span className="sr-only">Previous</span>
               <FaChevronLeft className="h-3 w-6" aria-hidden="true" />
-            </Link>
+            </button>
             {/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
-            <Link
-              to="/"
-              aria-current="page"
-              className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              1
-            </Link>
-            <Link
-              to="/"
-              className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              2
-            </Link>
-            <Link
-              to="/"
-              className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-            >
-              3
-            </Link>
-            <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+
+            {Array.from(Array(pagination.lastPage).keys()).map(
+              (value, index) => {
+                value += 1;
+                return (
+                  <button
+                    key={index}
+                    aria-current="page"
+                    onClick={() => handleOnClick(value)}
+                    className={
+                      value === pagination.currentPage
+                        ? `${active}`
+                        : `${inactive}`
+                    }
+                  >
+                    {value}
+                  </button>
+                );
+              }
+            )}
+
+            {/* <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
               ...
-            </span>
-            <Link
-              to="/"
-              className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"
-            >
-              8
-            </Link>
-            <Link
-              to="/"
-              className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              9
-            </Link>
-            <Link
-              to="/"
-              className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-            >
-              10
-            </Link>
-            <Link
-              to="/"
-              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            </span> */}
+            <button
+              onClick={() => handleOnClick(nextPage)}
+              disabled={nextPage > pagination.lastPage}
+              className={
+                nextPage > pagination.lastPage
+                  ? `${disableClass}  ${normalStepClass}  rounded-r-md`
+                  : `${normalStepClass}  rounded-r-md`
+              }
             >
               <span className="sr-only">Next</span>
               <FaChevronRight className="h-3 w-6" aria-hidden="true" />
-            </Link>
+            </button>
           </nav>
         </div>
       </div>

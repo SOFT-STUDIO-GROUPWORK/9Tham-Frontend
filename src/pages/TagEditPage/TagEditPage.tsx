@@ -10,7 +10,13 @@ import ReadOnlyRow from "./components/ReadOnlyRow";
 import EditableRow from "./components/EditableRow";
 
 import Input from "../../components/Input";
-import { getTags, addTag, deleteTag, updateTag } from "./services/tagsService";
+import {
+  getTags,
+  addTag,
+  deleteTag,
+  updateTag,
+  getSearchTags,
+} from "./services/tagsService";
 
 type Props = {};
 
@@ -45,9 +51,34 @@ let mockAccount = [
   },
 ];
 
+export interface IPagination {
+  firstPage: number;
+  lastPage: number;
+  currentPage: number;
+  perPage: number;
+  currentTotal: number;
+  total: number;
+  search: string;
+}
+const initialPagination = {
+  firstPage: 1,
+  lastPage: 1,
+  currentPage: 1,
+  perPage: 12,
+  currentTotal: 0,
+  total: 0,
+  search: "",
+};
+
 const TagEditPage = (props: Props) => {
   const [tags, setTags] = useState<ITag[]>(mockAccount);
   const [isLoading, setIsLoading] = useState(false);
+
+  //pagination
+  const [pagination, setPagination] = useState<IPagination>(initialPagination);
+
+  //search
+  const [search, setSearch] = useState("");
 
   //add
   const [isAdd, setIsAdd] = useState(false);
@@ -64,11 +95,12 @@ const TagEditPage = (props: Props) => {
   const { token } = useAuth();
 
   useEffect(() => {
-    console.log(token);
+    // console.log(token);
 
     // service getTag()
-    getTags({ setIsLoading, token, setTags });
-  }, []);
+    if (pagination.search === "")
+      getTags({ setIsLoading, token, setTags, pagination, setPagination });
+  }, [pagination.currentPage, pagination.search]);
 
   // add
   // add value to add from, in "input box", combine as "FormData"
@@ -91,6 +123,7 @@ const TagEditPage = (props: Props) => {
 
     // service addTag()
     let newId = await addTag({ token, setIsLoading, addFormData });
+    getTags({ setIsLoading, token, setTags, pagination, setPagination });
 
     if (newId == null) return;
 
@@ -176,6 +209,26 @@ const TagEditPage = (props: Props) => {
     setTags(newTags);
   };
 
+  const handlePagination = (value: number) => {
+    setPagination((prev: IPagination) => ({ ...prev, currentPage: value }));
+    console.log(pagination);
+    //getTags({ setIsLoading, token, setTags, pagination, setPagination });
+  };
+
+  const handleSearchFormData = (event: any) => {
+    setSearch(event.target.value);
+    setPagination((prev: IPagination) => ({
+      ...prev,
+      search: event.target.value,
+    }));
+  };
+
+  const handleOnClick = (event: any) => {
+    if (pagination.search === "")
+      getTags({ setIsLoading, token, setTags, pagination, setPagination });
+    getSearchTags({ setIsLoading, token, setTags, pagination, setPagination });
+  };
+
   return (
     <>
       {isLoading ? (
@@ -199,7 +252,11 @@ const TagEditPage = (props: Props) => {
                   <div className="flex flex-row items-center">
                     <div className="text-3xl mr-2">จัดการหมวดหมู่</div>
                     <div className="h-full w-96">
-                      <Searchbar />
+                      <Searchbar
+                        handleOnClick={handleOnClick}
+                        searchData={search}
+                        handleOnChange={handleSearchFormData}
+                      />
                     </div>
                   </div>
 
@@ -265,7 +322,11 @@ const TagEditPage = (props: Props) => {
                         <>
                           {editTagId === tag.id ? (
                             <EditableRow
-                              index={index}
+                              index={
+                                pagination.perPage *
+                                  (pagination.currentPage - 1) +
+                                index
+                              }
                               editFormData={editFormData}
                               handleEditFormChange={handleEditFormChange}
                               handleCancelClick={handleCancelClick}
@@ -273,7 +334,11 @@ const TagEditPage = (props: Props) => {
                           ) : (
                             <ReadOnlyRow
                               tag={tag}
-                              index={index}
+                              index={
+                                pagination.perPage *
+                                  (pagination.currentPage - 1) +
+                                index
+                              }
                               handleEditClick={handleEditClick}
                               handleDeleteClick={handleDeleteClick}
                             />
@@ -284,7 +349,10 @@ const TagEditPage = (props: Props) => {
                   </table>
                 </form>
               </div>
-              <Pagination />
+              <Pagination
+                pagination={pagination}
+                handleOnClick={handlePagination}
+              />
             </div>
           </div>
         </div>

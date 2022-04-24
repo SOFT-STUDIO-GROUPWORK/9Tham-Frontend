@@ -47,16 +47,13 @@ function App() {
             <Route element={<AuthRoutes />}>
               <Route path="/DetailAccount" element={<DetailAccountPage />} />
 
-              {/* Admin Only */}
-              <Route element={<AuthAdminRoutes />}>
-                <Route path="/EditPost" element={<EditPostPage />} />
-                <Route path="/ManageAccount" element={<ManageAccountPage />} />
-                <Route path="/TagEdit" element={<TagEditPage />} />
-                <Route
-                  path="/AnnoucementForm"
-                  element={<AnnoucementFormPage />}
-                />
-              </Route>
+            {/* Admin Only */}
+            <Route element={<AuthAdminRoutes />
+            <Route path="/EditPost" element={<EditPostPage />} />
+            <Route path="/ManageAccount" element={<ManageAccountPage />} />
+            <Route path="/TagEdit" element={<TagEditPage />} />
+            <Route path="/AnnoucementForm" element={<AnnoucementFormPage />} />
+            </Route>
             </Route>
 
             {/* redirect if path not found */}

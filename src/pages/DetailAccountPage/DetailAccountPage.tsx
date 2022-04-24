@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BiEdit } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
+import { BiEdit, BiImageAdd, BiUserCircle } from "react-icons/bi";
 import Input from "..//../components/Input";
 import EditForm from "./Components/EditForm";
 import { useAuth } from "../../contexts/AuthContext";
@@ -53,6 +53,23 @@ const DetailAccountPage = (props: Props) => {
     setIsEdit(false);
   };
 
+  //IMG
+  const mockImg =
+    "https://storage.thaipost.net/main/uploads2/photos/big/20200915/image_big_5f605cae84507.jpg";
+
+  const [profileImage, setProfileImage] = useState<any>(undefined);
+
+  const imageHandler = (e: any) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setProfileImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
   return (
     <div>
       <div
@@ -63,7 +80,36 @@ const DetailAccountPage = (props: Props) => {
           <div className="flex flex-row mx-28 my-12">
             <div className="flex flex-col flex-auto">
               <div className="text-2xl">บัญชีผู้ใช้งาน</div>
-              <div className="mt-10 bg-amber-500 rounded-full w-52 h-52"></div>
+              <div className="flex justify-center items-center mt-10 rounded-full w-48 h-48 border-4 border-amber-500">
+                {profileImage == undefined ? (
+                  <BiUserCircle className="flex justify-center items-center h-40 w-40 text-gray-400" />
+                ) : (
+                  <img
+                    src={profileImage}
+                    className="h-44 w-44 cover-full rounded-full"
+                  />
+                )}
+              </div>
+              <input
+                type="file"
+                name="imgage-upload"
+                id="input"
+                accept="image/*"
+                className="mt-6"
+                onChange={imageHandler}
+              />
+              <div className="w-full mt-1">
+                <label htmlFor="input">
+                  {profileImage == undefined ? (
+                    <div className="flex flex-row">
+                      <BiImageAdd className="mr-2" />
+                      Choose your photo
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </label>
+              </div>
             </div>
             <div className="flex flex-col flex-auto">
               <div className="text-2xl"></div>

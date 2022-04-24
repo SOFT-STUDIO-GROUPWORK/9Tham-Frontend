@@ -2,9 +2,11 @@ import logo from "../assets/budda-logo.png";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const { isAuth, user, logout } = useAuth();
+
   return (
     <div className="fixed w-full bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600  p-3 shadow-lg z-50">
       <nav className="container w-3/4 mx-auto flex items-center justify-between flex-wrap">

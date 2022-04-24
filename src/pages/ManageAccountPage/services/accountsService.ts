@@ -2,7 +2,7 @@ import axios, { config } from "../../../api/axios";
 
 import {
     REGISTER_URL,
-    USER_GETMY_URL,
+    USER_GETALL_URL,
     USER_GET_URL,
     USER_PUT_URL,
     USER_DELETE_URL,
@@ -17,7 +17,7 @@ type getTagsProps = {
 export const getAccounts = async ({ token, setIsLoading, setAccounts }: getTagsProps) => {
     setIsLoading(true);
     await axios
-        .get(USER_GETMY_URL, config(token))
+        .get(USER_GETALL_URL, config(token))
         .then((res) => {
             console.log(res.data)
 
@@ -87,7 +87,7 @@ export const updateAccount = async ({ token, setIsLoading, editAccountId, editFo
     setIsLoading(true);
     let result = false;
     await axios
-        .put(USER_PUT_URL.replace(":id", editAccountId.toString()), {
+        .put(USER_PUT_URL.replace(":email", editAccountId.toString()), {
             email: editFormData.username,
             firstName: editFormData.name,
             lastName: editFormData.surname,
@@ -121,7 +121,7 @@ export const deleteAccount = async ({ token, setIsLoading, accountId }: deleteTa
     setIsLoading(true);
     let result = false;
     await axios
-        .delete(USER_DELETE_URL.replace(":id", accountId.toString()), config(token))
+        .delete(USER_DELETE_URL.replace(":email", accountId.toString()), config(token))
         .then((res: any) => {
             if (res.status === 200) {
                 console.log("delete account complete!");

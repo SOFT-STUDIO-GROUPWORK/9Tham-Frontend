@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import Button from "../../components/Button";
 import { BiEdit } from "react-icons/bi";
 import Input from "..//../components/Input";
 import EditForm from "./Components/EditForm";
-import { useAuth } from "../../contexts/AuthContext"
+import { useAuth } from "../../contexts/AuthContext";
+import Button from "../../components/Button";
+import EditPassword from "./Components/EditPassword";
 
 type Props = {};
 const Options: string[] = ["User", "Admin"];
@@ -29,12 +30,28 @@ const mockAccount = {
 
 const DetailAccountPage = (props: Props) => {
   // check at my homePage before proceed by pop (delete if already read)
-  const [account, setAccount] = useState<IAccount>(mockAccount);
+
   const [isLoading, setIsLoading] = useState(false);
 
+  //edit account
+  const [account, setAccount] = useState<IAccount>(mockAccount);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const {getUserEmail} = useAuth();
+  //edit password
+  const [password, setPassword] = useState<string>("");
+  const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
+
+  const { getUserEmail } = useAuth();
+
+  const handleEdit = () => {
+    setIsEditPassword(false);
+    setIsEdit(true);
+  };
+
+  const handleEditPassword = () => {
+    setIsEditPassword(true);
+    setIsEdit(false);
+  };
 
   return (
     <div>
@@ -55,9 +72,10 @@ const DetailAccountPage = (props: Props) => {
               <div className="flex flex-row items-center">
                 <div className="text-2xl">ข้อมูลทั่วไป</div>
                 <Button
-                  className="text-amber-600"
+                  className="text-amber-600 bg-white"
                   color={""}
-                  onClick={() => setIsEdit(!isEdit)}
+                  onClick={handleEdit}
+                  disable={isEditPassword}
                 >
                   <BiEdit className="w-full h-5" />
                 </Button>
@@ -84,9 +102,20 @@ const DetailAccountPage = (props: Props) => {
                     <tr className="h-8">{account.role}</tr>
                     <tr className="h-8">{account.status}</tr>
                     <tr></tr>
-                    <Button className="" color={"amber"}>
-                      เปลี่ยนรหัสผ่าน
-                    </Button>
+                    {!isEditPassword ? (
+                      <Button
+                        className=""
+                        color={"amber"}
+                        onClick={handleEditPassword}
+                      >
+                        เปลี่ยนรหัสผ่าน
+                      </Button>
+                    ) : (
+                      <EditPassword
+                        setPassword={setPassword}
+                        setIsEditPassword={setIsEditPassword}
+                      />
+                    )}
                   </td>
                 ) : (
                   <EditForm
@@ -97,7 +126,6 @@ const DetailAccountPage = (props: Props) => {
                 )}
               </tr>
               <br></br>
-              <br></br>
               <div className="text-2xl">ตั้งค่าบัญชีผู้ใช้</div>
               <br></br>
               <tr>
@@ -105,9 +133,23 @@ const DetailAccountPage = (props: Props) => {
                   <tr>ลบบัญชีผู้ใช้</tr>
                 </td>
                 <td className="pl-28">
-                  <Button className="" color={"amber"}>
-                    ลบบัญชีผู้ใช้
-                  </Button>
+                  {!isEdit && !isEditPassword ? (
+                    <Button
+                      className="w-30 h-9"
+                      color={"amber"}
+                      disable={isEdit || isEditPassword}
+                    >
+                      ลบบัญชีผู้ใช้
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-30 h-9 bg-gray-200"
+                      color={"amber"}
+                      disable={isEdit || isEditPassword}
+                    >
+                      ลบบัญชีผู้ใช้
+                    </Button>
+                  )}
                 </td>
               </tr>
             </div>

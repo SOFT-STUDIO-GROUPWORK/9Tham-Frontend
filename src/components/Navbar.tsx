@@ -62,12 +62,12 @@ const Navbar = () => {
             >
               หน้าโปรไฟล์ Admin
             </Link>
-            <Link
+            {/* <Link
               to={"/detailAccount"}
               className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
             >
               ข้อมูลส่วนตัว
-            </Link>
+            </Link> */}
 
           </div>
           <div className="text-gray-50 text-sm">

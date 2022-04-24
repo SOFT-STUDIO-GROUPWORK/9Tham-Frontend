@@ -1,20 +1,67 @@
 import React, { useState } from "react";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-
+import { useAuth } from "../../../contexts/AuthContext";
+import axios, { config } from "../../../api/axios";
+import { USER_CHANGEPASS_URL } from "../../../api/routes";
 type Props = {
   setPassword: any;
   setIsEditPassword: any;
+};
+
+const changePassword = async (
+  email: string,
+  password: string,
+  oldPassword: string,
+  token: string
+) => {
+  try {
+    await axios
+      .patch(
+        USER_CHANGEPASS_URL,
+        {
+          email,
+          password,
+          oldPassword,
+        },
+        config(token)
+      )
+      .then(
+        async (res) => {
+          alert("เปลี่ยนpassword สำเร็จ");
+        },
+        (err) => {
+          alert("เปลี่ยนpassword ไม่สำเร็จ");
+          console.log(err.response.data);
+        }
+      );
+  } catch (err) {
+    console.error("Auth login(): " + err);
+  } finally {
+  }
 };
 
 const EditPassword = ({ setPassword, setIsEditPassword }: Props) => {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-
-  const handleSubmit = (e: any) => {
+  const { user, login, token } = useAuth();
+  const email = user.email;
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setPassword(newPassword);
+    changePassword(email, newPassword, oldPassword, token);
+    //   const result = await login(user.email, oldPassword)
+    //     .then((res) => {
+    //       //if(res.reponse.status== 200)
+    //       alert("คุณกำลังจะเข้าสู่ระบบใหม่อีกครั้ง");
+    //       changePassword(email, newPassword, oldPassword, token);
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err.response.data);
+    //     });
+    //   console.log(result);
     setIsEditPassword(false);
   };
 

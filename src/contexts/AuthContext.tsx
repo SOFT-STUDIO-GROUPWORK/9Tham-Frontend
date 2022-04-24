@@ -1,10 +1,15 @@
+import { Result } from "postcss";
 import React, { ReactChild, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { config } from "../api/axios";
 import {
+  saveLocalStorage,
+  loadLocalStorage,
+  removeLocalStorage,
   saveTokenLocalStorage,
   loadTokenLocalStorage,
-  removeTokenLocalStorage,
+  saveIsAuthLocalStorage,
+  saveRoleLocalStorage,
 } from "../api/localStorage";
 import {
   LOGIN_URL,
@@ -12,6 +17,8 @@ import {
   USER_GETMYEMAIL_URL,
   USER_GET_URL,
   USER_GETALL_URL,
+  USER_CHANGEPASS_URL,
+  USER_GETMYSELF_URL,
 } from "../api/routes";
 
 interface IAuthContext {
@@ -48,14 +55,13 @@ type Children = {
 };
 
 export const AuthProvider = ({ children }: Children) => {
-  const [isAuth, setIsAuth] = useState<boolean>(() => {
-    let tk = loadTokenLocalStorage();
-    return tk === "" ? false : true;
-  });
-  const [role, setRole] = useState<number>(0);
+  const [isAuth, setIsAuth] = useState<boolean>(
+    () => loadLocalStorage().isAuth
+  );
+  const [role, setRole] = useState<number>(() => loadLocalStorage().role);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>();
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>(() => loadLocalStorage().token);
   const navigate = useNavigate();
 
   // visit page first time
@@ -77,9 +83,13 @@ export const AuthProvider = ({ children }: Children) => {
           async (res) => {
             saveTokenLocalStorage(res.data);
             setIsAuth(true);
-            await getUserEmail();
+
+            let res2:any = await getUserEmail(); // may error didn't catch?
+            saveIsAuthLocalStorage(true)
+            saveRoleLocalStorage(res2.role)
             alert("เข้าสู่ระบบ สำเร็จ");
             navigate("/");
+            return isAuth;
           },
           (err) => {
             setIsAuth(false);
@@ -88,6 +98,7 @@ export const AuthProvider = ({ children }: Children) => {
           }
         );
     } catch (err) {
+      removeLocalStorage();
       console.error("Auth login(): " + err);
     } finally {
       setIsLoading(false);
@@ -125,6 +136,7 @@ export const AuthProvider = ({ children }: Children) => {
           }
         );
     } catch (err) {
+      removeLocalStorage();
       console.error("Auth createUser(): " + err);
     }
   };
@@ -134,7 +146,10 @@ export const AuthProvider = ({ children }: Children) => {
 
     setIsAuth(false);
     setUser(null);
-    removeTokenLocalStorage();
+    setRole(1);
+    setToken("");
+    // removeTokenLocalStorage();
+    removeLocalStorage();
     alert("ออกจากระบบเรียบร้อย");
 
     navigate("/login");
@@ -147,30 +162,31 @@ export const AuthProvider = ({ children }: Children) => {
     let loadToken = loadTokenLocalStorage();
     try {
       await axios
-        .get(USER_GETMYEMAIL_URL, config(loadToken))
+        .get(USER_GETMYSELF_URL, config(loadToken))
         .then(async (res) => {
-          let email_response = res.data;
-          await getUser(email_response)
-            .then((res2) => {
-              response = res2;
-              console.log("getUser()");
-              console.log(response);
-              setUser(response);
-              setIsAuth(true);
-            })
-            .catch((err) => {
-              throw err;
-            });
+          let response = res.data;
+          //   await getUser(email_response)
+          //     .then((res2) => {
+          //       response = res2;
+          console.log("getUser()");
+          console.log(response);
+          setUser(response);
+          setIsAuth(true);
+          //     })
+          //     .catch((err) => {
+          //       throw err;
+          //     });
         })
         .catch((err) => {
           setIsAuth(false);
           if (err.response.status === 401)
             throw Object.assign(
-              new Error(`${err.response.status}: No user found log-in`)
+              new Error(`${err.response.status}: No user found log-in big`)
             );
           else throw err;
         });
     } catch (err) {
+      removeLocalStorage();
       console.warn("Auth getUserEmail(): " + err);
     } finally {
       setToken(loadToken);
@@ -180,26 +196,26 @@ export const AuthProvider = ({ children }: Children) => {
   };
 
   // chain function 2nd
-  const getUser = async (email: string) => {
-    let response = null;
-    try {
-      await axios
-        .get(USER_GET_URL.replace(":email", email))
-        .then((res) => {
-          response = res.data;
-          setRole(response.role);
-        })
-        .catch((err) => {
-          throw Object.assign(
-            new Error(`${err.response.status}: No user in Database`)
-          );
-        });
-    } catch (err) {
-      console.warn("Auth getUser(): " + err);
-    } finally {
-      return response;
-    }
-  };
+  // const getUser = async (email: string) => {
+  //   let response = null;
+  //   try {
+  //     await axios
+  //       .get(USER_GET_URL.replace(":email", email))
+  //       .then((res) => {
+  //         response = res.data;
+  //         setRole(response.role);
+  //       })
+  //       .catch((err) => {
+  //         throw Object.assign(
+  //           new Error(`${err.response.status}: No user in Database`)
+  //         );
+  //       });
+  //   } catch (err) {
+  //     console.warn("Auth getUser(): " + err);
+  //   } finally {
+  //     return response;
+  //   }
+  // };
 
   // const passValue = useMemo(
   //   () => ({
@@ -235,7 +251,10 @@ export const AuthProvider = ({ children }: Children) => {
           </div>
         </>
       ) : (
-        children
+        <>
+          {/* <div className="w-screen h-44">{role}</div> */}
+          {children}
+        </>
       )}
     </AuthContext.Provider>
   );

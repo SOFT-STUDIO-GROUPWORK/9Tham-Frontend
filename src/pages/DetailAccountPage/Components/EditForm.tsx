@@ -40,8 +40,12 @@ const EditForm = ({ account, setAccount, setIsEdit }: Props) => {
     setIsEdit(false);
   };
 
+  const handleCancel = () => {
+    setIsEdit(false);
+  };
+
   return (
-    <td className="pl-32">
+    <td className="pl-28">
       <tr className="h-8">{account.id}</tr>
       <tr className="h-8">
         <Input
@@ -49,7 +53,7 @@ const EditForm = ({ account, setAccount, setIsEdit }: Props) => {
           placeholder="Username"
           value={username}
           onChange={(e: any) => setUsername(e.target.value)}
-          className={""}
+          className={"h-7"}
         />
       </tr>
       <tr className="h-8">
@@ -58,7 +62,7 @@ const EditForm = ({ account, setAccount, setIsEdit }: Props) => {
           placeholder="Name"
           value={name}
           onChange={(e: any) => setName(e.target.value)}
-          className={""}
+          className={"h-7"}
         />
       </tr>
       <tr className="h-8">
@@ -67,16 +71,23 @@ const EditForm = ({ account, setAccount, setIsEdit }: Props) => {
           placeholder="Surname"
           value={surname}
           onChange={(e: any) => setSurname(e.target.value)}
-          className={""}
+          className={"h-7"}
         />
       </tr>
       <tr className="h-8">{account.role}</tr>
       <tr className="h-8">{account.status}</tr>
-      <Button className="" color={"amber"}>
+      <Button className="bg-gray-200" color={"amber"} disable={true}>
         เปลี่ยนรหัสผ่าน
       </Button>
       <tr>
-        <Button className="bg" onClick={handleSubmit} color={"amber"}>
+        <Button className="bg mt-5 w-30" onClick={handleCancel} color={"red"}>
+          Cancel
+        </Button>
+        <Button
+          className="bg ml-2 mt-5 w-30"
+          onClick={handleSubmit}
+          color={"green"}
+        >
           Submit
         </Button>
       </tr>

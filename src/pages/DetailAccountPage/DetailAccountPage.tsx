@@ -34,14 +34,13 @@ const DetailAccountPage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   //edit account
-  const [account, setAccount] = useState<IAccount>(mockAccount);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { user, getUserEmail, token } = useAuth();
+  const [account, setAccount] = useState(user);
 
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   //edit password
   const [password, setPassword] = useState<string>("");
   const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
-
-  const { getUserEmail } = useAuth();
 
   const handleEdit = () => {
     setIsEditPassword(false);
@@ -141,12 +140,12 @@ const DetailAccountPage = (props: Props) => {
                 </td>
                 {!isEdit ? (
                   <td className="pl-32">
-                    <tr className="h-8">{account.id}</tr>
-                    <tr className="h-8">{account.username}</tr>
-                    <tr className="h-8">{account.name}</tr>
-                    <tr className="h-8">{account.surname}</tr>
-                    <tr className="h-8">{account.role}</tr>
-                    <tr className="h-8">{account.status}</tr>
+                    <tr className="h-8">{user?.id}</tr>
+                    <tr className="h-8">{user?.email}</tr>
+                    <tr className="h-8">{user?.firstName}</tr>
+                    <tr className="h-8">{user?.lastName}</tr>
+                    <tr className="h-8">{user?.role}</tr>
+                    <tr className="h-8">{user?.isBanned}</tr>
                     <tr></tr>
                     {!isEditPassword ? (
                       <Button
@@ -164,11 +163,7 @@ const DetailAccountPage = (props: Props) => {
                     )}
                   </td>
                 ) : (
-                  <EditForm
-                    account={account}
-                    setAccount={setAccount}
-                    setIsEdit={setIsEdit}
-                  />
+                  <EditForm account={user} setIsEdit={setIsEdit} />
                 )}
               </tr>
               <br></br>

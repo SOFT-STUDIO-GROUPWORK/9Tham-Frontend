@@ -1,29 +1,27 @@
 import axios, { config } from "../api/axios";
-import ICommentLike from "../interfaces/ICommentLike";
+import ILike from "../interfaces/ILike";
 import {
-  COMMENTLIKE_GET_URL,
-  COMMENTLIKE_POST_URL,
-  COMMENTLIKE_GETID_URL,
-  COMMENTLIKE_PUT_URL,
-  COMMENTLIKE_DELETE_URL,
+  LIKE_GET_URL,
+  LIKE_POST_URL,
+  LIKE_GETID_URL,
+  LIKE_PUT_URL,
+  LIKE_DELETE_URL,
 } from "../api/routes";
 
-type getCommentLikeProps = {
+type getLikeProps = {
   setIsLoading: any;
 };
 
-export const getCommentLike = async ({ setIsLoading }: getCommentLikeProps) => {
+export const getCommentLike = async ({ setIsLoading }: getLikeProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(COMMENTLIKE_GET_URL)
+    .get(LIKE_GET_URL)
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(
-        `CommentLike getCommentLike(): ${err.response.status}:` + err
-      );
+      console.error(`Like getLike(): ${err.response.status}:` + err);
     })
     .finally(() => {
       setIsLoading(false);
@@ -32,26 +30,21 @@ export const getCommentLike = async ({ setIsLoading }: getCommentLikeProps) => {
   return response;
 };
 
-type getCommentLikeIdProps = {
+type getLikeIdProps = {
   setIsLoading: any;
-  commentId: number;
+  likeId: number;
 };
 
-export const getCommentLikeId = async ({
-  setIsLoading,
-  commentId,
-}: getCommentLikeIdProps) => {
+export const getLikeId = async ({ setIsLoading, likeId }: getLikeIdProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(COMMENTLIKE_GETID_URL.replace(":id", commentId.toString()))
+    .get(LIKE_GETID_URL.replace(":id", likeId.toString()))
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(
-        `CommentLikeId getCommentLikeId(): ${err.response.status}:` + err
-      );
+      console.error(`LikeId getLikeId(): ${err.response.status}:` + err);
     })
     .finally(() => {
       setIsLoading(false);
@@ -60,39 +53,39 @@ export const getCommentLikeId = async ({
   return response;
 };
 
-type addCommentLikeProps = {
+type addLikeProps = {
   setIsLoading: any;
   token: string;
   addData: {
-    commentId: number;
+    articleId: number;
     bloggerId: number;
   };
 };
 
-export const addCommentLike = async ({
+export const addLike = async ({
   setIsLoading,
   token,
   addData,
-}: addCommentLikeProps) => {
+}: addLikeProps) => {
   setIsLoading(true);
   let response: any;
   await axios
     .post(
-      COMMENTLIKE_POST_URL,
+      LIKE_POST_URL,
       {
-        commentId: addData.commentId,
+        articleId: addData.articleId,
         bloggerId: addData.bloggerId,
       },
       config(token)
     )
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("add comment complete!");
+        console.log("add like complete!");
         response = res.data;
       }
     })
     .catch((err) => {
-      console.error(`Comment addComment(): ${err.response.status}:` + err);
+      console.error(`Like addLike(): ${err.response.status}:` + err);
       response = null;
     })
     .finally(() => {
@@ -102,41 +95,41 @@ export const addCommentLike = async ({
   return response;
 };
 
-type updateCommentLikeProps = {
+type updateLikeProps = {
   setIsLoading: any;
   token: string;
-  editCommentId: number;
+  editLikeId: number;
   addData: {
-    commentId: number;
+    articleId: number;
     bloggerId: number;
   };
 };
 
-export const updateCommentLike = async ({
+export const updateLike = async ({
   token,
   setIsLoading,
-  editCommentId,
+  editLikeId,
   addData,
-}: updateCommentLikeProps) => {
+}: updateLikeProps) => {
   setIsLoading(true);
   let result = false;
   await axios
     .put(
-      COMMENTLIKE_PUT_URL.replace(":id", editCommentId.toString()),
+      LIKE_PUT_URL.replace(":id", editLikeId.toString()),
       {
-        commentId: addData.commentId,
+        articleId: addData.articleId,
         bloggerId: addData.bloggerId,
       },
       config(token)
     )
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("update comment complete!");
+        console.log("update like complete!");
         result = true;
       }
     })
     .catch((err) => {
-      console.error(`Comment updateComment(): ${err.response.status}:` + err);
+      console.error(`Like updateLike(): ${err.response.status}:` + err);
       result = false;
     })
     .finally(() => {
@@ -145,32 +138,29 @@ export const updateCommentLike = async ({
   return result;
 };
 
-type deleteCommentLikeProps = {
+type deleteLikeProps = {
   setIsLoading: any;
   token: string;
-  commentId: number;
+  likeId: number;
 };
 
-export const deleteCommentLike = async ({
+export const deleteLike = async ({
   token,
   setIsLoading,
-  commentId,
-}: deleteCommentLikeProps) => {
+  likeId,
+}: deleteLikeProps) => {
   setIsLoading(true);
   let result = false;
   await axios
-    .delete(
-      COMMENTLIKE_DELETE_URL.replace(":id", commentId.toString()),
-      config(token)
-    )
+    .delete(LIKE_DELETE_URL.replace(":id", likeId.toString()), config(token))
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("delete comment complete!");
+        console.log("delete like complete!");
         result = true;
       }
     })
     .catch((err) => {
-      console.error(`Comment deleteComment(): ${err.response.status}:` + err);
+      console.error(`Like deleteLike(): ${err.response.status}:` + err);
       result = false;
     })
     .finally(() => {

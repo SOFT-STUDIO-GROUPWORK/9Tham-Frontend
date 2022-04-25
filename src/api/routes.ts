@@ -44,3 +44,10 @@ export const COMMENTLIKE_POST_URL = "api/CommentLikes";
 export const COMMENTLIKE_GETID_URL = "api/CommentLikes/:id";
 export const COMMENTLIKE_PUT_URL = "api/CommentLikes/:id";
 export const COMMENTLIKE_DELETE_URL = "api/CommentLikes/:id";
+
+//Like
+export const LIKE_GET_URL = "api/Likes";
+export const LIKE_POST_URL = "api/Likes";
+export const LIKE_GETID_URL = "api/Likes/:id";
+export const LIKE_PUT_URL = "api/Likes/:id";
+export const LIKE_DELETE_URL = "api/Likes/:id";

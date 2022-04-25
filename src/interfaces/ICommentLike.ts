@@ -1,5 +1,5 @@
 export default interface ICommentLike {
-  id: 0;
+  id: number;
   comment?: any;
   commentId: number;
   blogger?: any;

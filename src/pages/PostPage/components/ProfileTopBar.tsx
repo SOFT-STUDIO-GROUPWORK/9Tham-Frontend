@@ -1,23 +1,22 @@
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { FiMoreHorizontal } from "react-icons/fi";
+import IAccount from "../../../interfaces/IAccount";
 
 type Props = {
-    username: string,
-    firstname: string,
-    lastname: string,
-    date: string,
-    img: string,
+    account: IAccount
+    date?: string;
+    like? : number;
 };
 
-const ProfileTopBar = (props: Props) => {
+const ProfileTopBar = ({account, date}: Props) => {
   return (
     <div className="flex flex-row justify-between w-full h-12 mb-4 border-0 border-blue-600">
       <div className="flex flex-row">
         <BsPersonCircle className="w-14 h-full mr-4" />
         <div className="flex flex-col">
-          <p>{props.firstname} {props.lastname}</p>
-          <p><span className="font-semibold text-amber-500">@{props.username}</span> {props.date}</p>
+          <p>{account?.firstName} {account?.lastName}</p>
+          <p><span className="font-semibold text-amber-500">@{account?.email}</span> {date}</p>
         </div>
       </div>
       <div className="flex flex-row gap-2">

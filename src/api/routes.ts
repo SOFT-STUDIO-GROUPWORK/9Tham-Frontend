@@ -30,3 +30,13 @@ export const TAG_DELETE_URL = "api/Tags/:id"; // delete
 //Photo
 export const FILE_POST_URL = "api/FileUpload/picture"
 export const FILE_DELETE_URL = "api/FileUpload/picture"
+
+//Articles
+export const ARTICLES_GETALL_URL = "api/Articles"
+export const ARTICLES_GET_PAGE_URL = "api/Articles/:page/:perPage"
+export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage"
+
+export const ARTICLE_GET_URL = "api/Articles/:id"
+export const ARTICLE_POST_URL = "api/Articles"
+export const ARTICLE_PUT_URL = "api/Articles/:id"
+export const ARTICLE_DELETE_URL = "api/Articles/:id"

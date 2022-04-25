@@ -5,9 +5,21 @@ import NewComment from "./components/NewComment";
 import MOCK_COMMENTS from "../../mocks/Post/comments.json";
 import MOCK_POST from "../../mocks/Post/post.json";
 
+import IAccount, {initialAccount} from "../../interfaces/IAccount"
+import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
+
 type Props = {};
 
 const PostPage = (props: Props) => {
+
+  const {user} = useAuth();
+
+  // who post this post
+  const [postAccount, setPostAccount] = useState(initialAccount);
+
+  const [commentAccount, setCommentAccount] = useState(initialAccount);
+
   return (
     <div className="container mx-auto pb-32">
       <div
@@ -16,13 +28,7 @@ const PostPage = (props: Props) => {
       >
         {/* margin top for navbar */}
         <div className="w-full mt-24">
-          <ProfileTopBar
-            username={MOCK_POST.username}
-            firstname={MOCK_POST.firstname}
-            lastname={MOCK_POST.lastname}
-            date={MOCK_POST.date}
-            img={MOCK_POST.img}
-          />
+          <ProfileTopBar account={postAccount} />
         </div>
 
         <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
@@ -56,13 +62,7 @@ const PostPage = (props: Props) => {
         <div className="w-full">
           {MOCK_COMMENTS.map((c) => {
             return (
-              <Comment
-                username={c.username}
-                firstname={c.firstname}
-                lastname={c.lastname}
-                date={c.date}
-                img={c.img}
-                comment={c.comment}
+              <Comment account={commentAccount} comment={""}
               />
             );
           })}

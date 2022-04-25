@@ -1,24 +1,16 @@
+import IAccount from "../../../interfaces/IAccount";
 import ProfileTopBar from "./ProfileTopBar";
+
 type Props = {
-  username: string;
-  firstname: string;
-  lastname: string;
-  date: string;
-  img: string;
+  account: IAccount
   comment: string;
 };
 
-const Comment = (props: Props) => {
+const Comment = ({account,comment}: Props) => {
   return (
     <div className="w-full border-0 border-red-600 mt-6">
-      <ProfileTopBar
-        username={props.username}
-        firstname={props.firstname}
-        lastname={props.lastname}
-        date={props.date}
-        img={props.img}
-      />
-      <p className="pl-2">{props.comment}</p>
+      <ProfileTopBar account={account}      />
+      <p className="pl-2">{comment}</p>
       <hr className="mt-8" />
     </div>
   );

@@ -23,7 +23,6 @@ export const getTags = async ({ setIsLoading }: getTagsProps) => {
     }).finally(() => {
         setIsLoading(false);
     });
-    console.log(response)
     return response;
 }
 

@@ -20,52 +20,32 @@ import htmlToDraft from "html-to-draftjs";
 import Selector from "./components/Selector";
 import { Link } from "react-router-dom";
 
-import IPost from "../../interfaces/post";
+// import IPost from "../../interfaces/post";
 
 import { getTags } from "../../services/tagsService";
 import ITag from "../../interfaces/ITag";
+import IArticle from "../../interfaces/IArticle";
+import { useAuth } from "../../contexts/AuthContext";
+import { addArticle } from "./services/articlesService";
+
+import { useNavigate } from "react-router-dom";
+import IAccount from "../../interfaces/IAccount";
 
 type Props = {};
 
-const mockDataOptions: ITag[] = [
-  {
-    id: 114,
-    name: "พระ1",
-    articleTags: null,
-  },
-  {
-    id: 121,
-    name: "พระ2",
-    articleTags: null,
-  },
-  {
-    id: 123,
-    name: "gjg",
-    articleTags: null,
-  },
-  {
-    id: 124,
-    name: "asdas",
-    articleTags: null,
-  },
-  {
-    id: 125,
-    name: "asddas",
-    articleTags: null,
-  },
-];
+const defaultTag: ITag = {
+  id: 0,
+  name: "เลือกหมวดหมู่",
+};
 
 const EditPostPage = (props: Props) => {
-  const [token, setToken] = useState(
-    "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzdHJpbmciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTY1MDQ5NTk3MH0.jlTTzqIRJL2ug6bvbzNnUrDUsf6ijlIpfwFacwJi6JwHH7UwqfVBPgj0CXICH2m8AgxGuJvWSf1INojWL1D4Fg"
-  );
   const [isLoading, setIsLoading] = useState(false);
 
   // Post Content
   // Header
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [articleTag, setArticleTag] = useState<string>("เลือกหมวดหมู่");
+  const [articleTag, setArticleTag] = useState<ITag>(defaultTag);
   const [articleTags, setArticleTags] = useState<ITag[]>([]);
   // Cover Image
   const [selectCoverImage, setSelectCoverImage] = useState<undefined | Blob>();
@@ -77,8 +57,13 @@ const EditPostPage = (props: Props) => {
     EditorState.createEmpty()
   );
   //Complete Post
-  const [visibility, setVisibility] = useState<string>("1");
-  const [post, setPost] = useState<IPost>();
+  const [visible, setVisible] = useState<boolean>(true);
+  const [post, setPost] = useState<IArticle | undefined>(undefined);
+
+  const { token, user } = useAuth();
+  const [account, setAccount] = useState<IAccount>(user);
+
+  const navigate = useNavigate();
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -106,6 +91,23 @@ const EditPostPage = (props: Props) => {
     console.log("only second");
     console.log(post);
 
+    if (post !== undefined) {
+      let addFormData: IArticle = post;
+      console.log("HERE!");
+      console.log(articleTag);
+      addArticle({ token, setIsLoading, addFormData })
+        .then((res) => {
+          if (res !== null) {
+            alert("อัพโพสต์สำเร็จ ไปยังหน้าโพสต์");
+            navigate("/");
+          } else {
+            alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
     // CreatePostApi here
   }, [post]);
 
@@ -139,12 +141,13 @@ const EditPostPage = (props: Props) => {
     if (
       title === "" ||
       description === "" ||
-      articleTag === "" ||
+      articleTag.id === 0 ||
       content === undefined
     ) {
       // setError('Please fill out all fields.');
       // setSuccess('');
       console.log("Please fill out all fields.");
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
       return null;
     }
     console.log("every thing is fill requirement");
@@ -168,13 +171,12 @@ const EditPostPage = (props: Props) => {
         )
       ).then(() => {
         setPost({
-          author: "xxxx",
+          bloggerId: account.id!,
           title: title,
           description: description,
-          coverImage: previewCoverImageBufferUrl,
+          thumbnailUrl: previewCoverImageBufferUrl,
           content: draftToHtml(content),
-          articleTag: articleTag,
-          visibility: visibility,
+          visible: visible,
         });
       });
 
@@ -241,13 +243,7 @@ const EditPostPage = (props: Props) => {
         style={{ minHeight: "calc(100vh - 64px)" }}
       >
         <div className="mt-24"></div>
-        <ProfileTopBar
-          username={MOCK_POST.username}
-          firstname={MOCK_POST.firstname}
-          lastname={MOCK_POST.lastname}
-          date={MOCK_POST.date}
-          img={MOCK_POST.img}
-        />
+        <ProfileTopBar account={account} />
         <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
           เพิ่มบทความใหม่
         </h2>
@@ -282,9 +278,7 @@ const EditPostPage = (props: Props) => {
             <span className="text-amber-500">* </span>หมวดหมู่
           </h4>
           <div className="font-normal text-base mb-2">
-            <span
-              className={articleTag === "เลือกหมวดหมู่" ? "text-gray-700 " : ""}
-            >
+            <span className={articleTag.id === 0 ? "text-gray-700 " : ""}>
               <Selector
                 isDefault={true}
                 onChange={(e: any) => setArticleTag(e.target.value)}
@@ -383,11 +377,11 @@ const EditPostPage = (props: Props) => {
                 <input
                   className="sr-only peer"
                   type="radio"
-                  value={visibility}
-                  name="visibility"
+                  value={visible ? "1" : "0"}
+                  name="visible"
                   id="private"
-                  onChange={() => setVisibility("0")}
-                  defaultChecked={visibility === "0"}
+                  onChange={() => setVisible(false)}
+                  defaultChecked={visible === false}
                 />
                 <label
                   className="text-lg flex items-center py-2 px-4 rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"
@@ -400,11 +394,11 @@ const EditPostPage = (props: Props) => {
                 <input
                   className="sr-only peer"
                   type="radio"
-                  value={visibility}
-                  name="visibility"
+                  value={visible ? "1" : "0"}
+                  name="visible"
                   id="public"
-                  onChange={() => setVisibility("1")}
-                  defaultChecked={visibility === "1"}
+                  onChange={() => setVisible(true)}
+                  defaultChecked={visible === true}
                 />
                 <label
                   className="text-lg flex items-center py-2 px-4 bg-slate-50  rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"

@@ -37,7 +37,9 @@ function App() {
           <Routes>
             {/* General */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/Login" element={<LoginPage />} />
+            <Route element={<NoAuthRoutes />}>
+              <Route path="/Login" element={<LoginPage />} />
+            </Route>
             <Route path="/Register" element={<RegisterPage />} />
             <Route path="/Post" element={<PostPage />} />
             <Route path="/Profile" element={<ProfilePage />} />
@@ -69,6 +71,21 @@ function App() {
 }
 
 export default App;
+
+const NoAuthRoutes = () => {
+  const { isAuth } = useAuth();
+  let location = useLocation();
+
+  return isAuth === false ? (
+    <>
+      <Outlet />
+    </>
+  ) : (
+    <>
+      <Navigate to="/" state={{ from: location }} replace />
+    </>
+  );
+};
 
 const AuthRoutes = () => {
   const { isAuth } = useAuth();

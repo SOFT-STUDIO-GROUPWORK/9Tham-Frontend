@@ -20,12 +20,13 @@ import {
   USER_CHANGEPASS_URL,
   USER_GETMYSELF_URL,
 } from "../api/routes";
+import IAccount, {initialAccount} from "../interfaces/IAccount";
 
 interface IAuthContext {
   isAuth: boolean;
   role: number;
   token: string;
-  user: any;
+  user: IAccount;
   // setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -36,17 +37,17 @@ interface IAuthContext {
     lastName: string,
     nickName: string
   ) => Promise<void>;
-  getUserEmail: () => Promise<null>;
+  getUserMySelf: () => Promise<null>;
 }
 const AuthContext = React.createContext<IAuthContext>({
   isAuth: false,
   role: 0, // 0 user, 1 admin
   token: "",
-  user: {},
+  user: initialAccount,
   login: () => new Promise((resolve) => resolve()),
   logout: () => new Promise((resolve) => resolve()),
   createUser: () => new Promise((resolve) => resolve()),
-  getUserEmail: () => Promise.reject(),
+  getUserMySelf: () => Promise.reject(),
 });
 export const useAuth = () => useContext<IAuthContext>(AuthContext);
 
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }: Children) => {
   // visit page first time
   useEffect(() => {
     console.log("beginfirst");
-    getUserEmail();
+    getUserMySelf();
   }, []);
 
   // auth function
@@ -84,9 +85,10 @@ export const AuthProvider = ({ children }: Children) => {
             saveTokenLocalStorage(res.data);
             setIsAuth(true);
 
-            let res2:any = await getUserEmail(); // may error didn't catch?
-            saveIsAuthLocalStorage(true)
-            saveRoleLocalStorage(res2.role)
+            let res2: any = await getUserMySelf(); // may error didn't catch?
+            console.log(res2);
+            saveIsAuthLocalStorage(true);
+            saveRoleLocalStorage(res2.role);
             alert("เข้าสู่ระบบ สำเร็จ");
             navigate("/");
             return isAuth;
@@ -126,7 +128,7 @@ export const AuthProvider = ({ children }: Children) => {
             alert("ลงทะเบียน สำเร็จ");
             console.log("ลงทะเบียน สำเร็จ");
             console.log(res.data);
-            navigate("/Login");
+            navigate(-1);
           },
           (err) => {
             alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว");
@@ -156,7 +158,7 @@ export const AuthProvider = ({ children }: Children) => {
     setIsLoading(false);
   };
 
-  const getUserEmail = async () => {
+  const getUserMySelf = async () => {
     setIsLoading(true);
     let response = null;
     let loadToken = loadTokenLocalStorage();
@@ -164,18 +166,11 @@ export const AuthProvider = ({ children }: Children) => {
       await axios
         .get(USER_GETMYSELF_URL, config(loadToken))
         .then(async (res) => {
-          let response = res.data;
-          //   await getUser(email_response)
-          //     .then((res2) => {
-          //       response = res2;
+          response = res.data;
           console.log("getUser()");
           console.log(response);
           setUser(response);
           setIsAuth(true);
-          //     })
-          //     .catch((err) => {
-          //       throw err;
-          //     });
         })
         .catch((err) => {
           setIsAuth(false);
@@ -187,7 +182,7 @@ export const AuthProvider = ({ children }: Children) => {
         });
     } catch (err) {
       removeLocalStorage();
-      console.warn("Auth getUserEmail(): " + err);
+      console.warn("Auth getUserMySelf(): " + err);
     } finally {
       setToken(loadToken);
       setIsLoading(false);
@@ -239,7 +234,7 @@ export const AuthProvider = ({ children }: Children) => {
     login,
     createUser,
     logout,
-    getUserEmail,
+    getUserMySelf,
   };
 
   return (

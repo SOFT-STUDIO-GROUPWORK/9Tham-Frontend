@@ -1,14 +1,36 @@
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import { IAccount } from "../ManageAccountPage";
-import Selector from "./Selector"
+import IAccount from "../../../interfaces/IAccount";
+import Selector from "./Selector";
 
 type Props = {
   index: number;
-  editFormData: IAccount
+  editFormData: IAccount;
   handleEditFormChange: (event: any) => void;
   handleCancelClick: (event: any) => void;
 };
+
+const isBanned = [
+  {
+    value: true,
+    display: "Banned",
+  },
+  {
+    value: false,
+    display: "Active",
+  },
+];
+
+const role = [
+  {
+    value: 0,
+    display: "User",
+  },
+  {
+    value: 1,
+    display: "Admin",
+  },
+];
 
 const EditableRow = ({
   index,
@@ -17,20 +39,20 @@ const EditableRow = ({
   handleCancelClick,
 }: Props) => {
   let structures = [
+    // {
+    //   name: "email",
+    //   placeholder: "ใส่บัญชีผู้ใช้...",
+    //   value: editFormData.email,
+    // },
     {
-      name: "username",
-      placeholder: "ใส่บัญชีผู้ใช้...",
-      value: editFormData.username,
-    },
-    {
-      name: "name",
+      name: "firstName",
       placeholder: "ใส่ชื่อ...",
-      value: editFormData.name,
+      value: editFormData.firstName,
     },
     {
-      name: "surname",
+      name: "lastName",
       placeholder: "ใส่สกุล...",
-      value: editFormData.surname,
+      value: editFormData.lastName,
     },
   ];
 
@@ -40,9 +62,10 @@ const EditableRow = ({
       className="bg-amber-100 text-center h-12  border-b-2 border-gray-100"
     >
       <td className="">{index + 1}</td>
+      <td className="text-left pl-3">{editFormData.email}</td>
       {structures.map((structure, index) => (
         <td className="text-left" key={index}>
-          <div className={structure.name === "username"? "w-56" : "w-36"}>
+          <div className={structure.name === "email" ? "w-56" : "w-36"}>
             <Input
               name={structure.name}
               placeholder={structure.placeholder}
@@ -53,8 +76,24 @@ const EditableRow = ({
           </div>
         </td>
       ))}
-      <td><Selector title={""} options={["User", "Admin"]}/></td>
-      <td><Selector title={""} options={["Active", "Banned"]}/></td>
+      <td>
+        <Selector
+          title={""}
+          name="role"
+          options={role}
+          selected={editFormData.role}
+          onChange={handleEditFormChange}
+        />
+      </td>
+      <td>
+        <Selector
+          title={""}
+          name="isBanned"
+          options={isBanned}
+          selected={editFormData.isBanned}
+          onChange={handleEditFormChange}
+        />
+      </td>
       <td className="text-right">
         <Button className="w-20 text-sm" color={"amber"}>
           บันทึก

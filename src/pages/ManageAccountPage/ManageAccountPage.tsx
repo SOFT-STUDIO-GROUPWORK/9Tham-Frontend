@@ -1,63 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Selector from "./components/Selector";
-import Searchbar from "./components/Searchbar";
-import Pagination from "./components/Pagination";
 import EditableRow from "./components/EditableRow";
 import ReadOnlyRow from "./components/ReadOnlyRow";
 
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { useAuth } from "../../contexts/AuthContext";
+import Searchbar from "../../components/Searchbar";
 
 import { useNavigate } from "react-router-dom";
 
 import {
-  getAccounts,
+  getPageAccounts,
+  getSearchAccounts,
   updateAccount,
   deleteAccount,
-} from "./services/accountsService";
+} from "../../services/accountsService";
+import Pagination from "../../components/Pagination";
+import IPagination, { initialPagination } from "../../interfaces/IPagination";
+import IAccount, { initialAccount } from "../../interfaces/IAccount";
 
 type Props = {};
 
-export interface IAccount {
-  id?: number;
-  username: string;
-  name: string;
-  surname: string;
-  role: number;
-  nickname: string;
-  status?: string;
-  pic?: string;
-  isBanned: boolean;
-}
-const initialAccount = {
-  username: "",
-  name: "",
-  surname: "",
-  nickname: "",
-  role: 0,
-  isBanned: false,
-};
 let mockAccount = [
   {
     id: 1,
-    username: "gutsoo",
-    name: "Pudinan",
-    surname: "Pensuk",
-    nickname: "Pudinan Pensuk",
-    role: 1,
-    status: "Active",
+    firstName: "xxxxxx",
+    lastName: "xxxxxx",
+    nickName: "xxxxxx xxxxxx",
+    email: "eeeee",
+    role: 0,
     isBanned: false,
+    imageUrl: "",
+    bannerUrl: "",
   },
   {
     id: 2,
-    username: "pop",
-    name: "Sirawit",
-    surname: "Sukwattanavit",
-    nickname: "Sirawit Sukwattanavit",
+    firstName: "pop",
+    lastName: "hhhhhh",
+    nickName: "pop hhhhhh",
+    email: "kkkkkkk",
     role: 1,
-    status: "Active",
     isBanned: false,
+    imageUrl: "",
+    bannerUrl: "",
   },
 ];
 
@@ -69,11 +55,17 @@ const ManageAccountPage = (props: Props) => {
   // const [isAdd, setIsAdd] = useState(false);
   // const [addFormData, setAddFormData] = useState(initialAccount);
 
+  //pagination
+  const [pagination, setPagination] = useState<IPagination>(initialPagination);
+
+  //search
+  const [search, setSearch] = useState("");
+
   //edit
   const [editAccountId, setEditAccountId] = useState<number | null>(null);
   const [editFormData, setEditFormData] = useState<IAccount>(initialAccount);
 
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
   const navigate = useNavigate();
 
@@ -81,8 +73,9 @@ const ManageAccountPage = (props: Props) => {
     console.log(token);
 
     // service getTag()
-    getAccounts({ setIsLoading, token, setAccounts });
-  }, []);
+    if (pagination.search === "")
+      getPageAccounts({ setIsLoading, setAccounts, pagination, setPagination });
+  }, [pagination.currentPage, pagination.search]);
 
   const smallFormChange = (event: any) => {
     let newFormData: IAccount = { ...editFormData }; // beware! addFromData and editFormData
@@ -91,14 +84,20 @@ const ManageAccountPage = (props: Props) => {
     let fieldValue: string = event.target.value;
     // change to variable attribute
 
-    if (fieldName === "name") {
-      newFormData.name = fieldValue;
-    } else if (fieldName === "surname") {
-      newFormData.surname = fieldValue;
-    } else if (fieldName === "username") {
-      newFormData.username = fieldValue;
+    if (fieldName === "firstName") {
+      newFormData.firstName = fieldValue;
+    } else if (fieldName === "lastName") {
+      newFormData.lastName = fieldValue;
+    } else if (fieldName === "email") {
+      newFormData.email = fieldValue;
     } else if (fieldName === "role") {
       newFormData.role = parseInt(fieldValue);
+    } else if (fieldName === "isBanned") {
+      if (fieldValue === "true") {
+        newFormData.isBanned = true;
+      }else if (fieldValue === "false") {
+        newFormData.isBanned = false;
+      }
     }
     return newFormData;
   };
@@ -141,13 +140,15 @@ const ManageAccountPage = (props: Props) => {
     event.preventDefault();
     setEditAccountId(account.id!);
 
-    let formValues = {
-      name: account.name,
-      username: account.username,
-      surname: account.surname,
-      nickname: account.name + " " + account.surname,
+    let formValues: IAccount = {
+      firstName: account.firstName,
+      email: account.email,
+      lastName: account.lastName,
+      nickName: account.firstName + " " + account.lastName,
       role: account.role,
       isBanned: account.isBanned,
+      imageUrl: account.imageUrl,
+      bannerUrl: account.bannerUrl,
     };
 
     setEditFormData(formValues);
@@ -158,6 +159,7 @@ const ManageAccountPage = (props: Props) => {
     event.preventDefault();
 
     let newFormData = smallFormChange(event);
+    console.log(newFormData)
 
     setEditFormData(newFormData);
   };
@@ -167,32 +169,35 @@ const ManageAccountPage = (props: Props) => {
     event.preventDefault();
     if (editAccountId === null) return;
 
+    let email = editFormData.email;
+
     //api service updateAccount()
     let result = await updateAccount({
       token,
       setIsLoading,
-      editAccountId,
+      email,
       editFormData,
     });
     if (result === false) {
       return;
     }
 
-    const editAccount = {
+    let editAccount = {
       id: editAccountId,
-      username: editFormData.username,
-      name: editFormData.name,
-      surname: editFormData.surname,
-      nickname: editFormData.name + " " + editFormData.surname,
+      email: editFormData.email,
+      firstName: editFormData.firstName,
+      lastName: editFormData.lastName,
+      nickName: editFormData.firstName + " " + editFormData.lastName,
       role: editFormData.role,
-      isBanned: false,
-      pic: editFormData.pic,
+      isBanned: editFormData.isBanned,
+      imageUrl: editFormData.imageUrl,
+      bannerUrl: editFormData.bannerUrl,
       //add password after tree finish
     };
 
     //Showing
-    const newAccounts = [...accounts];
-    const index = accounts.findIndex(
+    let newAccounts = [...accounts];
+    let index = accounts.findIndex(
       (account: IAccount) => account.id === editAccountId
     );
     newAccounts[index] = editAccount;
@@ -207,18 +212,44 @@ const ManageAccountPage = (props: Props) => {
   };
 
   // when want to delete in Readonly, click "delete button"
-  const handleDeleteClick = async (accountId: number) => {
+  const handleDeleteClick = async (email: string) => {
     // service deleteAccount()
-    console.log(accountId);
-    let result = await deleteAccount({ token, setIsLoading, accountId });
+    console.log(email);
+    let result = await deleteAccount({ token, setIsLoading, email });
     if (result === false) {
       return;
     }
     //for update State for showing after delete
     const newAccounts = [...accounts];
-    const index = accounts.findIndex((account) => account.id === accountId);
+    const index = accounts.findIndex((account) => account.email === email);
     newAccounts.splice(index, 1);
     setAccounts(newAccounts);
+  };
+
+  const handlePagination = (value: number) => {
+    setPagination((prev: IPagination) => ({ ...prev, currentPage: value }));
+    console.log(pagination);
+  };
+
+  const handleSearchFormData = (event: any) => {
+    setSearch(event.target.value);
+    setPagination((prev: IPagination) => ({
+      ...prev,
+      search: event.target.value,
+    }));
+  };
+
+  const handleSearchOnClick = (event: any) => {
+    if (pagination.search === "") {
+      getPageAccounts({ setIsLoading, setAccounts, pagination, setPagination });
+    } else {
+      getSearchAccounts({
+        setIsLoading,
+        setAccounts,
+        pagination,
+        setPagination,
+      });
+    }
   };
 
   return (
@@ -244,7 +275,11 @@ const ManageAccountPage = (props: Props) => {
                   <div className="flex flex-row items-center">
                     <div className="text-3xl mr-2">จัดการหมวดหมู่</div>
                     <div className="h-full w-96">
-                      <Searchbar />
+                      <Searchbar
+                        searchData={search}
+                        handleSearchOnClick={handleSearchOnClick}
+                        handleOnChange={handleSearchFormData}
+                      />
                     </div>
                   </div>
 
@@ -268,8 +303,12 @@ const ManageAccountPage = (props: Props) => {
                         <th className="font-medium pl-3 w-56 text-left">
                           บัญชีผู้ใช้
                         </th>
-                        <th className="font-medium w-36 pl-3 text-left">ชื่อ</th>
-                        <th className="font-medium w-36 pl-3 text-left">สกุล</th>
+                        <th className="font-medium w-36 pl-3 text-left">
+                          ชื่อ
+                        </th>
+                        <th className="font-medium w-36 pl-3 text-left">
+                          สกุล
+                        </th>
                         <th className="font-medium w-24">กลุ่มผู้ใช้</th>
                         <th className="font-medium w-24">สถานะ</th>
                         <th className="font-medium w-24"></th>
@@ -279,7 +318,7 @@ const ManageAccountPage = (props: Props) => {
                     {/* table Content */}
                     <tbody>
                       {accounts.map((account, index) => (
-                        <>
+                        <React.Fragment key={index}>
                           {editAccountId === account.id ? (
                             <EditableRow
                               index={index}
@@ -293,15 +332,19 @@ const ManageAccountPage = (props: Props) => {
                               index={index}
                               handleEditClick={handleEditClick}
                               handleDeleteClick={handleDeleteClick}
+                              user={user}
                             />
                           )}
-                        </>
+                        </React.Fragment>
                       ))}
                     </tbody>
                   </table>
                 </form>
               </div>
-              <Pagination />
+              <Pagination
+                pagination={pagination}
+                handleOnClick={handlePagination}
+              />
             </div>
           </div>
         </div>

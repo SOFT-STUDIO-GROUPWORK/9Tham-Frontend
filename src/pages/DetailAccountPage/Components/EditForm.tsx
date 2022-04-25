@@ -1,77 +1,86 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import axios, { config } from "../../../api/axios";
-import {
-  USER_DELETE_URL,
-  USER_PUT_URL,
-  USER_GET_URL,
-  USER_GETALL_URL,
-} from "../../../api/routes";
+
 import { useAuth } from "../../../contexts/AuthContext";
-interface IAccount {
-  pic?: string;
-  id: string;
-  username: string;
-  name: string;
-  surname: string;
-  role: string;
-  status: string;
-}
+
+import { updateAccount } from "../../../services/accountsService";
+import IAccount from "../../../interfaces/IAccount";
 
 type Props = {
-  account: any;
+  account: IAccount;
   setIsEdit: any;
+  setIsLoading: any;
 };
 
-const EditForm = ({ account, setIsEdit }: Props) => {
-  const id = account.id;
-  const nickName = account.nickName;
-  const isBanned = account.isBanned;
-  const role = account.role;
-  const email = account.email;
-  const { getUserEmail, token } = useAuth();
-  const [username, setUsername] = useState<string>();
-  const [firstName, setName] = useState<string>();
-  const [lastName, setSurname] = useState<string>();
+const EditForm = ({ account, setIsEdit, setIsLoading }: Props) => {
+  const initialAccount = {
+    id: account.id,
+    firstName: account.firstName,
+    lastName: account.lastName,
+    nickName: account.nickName,
+    email: account.email,
+    role: account.role,
+    isBanned: account.isBanned,
+    imageUrl: account.imageUrl,
+    bannerUrl: account.bannerUrl,
+  };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    console.log(firstName);
-    await axios
-      .patch(
-        USER_PUT_URL,
-        {
-          email,
-          firstName,
-          lastName,
-          nickName,
-          isBanned,
-          role,
-        },
-        config(token)
-      )
-      .then(
-        (res) => {
-          getUserEmail();
-          alert("เปลี่ยนสำเร็จ");
-          console.log(res);
-          console.log(res.data);
-        },
-        (err) => {
-          alert("เปลี่ยนไม่ได้");
-        }
-      );
-    // let updateAccount = {
-    //   pic: account.pic,
-    //   id: account.id,
-    //   username: email,
-    //   name: firstName,
-    //   surname: lastName,
-    //   role: account.role,
-    //   status: account.status,
-    // };
-    //setAccount(updateAccount);
+  const { token, getUserMySelf } = useAuth();
+
+  const [editFormData, setEditFormData] = useState<IAccount>(initialAccount);
+
+  const smallFormChange = (event: any) => {
+    let newFormData: IAccount = { ...editFormData }; // beware! addFromData and editFormData
+
+    let fieldName: string = event.target.getAttribute("name");
+    let fieldValue: string = event.target.value;
+    // change to variable attribute
+
+    if (fieldName === "firstName") {
+      newFormData.firstName = fieldValue;
+    } else if (fieldName === "lastName") {
+      newFormData.lastName = fieldValue;
+    } else if (fieldName === "email") {
+      newFormData.email = fieldValue;
+    } else if (fieldName === "role") {
+      newFormData.role = parseInt(fieldValue);
+    } else if (fieldName === "isBanned") {
+      if (fieldValue === "true") {
+        newFormData.isBanned = true;
+      } else if (fieldValue === "false") {
+        newFormData.isBanned = false;
+      }
+    }
+    return newFormData;
+  };
+
+  const handleEditFormChange = (event: any) => {
+    event.preventDefault();
+
+    let newFormData = smallFormChange(event);
+    console.log(newFormData);
+
+    setEditFormData(newFormData);
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    let email = editFormData.email;
+    try {
+      let res = await updateAccount({
+        token,
+        setIsLoading,
+        email,
+        editFormData,
+      });
+      await getUserMySelf()
+      alert("อัพเดตข้อมูลทั่วไปสำเร็จ");
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+      alert("ไม่สามารถเปลี่ยนได้ กรุณาลองใหม่อีกครั้ง");
+    }
     setIsEdit(false);
   };
 
@@ -80,52 +89,56 @@ const EditForm = ({ account, setIsEdit }: Props) => {
   };
 
   return (
-    <td className="pl-28">
-      <tr className="h-8">{account.id}</tr>
-      <tr className="h-8">
+    <td className="pl-28  w-80">
+      <tr className="h-12 flex flex-col justify-center">
+        <p className="pl-2"> {account.id}</p>
+      </tr>
+      <tr className="h-12 flex flex-col justify-center">
+        <p className="pl-2"> {account.email}</p>
+      </tr>
+      <tr className="h-12 flex flex-col justify-center">
         <Input
-          name="name"
-          placeholder="Username"
-          value={email}
-          onChange={(e: any) => setUsername(e.target.value)}
-          className={"h-7"}
+          name="firstName"
+          placeholder="กรอกชื่อจริง"
+          value={editFormData.firstName}
+          onChange={handleEditFormChange}
+          className={"py-1.5"}
         />
       </tr>
-      <tr className="h-8">
+      <tr className="h-12 flex flex-col justify-center">
         <Input
-          name="name"
-          placeholder="Name"
-          value={firstName}
-          onChange={(e: any) => setName(e.target.value)}
-          className={"h-7"}
+          name="lastName"
+          placeholder="กรอกนามสกุล"
+          value={editFormData.lastName}
+          onChange={handleEditFormChange}
+          className={"py-1.5"}
         />
       </tr>
-      <tr className="h-8">
-        <Input
-          name="name"
-          placeholder="Surname"
-          value={lastName}
-          onChange={(e: any) => setSurname(e.target.value)}
-          className={"h-7"}
-        />
+      <tr className="h-12 flex flex-col justify-center">
+        {" "}
+        <p className="pl-2">{account.role === 0 ? "ทั่วไป" : "ผู้ดูแลระบบ"}</p>
       </tr>
-      <tr className="h-8">{account.role}</tr>
-      <tr className="h-8">{account.status}</tr>
-      <Button className="bg-gray-200" color={"amber"} disable={true}>
-        เปลี่ยนรหัสผ่าน
-      </Button>
+      {/* <tr className="h-12">{account.status}</tr> */}
+      <div className="pl-1">
+        <Button className="bg-gray-200" color={"amber"} disable={true}>
+          เปลี่ยนรหัสผ่าน
+        </Button>
+      </div>
+
       <tr>
-        <Button className="bg mt-5 w-30" onClick={handleCancel} color={"red"}>
-          Cancel
-        </Button>
-        <Button
-          className="bg ml-2 mt-5 w-30"
-          onClick={handleSubmit}
-          color={"green"}
-          //disable={!(firstName == "" || lastName == "" || username == "")}
-        >
-          Submit
-        </Button>
+        <div className="pl-1">
+          <Button className="bg mt-5 w-30" onClick={handleCancel} color={"red"}>
+            Cancel
+          </Button>
+          <Button
+            className="bg ml-2 mt-5 w-30"
+            onClick={handleSubmit}
+            color={"green"}
+            //disable={!(firstName == "" || lastName == "" || username == "")}
+          >
+            Submit
+          </Button>
+        </div>
       </tr>
     </td>
   );

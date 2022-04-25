@@ -35,7 +35,7 @@ const ProfilePage = (props: Props) => {
           </div>
         </div>
         <div className="text-center mt-6 text-3xl font-bold text-fBlack">
-          ไอป้อป ไออ้วน
+          จารย์แดง
         </div>
         <div className="border border-fGrey mt-6 border-opacity-10" />
         <div className="flex justify-between px-10">

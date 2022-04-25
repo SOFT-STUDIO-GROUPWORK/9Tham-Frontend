@@ -1,27 +1,29 @@
 import axios, { config } from "../api/axios";
-import ILike from "../interfaces/ILike";
+import IArticleTags from "../interfaces/IArticleTags";
 import {
-  LIKE_GET_URL,
-  LIKE_POST_URL,
-  LIKE_GETID_URL,
-  LIKE_PUT_URL,
-  LIKE_DELETE_URL,
+  ARTICLETAGS_GET_URL,
+  ARTICLETAGS_POST_URL,
+  ARTICLETAGS_GETID_URL,
+  ARTICLETAGS_PUT_URL,
+  ARTICLETAGS_DELETE_URL,
 } from "../api/routes";
 
-type getLikeProps = {
+type getArticleTagsProps = {
   setIsLoading: any;
 };
 
-export const getLike = async ({ setIsLoading }: getLikeProps) => {
+export const getArticleTags = async ({ setIsLoading }: getArticleTagsProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(LIKE_GET_URL)
+    .get(ARTICLETAGS_GET_URL)
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(`Like getLike(): ${err.response.status}:` + err);
+      console.error(
+        `ArticleTags getArticleTags(): ${err.response.status}:` + err
+      );
     })
     .finally(() => {
       setIsLoading(false);
@@ -30,21 +32,26 @@ export const getLike = async ({ setIsLoading }: getLikeProps) => {
   return response;
 };
 
-type getLikeIdProps = {
+type getArticleTagsIdProps = {
   setIsLoading: any;
-  likeId: number;
+  ArticleTagsId: number;
 };
 
-export const getLikeId = async ({ setIsLoading, likeId }: getLikeIdProps) => {
+export const getArticleTagsId = async ({
+  setIsLoading,
+  ArticleTagsId,
+}: getArticleTagsIdProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(LIKE_GETID_URL.replace(":id", likeId.toString()))
+    .get(ARTICLETAGS_GETID_URL.replace(":id", ArticleTagsId.toString()))
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(`LikeId getLikeId(): ${err.response.status}:` + err);
+      console.error(
+        `ArticleTagsId getArticleTagsId(): ${err.response.status}:` + err
+      );
     })
     .finally(() => {
       setIsLoading(false);
@@ -53,39 +60,39 @@ export const getLikeId = async ({ setIsLoading, likeId }: getLikeIdProps) => {
   return response;
 };
 
-type addLikeProps = {
+type addArticleTagsProps = {
   setIsLoading: any;
   token: string;
   addData: {
     articleId: number;
-    bloggerId: number;
+    tagId: number;
   };
 };
 
-export const addLike = async ({
+export const addArticleTags = async ({
   setIsLoading,
   token,
   addData,
-}: addLikeProps) => {
+}: addArticleTagsProps) => {
   setIsLoading(true);
   let response: any;
   await axios
     .post(
-      LIKE_POST_URL,
+      ARTICLETAGS_POST_URL,
       {
         articleId: addData.articleId,
-        bloggerId: addData.bloggerId,
+        tagId: addData.tagId,
       },
       config(token)
     )
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("add like complete!");
+        console.log("add ArticleTags complete!");
         response = res.data;
       }
     })
     .catch((err) => {
-      console.error(`Like addLike(): ${err.response.status}:` + err);
+      console.error(`ArticleTags addLike(): ${err.response.status}:` + err);
       response = null;
     })
     .finally(() => {
@@ -95,41 +102,43 @@ export const addLike = async ({
   return response;
 };
 
-type updateLikeProps = {
+type updateArticleTagsProps = {
   setIsLoading: any;
   token: string;
-  editLikeId: number;
+  editArticleTagsId: number;
   addData: {
     articleId: number;
-    bloggerId: number;
+    tagId: number;
   };
 };
 
-export const updateLike = async ({
+export const updateArticleTags = async ({
   token,
   setIsLoading,
-  editLikeId,
+  editArticleTagsId,
   addData,
-}: updateLikeProps) => {
+}: updateArticleTagsProps) => {
   setIsLoading(true);
   let result = false;
   await axios
     .put(
-      LIKE_PUT_URL.replace(":id", editLikeId.toString()),
+      ARTICLETAGS_PUT_URL.replace(":id", editArticleTagsId.toString()),
       {
         articleId: addData.articleId,
-        bloggerId: addData.bloggerId,
+        tagId: addData.tagId,
       },
       config(token)
     )
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("update like complete!");
+        console.log("update ArticleTags complete!");
         result = true;
       }
     })
     .catch((err) => {
-      console.error(`Like updateLike(): ${err.response.status}:` + err);
+      console.error(
+        `ArticleTags updateArticleTags(): ${err.response.status}:` + err
+      );
       result = false;
     })
     .finally(() => {
@@ -138,29 +147,34 @@ export const updateLike = async ({
   return result;
 };
 
-type deleteLikeProps = {
+type deleteArticleTagsProps = {
   setIsLoading: any;
   token: string;
-  likeId: number;
+  ArticleTagsId: number;
 };
 
-export const deleteLike = async ({
+export const deleteArticleTags = async ({
   token,
   setIsLoading,
-  likeId,
-}: deleteLikeProps) => {
+  ArticleTagsId,
+}: deleteArticleTagsProps) => {
   setIsLoading(true);
   let result = false;
   await axios
-    .delete(LIKE_DELETE_URL.replace(":id", likeId.toString()), config(token))
+    .delete(
+      ARTICLETAGS_DELETE_URL.replace(":id", ArticleTagsId.toString()),
+      config(token)
+    )
     .then((res: any) => {
       if (res.status === 200) {
-        console.log("delete like complete!");
+        console.log("delete ArticleTags complete!");
         result = true;
       }
     })
     .catch((err) => {
-      console.error(`Like deleteLike(): ${err.response.status}:` + err);
+      console.error(
+        `ArticleTags deleteArticleTags(): ${err.response.status}:` + err
+      );
       result = false;
     })
     .finally(() => {

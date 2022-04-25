@@ -6,4 +6,14 @@ export default interface IPagination {
     currentTotal: number;
     total: number;
     search: string;
-  }
+}
+
+export const initialPagination = {
+    firstPage: 1,
+    lastPage: 1,
+    currentPage: 1,
+    perPage: 12,
+    currentTotal: 0,
+    total: 0,
+    search: "",
+};

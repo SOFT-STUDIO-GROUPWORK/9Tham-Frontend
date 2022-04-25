@@ -2,11 +2,11 @@ import { FaSearch } from "react-icons/fa";
 
 type Props = {
   searchData: string;
-  handleOnClick: (event:any) => void;
+  handleSearchOnClick: (event:any) => void;
   handleOnChange: (event: any) => void;
 };
 
-const Searchbar = ({handleOnClick, searchData, handleOnChange}: Props) => {
+const Searchbar = ({handleSearchOnClick, searchData, handleOnChange}: Props) => {
   return (
     <div className="flex flex-1">
       <input
@@ -18,7 +18,7 @@ const Searchbar = ({handleOnClick, searchData, handleOnChange}: Props) => {
         placeholder="ค้นหา..."
       />
       <button
-        onClick={handleOnClick}
+        onClick={handleSearchOnClick}
         className="btn px-6 py-3 bg-amber-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-sm hover:bg-amber-600 hover:shadow-lg focus:bg-amber-600  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-amber-700 active:shadow-lg transition duration-150 ease-in-out "
       >
         <FaSearch />

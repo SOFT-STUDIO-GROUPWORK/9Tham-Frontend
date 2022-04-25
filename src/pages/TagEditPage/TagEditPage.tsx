@@ -18,8 +18,9 @@ import {
   getSearchTags,
 } from "../../services/tagsService";
 
-import IPagination from "../../interfaces/IPagination";
+import IPagination, { initialPagination } from "../../interfaces/IPagination";
 import ITag from "../../interfaces/ITag";
+import React from "react";
 
 type Props = {};
 
@@ -37,17 +38,6 @@ let mockAccount = [
     name: "ความรู้ศาสนา",
   },
 ];
-
-
-const initialPagination = {
-  firstPage: 1,
-  lastPage: 1,
-  currentPage: 1,
-  perPage: 12,
-  currentTotal: 0,
-  total: 0,
-  search: "",
-};
 
 const TagEditPage = (props: Props) => {
   const [tags, setTags] = useState<ITag[]>(mockAccount);
@@ -205,7 +195,6 @@ const TagEditPage = (props: Props) => {
   const handlePagination = (value: number) => {
     setPagination((prev: IPagination) => ({ ...prev, currentPage: value }));
     console.log(pagination);
-    //getPageTags({ setIsLoading, setTags, pagination, setPagination });
   };
 
   const handleSearchFormData = (event: any) => {
@@ -216,7 +205,7 @@ const TagEditPage = (props: Props) => {
     }));
   };
 
-  const handleOnClick = (event: any) => {
+  const handleSearchOnClick = (event: any) => {
     if (pagination.search === "") {
       getPageTags({ setIsLoading, setTags, pagination, setPagination });
     } else {
@@ -253,8 +242,8 @@ const TagEditPage = (props: Props) => {
                     <div className="text-3xl mr-2">จัดการหมวดหมู่</div>
                     <div className="h-full w-96">
                       <Searchbar
-                        handleOnClick={handleOnClick}
                         searchData={search}
+                        handleSearchOnClick={handleSearchOnClick}
                         handleOnChange={handleSearchFormData}
                       />
                     </div>
@@ -318,7 +307,7 @@ const TagEditPage = (props: Props) => {
                     {/* table Content */}
                     <tbody>
                       {tags.map((tag, index) => (
-                        <>
+                        <React.Fragment key={index}>
                           {editTagId === tag.id ? (
                             <EditableRow
                               index={
@@ -342,7 +331,7 @@ const TagEditPage = (props: Props) => {
                               handleDeleteClick={handleDeleteClick}
                             />
                           )}
-                        </>
+                        </React.Fragment>
                       ))}
                     </tbody>
                   </table>

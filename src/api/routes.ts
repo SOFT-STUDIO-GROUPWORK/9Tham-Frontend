@@ -37,3 +37,10 @@ export const COMMENT_POST_URL = "api/Comments";
 export const COMMENT_GETID_URL = "api/Comments/:id";
 export const COMMENT_PUT_URL = "api/Comments/:id";
 export const COMMENT_DELETE_URL = "api/Comments/:id";
+
+//CommentLike
+export const COMMENTLIKE_GET_URL = "api/CommentLikes";
+export const COMMENTLIKE_POST_URL = "api/CommentLikes";
+export const COMMENTLIKE_GETID_URL = "api/CommentLikes/:id";
+export const COMMENTLIKE_PUT_URL = "api/CommentLikes/:id";
+export const COMMENTLIKE_DELETE_URL = "api/CommentLikes/:id";

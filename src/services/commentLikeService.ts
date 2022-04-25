@@ -1,27 +1,29 @@
 import axios, { config } from "../api/axios";
 import IComment from "../interfaces/IComment";
 import {
-  COMMENT_GET_URL,
-  COMMENT_POST_URL,
-  COMMENT_GETID_URL,
-  COMMENT_PUT_URL,
-  COMMENT_DELETE_URL,
+  COMMENTLIKE_GET_URL,
+  COMMENTLIKE_POST_URL,
+  COMMENTLIKE_GETID_URL,
+  COMMENTLIKE_PUT_URL,
+  COMMENTLIKE_DELETE_URL,
 } from "../api/routes";
 
-type getCommentProps = {
+type getCommentLikeProps = {
   setIsLoading: any;
 };
 
-export const getComment = async ({ setIsLoading }: getCommentProps) => {
+export const getComment = async ({ setIsLoading }: getCommentLikeProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(COMMENT_GET_URL)
+    .get(COMMENTLIKE_GET_URL)
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(`Comment getComment(): ${err.response.status}:` + err);
+      console.error(
+        `CommentLike getCommentLike(): ${err.response.status}:` + err
+      );
     })
     .finally(() => {
       setIsLoading(false);
@@ -30,7 +32,7 @@ export const getComment = async ({ setIsLoading }: getCommentProps) => {
   return response;
 };
 
-type getCommentIdProps = {
+type getCommentLikeIdProps = {
   setIsLoading: any;
   commentId: number;
 };
@@ -38,16 +40,18 @@ type getCommentIdProps = {
 export const getCommentId = async ({
   setIsLoading,
   commentId,
-}: getCommentIdProps) => {
+}: getCommentLikeIdProps) => {
   setIsLoading(true);
   let response = null;
   await axios
-    .get(COMMENT_GETID_URL.replace(":id", commentId.toString()))
+    .get(COMMENTLIKE_GETID_URL.replace(":id", commentId.toString()))
     .then((res) => {
       response = res.data;
     })
     .catch((err) => {
-      console.error(`CommentId getCommentId(): ${err.response.status}:` + err);
+      console.error(
+        `CommentLikeId getCommentLikeId(): ${err.response.status}:` + err
+      );
     })
     .finally(() => {
       setIsLoading(false);
@@ -56,14 +60,12 @@ export const getCommentId = async ({
   return response;
 };
 
-type addCommentProps = {
+type addCommentLikeProps = {
   setIsLoading: any;
   token: string;
   addData: {
-    content: string;
-    visible: true;
+    commentId: number;
     bloggerId: number;
-    articleId: number;
   };
 };
 
@@ -71,17 +73,15 @@ export const addComment = async ({
   setIsLoading,
   token,
   addData,
-}: addCommentProps) => {
+}: addCommentLikeProps) => {
   setIsLoading(true);
   let response: any;
   await axios
     .post(
-      COMMENT_POST_URL,
+      COMMENTLIKE_POST_URL,
       {
-        content: addData.content,
-        visible: addData.visible,
+        commentId: addData.commentId,
         bloggerId: addData.bloggerId,
-        articleId: addData.articleId,
       },
       config(token)
     )
@@ -102,15 +102,13 @@ export const addComment = async ({
   return response;
 };
 
-type updateCommentProps = {
+type updateCommentLikeProps = {
   setIsLoading: any;
   token: string;
   editCommentId: number;
   addData: {
-    content: string;
-    visible: true;
+    commentId: number;
     bloggerId: number;
-    articleId: number;
   };
 };
 
@@ -119,17 +117,15 @@ export const updateComment = async ({
   setIsLoading,
   editCommentId,
   addData,
-}: updateCommentProps) => {
+}: updateCommentLikeProps) => {
   setIsLoading(true);
   let result = false;
   await axios
     .put(
-      COMMENT_PUT_URL.replace(":id", editCommentId.toString()),
+      COMMENTLIKE_PUT_URL.replace(":id", editCommentId.toString()),
       {
-        content: addData.content,
-        visible: addData.visible,
+        commentId: addData.commentId,
         bloggerId: addData.bloggerId,
-        articleId: addData.articleId,
       },
       config(token)
     )
@@ -149,7 +145,7 @@ export const updateComment = async ({
   return result;
 };
 
-type deleteCommentProps = {
+type deleteCommentLikeProps = {
   setIsLoading: any;
   token: string;
   commentId: number;
@@ -159,12 +155,12 @@ export const deleteComment = async ({
   token,
   setIsLoading,
   commentId,
-}: deleteCommentProps) => {
+}: deleteCommentLikeProps) => {
   setIsLoading(true);
   let result = false;
   await axios
     .delete(
-      COMMENT_DELETE_URL.replace(":id", commentId.toString()),
+      COMMENTLIKE_DELETE_URL.replace(":id", commentId.toString()),
       config(token)
     )
     .then((res: any) => {

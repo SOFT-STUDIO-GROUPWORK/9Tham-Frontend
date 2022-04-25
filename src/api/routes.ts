@@ -40,3 +40,31 @@ export const ARTICLE_GET_URL = "api/Articles/:id"
 export const ARTICLE_POST_URL = "api/Articles"
 export const ARTICLE_PUT_URL = "api/Articles/:id"
 export const ARTICLE_DELETE_URL = "api/Articles/:id"
+
+//Comment
+export const COMMENT_GET_URL = "api/Comments";
+export const COMMENT_POST_URL = "api/Comments";
+export const COMMENT_GETID_URL = "api/Comments/:id";
+export const COMMENT_PUT_URL = "api/Comments/:id";
+export const COMMENT_DELETE_URL = "api/Comments/:id";
+
+//CommentLike
+export const COMMENTLIKE_GET_URL = "api/CommentLikes";
+export const COMMENTLIKE_POST_URL = "api/CommentLikes";
+export const COMMENTLIKE_GETID_URL = "api/CommentLikes/:id";
+export const COMMENTLIKE_PUT_URL = "api/CommentLikes/:id";
+export const COMMENTLIKE_DELETE_URL = "api/CommentLikes/:id";
+
+//Like
+export const LIKE_GET_URL = "api/Likes";
+export const LIKE_POST_URL = "api/Likes";
+export const LIKE_GETID_URL = "api/Likes/:id";
+export const LIKE_PUT_URL = "api/Likes/:id";
+export const LIKE_DELETE_URL = "api/Likes/:id";
+
+//ArticleTags
+export const ARTICLETAGS_GET_URL = "api/ArticleTags";
+export const ARTICLETAGS_POST_URL = "api/ArticleTags";
+export const ARTICLETAGS_GETID_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_PUT_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_DELETE_URL = "api/ArticleTags/:id";

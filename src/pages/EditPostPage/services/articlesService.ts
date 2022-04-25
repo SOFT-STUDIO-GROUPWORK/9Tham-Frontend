@@ -90,7 +90,7 @@ export const getSearchArticles = async ({ setIsLoading, setArticles, pagination,
                     currentTotal: res.data.articles.length
                 })
             )
-            await getArticles(setIsLoading).then((res: any) => {
+            await getArticles({setIsLoading}).then((res: any) => {
                 setPagination((prev: IPagination) => (
                     {
                         ...prev,

@@ -28,7 +28,7 @@ const PostPage = (props: Props) => {
       >
         {/* margin top for navbar */}
         <div className="w-full mt-24">
-          <ProfileTopBar account={postAccount} />
+          <ProfileTopBar account={postAccount} isNewPost={false} />
         </div>
 
         <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">

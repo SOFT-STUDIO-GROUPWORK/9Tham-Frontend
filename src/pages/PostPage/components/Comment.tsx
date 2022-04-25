@@ -9,14 +9,14 @@ import {
 } from "../../../services/commentService";
 import IComment from "../../../interfaces/IComment";
 type Props = {
-  account: IAccount
+  account: IAccount;
   comment: string;
 };
 
-const Comment = ({account,comment}: Props) => {
+const Comment = ({ account, comment }: Props) => {
   return (
     <div className="w-full border-0 border-red-600 mt-6">
-      <ProfileTopBar account={account}      />
+      <ProfileTopBar account={account} isNewPost={false} />
       <p className="pl-2">{comment}</p>
       <hr className="mt-8" />
     </div>

@@ -36,7 +36,7 @@ const DetailAccountPage = (props: Props) => {
 
   useEffect(() => {
     if (!selectCoverImage) {
-      setPreviewCoverImage("");
+      //setPreviewCoverImage("");
       return;
     }
 
@@ -101,9 +101,9 @@ const DetailAccountPage = (props: Props) => {
     setIsEdit(false);
   };
 
-  const handleDeleteClick = async (email: string) => {
+  const handleDeleteClick = async () => {
     // service deleteAccount()
-    console.log(email);
+    let email = account.email;
     let result = await deleteAccount({ token, setIsLoading, email });
     if (result === false) {
       return;
@@ -125,7 +125,7 @@ const DetailAccountPage = (props: Props) => {
               <div className="w-48 my-3 flex flex-col items-center bg-slate-50">
                 {/* input picture */}
                 <div className="relative flex justify-center items-center mt-10 rounded-full w-48 h-48 border-4 border-amber-500">
-                  {selectCoverImage ? (
+                  {selectCoverImage || previewCoverImage ? (
                     <img
                       id="img-preview"
                       src={previewCoverImage}

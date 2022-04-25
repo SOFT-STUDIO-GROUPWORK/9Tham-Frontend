@@ -1,8 +1,8 @@
 import { FaSearch } from "react-icons/fa";
 
 type Props = {
-  handleOnClick: (event:any) => void;
   searchData: string;
+  handleOnClick: (event:any) => void;
   handleOnChange: (event: any) => void;
 };
 

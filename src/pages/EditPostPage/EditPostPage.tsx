@@ -17,24 +17,56 @@ import { EditorState, convertToRaw, RawDraftContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
-import Selector from "../../components/Selector";
+import Selector from "./components/Selector";
 import { Link } from "react-router-dom";
 
 import IPost from "../../interfaces/post";
 
+import { getTags } from "../../services/tagsService";
+import ITag from "../../interfaces/ITag";
+
 type Props = {};
+
+const mockDataOptions: ITag[] = [
+  {
+    id: 114,
+    name: "พระ1",
+    articleTags: null,
+  },
+  {
+    id: 121,
+    name: "พระ2",
+    articleTags: null,
+  },
+  {
+    id: 123,
+    name: "gjg",
+    articleTags: null,
+  },
+  {
+    id: 124,
+    name: "asdas",
+    articleTags: null,
+  },
+  {
+    id: 125,
+    name: "asddas",
+    articleTags: null,
+  },
+];
 
 const EditPostPage = (props: Props) => {
   const [token, setToken] = useState(
     "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzdHJpbmciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTY1MDQ5NTk3MH0.jlTTzqIRJL2ug6bvbzNnUrDUsf6ijlIpfwFacwJi6JwHH7UwqfVBPgj0CXICH2m8AgxGuJvWSf1INojWL1D4Fg"
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   // Post Content
   // Header
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [articleTag, setArticleTag] = useState<string>("เลือกหมวดหมู่");
-  const [articleTags, setArticleTags] = useState<string[]>([]);
+  const [articleTags, setArticleTags] = useState<ITag[]>([]);
   // Cover Image
   const [selectCoverImage, setSelectCoverImage] = useState<undefined | Blob>();
   const [previewCoverImage, setPreviewCoverImage] = useState<string>("");
@@ -50,7 +82,11 @@ const EditPostPage = (props: Props) => {
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
-    setArticleTags(["ความรู้ธรรมะ", "หลักคำสอน", "สถานที่ธรรมะ"]);
+    getTags({ setIsLoading }).then((res: any) => setArticleTags(res));
+    //setArticleTags(mockDataOptions);
+  }, []);
+
+  useEffect(() => {
     console.log("only first");
     if (!selectCoverImage) {
       setPreviewCoverImage("");
@@ -71,7 +107,6 @@ const EditPostPage = (props: Props) => {
     console.log(post);
 
     // CreatePostApi here
-
   }, [post]);
 
   // Cover Image start
@@ -259,7 +294,7 @@ const EditPostPage = (props: Props) => {
           </div>
           <p className="ml-2 text-amber-500">
             หากต้องการเพิ่ม Tag ใหม่ ไปยัง {/* insert to edit tags page */}
-            <Link to={""}>
+            <Link to="/tagEdit">
               <u>สร้าง Tag</u>{" "}
             </Link>
           </p>

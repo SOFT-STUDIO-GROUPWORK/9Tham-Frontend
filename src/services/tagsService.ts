@@ -1,27 +1,42 @@
-import axios, { config } from "../../../api/axios";
-
-import { IPagination } from "../TagEditPage"
-
+import axios, { config } from "../api/axios";
+import IPagination from "../interfaces/IPagination";
 import {
     TAGS_GET_URL,
+    TAGS_GET_PAGE_URL,
+    TAGS_SEARCH_PAGE_URL,
     TAG_POST_URL,
     TAG_PUT_URL,
     TAG_DELETE_URL,
-    TAGS_GET_PAGE_URL,
-    TAGS_SEARCH_PAGE_URL,
-} from "../../../api/routes";
+} from "../api/routes";
 
 type getTagsProps = {
     setIsLoading: any;
-    token: string;
+}
+
+export const getTags = async ({ setIsLoading }: getTagsProps) => {
+    setIsLoading(true);
+    let response = null;
+    await axios.get(TAGS_GET_URL).then((res) => {
+        response = res.data;
+    }).catch((err) => {
+        console.error(`Tags getTags(): ${err.status}:` + err);
+    }).finally(() => {
+        setIsLoading(false);
+    });
+    console.log(response)
+    return response;
+}
+
+type getPageAndSearchTagsProps = {
+    setIsLoading: any;
     setTags: any;
     pagination: IPagination;
     setPagination: any
 }
-export const getTags = async ({ token, setIsLoading, setTags, pagination, setPagination }: getTagsProps) => {
+export const getPageTags = async ({ setIsLoading, setTags, pagination, setPagination }: getPageAndSearchTagsProps) => {
     setIsLoading(true);
     await axios
-        .get(TAGS_GET_PAGE_URL.replace(":page", pagination.currentPage.toString()).replace(":perPage", pagination.perPage.toString()), config(token))
+        .get(TAGS_GET_PAGE_URL.replace(":page", pagination.currentPage.toString()).replace(":perPage", pagination.perPage.toString()))
         .then(async (res) => {
             setTags(res.data.tags);
             setPagination((prev: IPagination) => (
@@ -33,32 +48,32 @@ export const getTags = async ({ token, setIsLoading, setTags, pagination, setPag
                     currentTotal: res.data.tags.length
                 })
             )
-            await axios.get(TAGS_GET_URL, config(token)).then((res) => {
+            await getTags({setIsLoading}).then((res:any) => {
                 setPagination((prev: IPagination) => (
                     {
                         ...prev,
-                        total: res.data.length
+                        total: res.length
                     })
                 )
             }).catch((err) => {
-                console.error(`Tags getTags2(): ${err.response.status}:` + err);
+                console.error(`Tags getPageTags2(): ${err.status}:` + err);
             })
         })
         .catch((err) => {
-            console.error(`Tags getTags1(): ${err.response.status}:` + err);
+            console.error(`Tags getPageTags1(): ${err.status}:` + err);
         })
         .finally(() => {
             setIsLoading(false);
         });
 };
 
-export const getSearchTags = async ({ token, setIsLoading, setTags, pagination, setPagination }: getTagsProps) => {
+export const getSearchTags = async ({ setIsLoading, setTags, pagination, setPagination }: getPageAndSearchTagsProps) => {
     setIsLoading(true);
     await axios
         .get(TAGS_SEARCH_PAGE_URL
             .replace(":search", pagination.search.toString())
             .replace(":page", pagination.currentPage.toString())
-            .replace(":perPage", pagination.perPage.toString()), config(token))
+            .replace(":perPage", pagination.perPage.toString()))
         .then(async (res) => {
             setTags(res.data.tags);
             setPagination((prev: IPagination) => (
@@ -70,11 +85,11 @@ export const getSearchTags = async ({ token, setIsLoading, setTags, pagination, 
                     currentTotal: res.data.tags.length
                 })
             )
-            await axios.get(TAGS_GET_URL, config(token)).then((res) => {
+            await getTags(setIsLoading).then((res:any) => {
                 setPagination((prev: IPagination) => (
                     {
                         ...prev,
-                        total: res.data.length
+                        total: res.length
                     })
                 )
             }).catch((err) => {

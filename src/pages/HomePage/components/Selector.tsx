@@ -1,6 +1,6 @@
 type Props = {
   title?: string;
-  options: string[];
+  options: any[];
   onChange: any;
   isDefault?: boolean;
 };

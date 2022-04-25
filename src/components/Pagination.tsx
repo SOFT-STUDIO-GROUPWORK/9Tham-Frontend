@@ -1,7 +1,7 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-import { IPagination } from "../TagEditPage";
+import IPagination from "../interfaces/IPagination";
 
 type Props = {
   pagination: IPagination;
@@ -20,6 +20,11 @@ const Pagination = ({ pagination, handleOnClick }: Props) => {
 
   let previousPage = pagination.currentPage - 1;
   let nextPage = pagination.currentPage + 1;
+
+  let oneOrZero = 0;
+  if (pagination.currentTotal >= 1){
+    oneOrZero = 1;
+  }
 
   return (
     <div className="w-full bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
@@ -45,7 +50,7 @@ const Pagination = ({ pagination, handleOnClick }: Props) => {
           <p className="text-sm text-gray-700">
             Showing{" "}
             <span className="font-medium">
-              {pagination.perPage * (pagination.currentPage - 1) + 1}
+              {pagination.perPage * (pagination.currentPage - 1) + oneOrZero}
             </span>{" "}
             to{" "}
             <span className="font-medium">

@@ -1,4 +1,4 @@
-import Selector from "../../components/Selector";
+import Selector from "./components/Selector";
 import Searchbar from "./components/Searchbar";
 import Card from "./components/Card";
 import Pagination from "./components/Pagination";
@@ -7,9 +7,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 
 import MOCK_BANNER from "../../mocks/SildeBanner/sildingBanner.json";
+import IPagination from "../../interfaces/IPagination"
 
 type Props = {};
-const sortOptions: string[] = ["ล่าสุด", "เก่าสุด"];
+const sortOptions: any[] = ["ล่าสุด", "เก่าสุด"];
 const typeOptions: string[] = [
   "ทั้งหมด",
   "ความรู้ธรรมะ",

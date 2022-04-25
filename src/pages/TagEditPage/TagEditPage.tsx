@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import Searchbar from "./components/Searchbar";
-import Pagination from "./components/Pagination";
+import Searchbar from "../../components/Searchbar";
+import Pagination from "../../components/Pagination";
 import Button from "../../components/Button";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -11,19 +11,18 @@ import EditableRow from "./components/EditableRow";
 
 import Input from "../../components/Input";
 import {
-  getTags,
+  getPageTags,
   addTag,
   deleteTag,
   updateTag,
   getSearchTags,
-} from "./services/tagsService";
+} from "../../services/tagsService";
+
+import IPagination from "../../interfaces/IPagination";
+import ITag from "../../interfaces/ITag";
 
 type Props = {};
 
-export interface ITag {
-  id: number | null;
-  name: string;
-}
 let mockAccount = [
   {
     id: 1,
@@ -35,31 +34,11 @@ let mockAccount = [
   },
   {
     id: 3,
-    name: "หลักคำสอน",
-  },
-  {
-    id: 4,
-    name: "หลักคำสอน",
-  },
-  {
-    id: 5,
-    name: "หลักคำสอน",
-  },
-  {
-    id: 6,
-    name: "หลักคำสอน",
+    name: "ความรู้ศาสนา",
   },
 ];
 
-export interface IPagination {
-  firstPage: number;
-  lastPage: number;
-  currentPage: number;
-  perPage: number;
-  currentTotal: number;
-  total: number;
-  search: string;
-}
+
 const initialPagination = {
   firstPage: 1,
   lastPage: 1,
@@ -99,7 +78,7 @@ const TagEditPage = (props: Props) => {
 
     // service getTag()
     if (pagination.search === "")
-      getTags({ setIsLoading, token, setTags, pagination, setPagination });
+      getPageTags({ setIsLoading, setTags, pagination, setPagination });
   }, [pagination.currentPage, pagination.search]);
 
   // add
@@ -123,7 +102,8 @@ const TagEditPage = (props: Props) => {
 
     // service addTag()
     let newId = await addTag({ token, setIsLoading, addFormData });
-    getTags({ setIsLoading, token, setTags, pagination, setPagination });
+    getPageTags({ setIsLoading, setTags, pagination, setPagination });
+    setAddFormData({ name: "" });
 
     if (newId == null) return;
 
@@ -134,6 +114,7 @@ const TagEditPage = (props: Props) => {
 
     const newTags = [...tags, newTag];
     setTags(newTags);
+    setIsAdd(false);
   };
 
   // edit
@@ -202,6 +183,18 @@ const TagEditPage = (props: Props) => {
     if (result === false) {
       return;
     }
+
+    if (pagination.search === "") {
+      getPageTags({ setIsLoading, setTags, pagination, setPagination });
+    } else {
+      getSearchTags({
+        setIsLoading,
+        setTags,
+        pagination,
+        setPagination,
+      });
+    }
+
     //for update State for showing after delete
     const newTags = [...tags];
     const index = tags.findIndex((tag) => tag.id === tagId);
@@ -212,7 +205,7 @@ const TagEditPage = (props: Props) => {
   const handlePagination = (value: number) => {
     setPagination((prev: IPagination) => ({ ...prev, currentPage: value }));
     console.log(pagination);
-    //getTags({ setIsLoading, token, setTags, pagination, setPagination });
+    //getPageTags({ setIsLoading, setTags, pagination, setPagination });
   };
 
   const handleSearchFormData = (event: any) => {
@@ -224,9 +217,16 @@ const TagEditPage = (props: Props) => {
   };
 
   const handleOnClick = (event: any) => {
-    if (pagination.search === "")
-      getTags({ setIsLoading, token, setTags, pagination, setPagination });
-    getSearchTags({ setIsLoading, token, setTags, pagination, setPagination });
+    if (pagination.search === "") {
+      getPageTags({ setIsLoading, setTags, pagination, setPagination });
+    } else {
+      getSearchTags({
+        setIsLoading,
+        setTags,
+        pagination,
+        setPagination,
+      });
+    }
   };
 
   return (
@@ -264,24 +264,23 @@ const TagEditPage = (props: Props) => {
                     {isAdd ? (
                       <>
                         <div className="text-amber-500">เพิ่มหมวดหมู่:</div>
-                        <form onSubmit={handleAddFormSubmit}>
+                        <form
+                          onSubmit={handleAddFormSubmit}
+                          className="flex flex-row items-center gap-2"
+                        >
                           <Input
                             name="name"
                             placeholder="เพิ่มหมวดหมู่ใหม่..."
                             onChange={handleAddFormChange}
                             className="border-amber-500 py-1.5"
                           />
+                          <Button
+                            className="font-bold border border-amber-500"
+                            color={"amber"}
+                          >
+                            บันทึก
+                          </Button>
                         </form>
-                        <Button
-                          onClick={(event: any) => {
-                            handleAddFormSubmit(event);
-                            setIsAdd(false);
-                          }}
-                          className="font-bold border border-amber-500"
-                          color={"amber"}
-                        >
-                          บันทึก
-                        </Button>
                         <Button
                           onClick={() => setIsAdd(false)}
                           className="ml-1 font-bold"

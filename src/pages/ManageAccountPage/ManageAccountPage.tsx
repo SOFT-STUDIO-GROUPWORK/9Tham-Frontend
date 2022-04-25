@@ -265,11 +265,11 @@ const ManageAccountPage = (props: Props) => {
                     <thead className="text-white shadow border-b-2 border-gray-300">
                       <tr className="bg-amber-500 h-12">
                         <th className="font-medium w-16">ลำดับ</th>
-                        <th className="font-medium pl-3 w-40 text-left">
+                        <th className="font-medium pl-3 w-56 text-left">
                           บัญชีผู้ใช้
                         </th>
-                        <th className="font-medium w-40 pl-3 text-left">ชื่อ</th>
-                        <th className="font-medium w-40 pl-3 text-left">สกุล</th>
+                        <th className="font-medium w-36 pl-3 text-left">ชื่อ</th>
+                        <th className="font-medium w-36 pl-3 text-left">สกุล</th>
                         <th className="font-medium w-24">กลุ่มผู้ใช้</th>
                         <th className="font-medium w-24">สถานะ</th>
                         <th className="font-medium w-24"></th>

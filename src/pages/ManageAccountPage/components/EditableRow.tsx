@@ -42,7 +42,7 @@ const EditableRow = ({
       <td className="">{index + 1}</td>
       {structures.map((structure, index) => (
         <td className="text-left" key={index}>
-          <div className="w-40">
+          <div className={structure.name === "username"? "w-56" : "w-36"}>
             <Input
               name={structure.name}
               placeholder={structure.placeholder}

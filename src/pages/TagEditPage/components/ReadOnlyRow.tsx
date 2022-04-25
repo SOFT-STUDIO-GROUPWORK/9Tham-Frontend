@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../../../components/Button";
 import { BiTrash } from "react-icons/bi";
-import { ITag } from "../TagEditPage";
+import ITag from "../../../interfaces/ITag";
 
 type Props = {
   tag: ITag;

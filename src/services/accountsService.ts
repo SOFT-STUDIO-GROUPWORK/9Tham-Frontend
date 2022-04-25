@@ -107,7 +107,7 @@ export const getSearchAccounts = async ({ setIsLoading, setAccounts, pagination,
                     currentTotal: res.data.bloggers.length
                 })
             )
-            await getAccounts(setIsLoading).then((res: any) => {
+            await getAccounts({setIsLoading}).then((res: any) => {
                 setPagination((prev: IPagination) => (
                     {
                         ...prev,
@@ -115,11 +115,11 @@ export const getSearchAccounts = async ({ setIsLoading, setAccounts, pagination,
                     })
                 )
             }).catch((err) => {
-                console.error(`Accounts getSearchAccounts2(): ${err.response.status}:` + err);
+                console.error(`Accounts getSearchAccounts2(): ${err.status}:` + err);
             })
         })
         .catch((err) => {
-            console.error(`Accounts getSearchAccounts1(): ${err.response.status}:` + err);
+            console.error(`Accounts getSearchAccounts1(): ${err.status}:` + err);
         })
         .finally(() => {
             setIsLoading(false);
@@ -173,6 +173,7 @@ type deleteAccountProps = {
 }
 export const deleteAccount = async ({ token, setIsLoading, email }: deleteAccountProps) => {
     setIsLoading(true);
+    console.log(email)
     let result = false;
     await axios
         .delete(USER_DELETE_URL.replace(":email", email), config(token))

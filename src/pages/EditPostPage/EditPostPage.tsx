@@ -243,7 +243,7 @@ const EditPostPage = (props: Props) => {
         style={{ minHeight: "calc(100vh - 64px)" }}
       >
         <div className="mt-24"></div>
-        <ProfileTopBar account={account} />
+        <ProfileTopBar account={account} isNewPost={true} />
         <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
           เพิ่มบทความใหม่
         </h2>

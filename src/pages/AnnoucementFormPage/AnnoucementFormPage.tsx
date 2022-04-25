@@ -5,7 +5,7 @@
 // (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
 // by Pop (delete if already read)
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsFillImageFill } from "react-icons/bs";
 import Button from "../../components/Button";
@@ -16,10 +16,10 @@ const mockProfileImage = undefined;
 const mockDay = "4 April 2022";
 
 const AnnoucementFormPage = (props: Props) => {
-  const [photoList, setPhotoList] = useState([{ photo: "" }]);
+  const [photoList, setPhotoList] = useState<any>([undefined]);
 
   const handlePhotoAdd = () => {
-    setPhotoList([...photoList, { photo: "" }]);
+    setPhotoList([...photoList, undefined]);
   };
 
   const handlePhotoRemove = (index: number) => {
@@ -28,14 +28,15 @@ const AnnoucementFormPage = (props: Props) => {
     setPhotoList(list);
   };
 
-  const [previewPhoto, setPreviewPhoto] = useState<any>(undefined);
-
   const imageHandler = (e: any, index: number) => {
     e.preventDefault();
     const reader = new FileReader();
+    let oldlist = [...photoList];
+
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setPreviewPhoto(reader.result);
+        oldlist[index] = reader.result;
+        setPhotoList(oldlist);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
@@ -72,7 +73,7 @@ const AnnoucementFormPage = (props: Props) => {
             </div>
 
             <div className="flex flex-col justify-center">
-              {photoList.map((singleImage, index) => (
+              {photoList.map((singleImage: any, index: number) => (
                 <div
                   key={index}
                   className="flex flex-col justify-center w-full"
@@ -80,11 +81,11 @@ const AnnoucementFormPage = (props: Props) => {
                   <h2 className="mt-7">*รูปที่ {index + 1}</h2>
                   <div className="w-full h-60 bg-gray-100 border-2 border-gray-300 mt-2 flex flex-col justify-center items-center">
                     <div className="m-2 rounded-t-sm h-28 w-52 flex justify-center items-center">
-                      {previewPhoto == undefined ? (
+                      {photoList[index] == undefined ? (
                         <BsFillImageFill className="w-full h-full text-gray-400" />
                       ) : (
                         <img
-                          src={previewPhoto}
+                          src={photoList[index]}
                           className="w-full h-full cover-full"
                         />
                       )}

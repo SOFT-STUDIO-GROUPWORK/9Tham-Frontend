@@ -26,7 +26,7 @@ import { getTags } from "../../services/tagsService";
 import ITag from "../../interfaces/ITag";
 import IArticle from "../../interfaces/IArticle";
 import { useAuth } from "../../contexts/AuthContext";
-import { addArticle } from "./services/articlesService";
+import { addArticle } from "../../services/articlesService";
 
 import { useNavigate } from "react-router-dom";
 import IAccount from "../../interfaces/IAccount";
@@ -302,14 +302,14 @@ const EditPostPage = (props: Props) => {
           {/* input picture */}
           <div
             className="relative w-full rounded border bg-white shadow"
-            style={{ height: "400px", width: "400px" }}
+            style={{ height: "400px", width: "600px"}}
           >
             {selectCoverImage ? (
               <img
                 id="img-preview"
                 src={previewCoverImage}
                 className="object-fill"
-                style={{ height: "400px", width: "400px" }}
+                style={{ height: "400px", width: "600px" }}
                 alt=""
               />
             ) : (
@@ -318,7 +318,7 @@ const EditPostPage = (props: Props) => {
           </div>
           <div
             className="flex flex-row items-center justify-center"
-            style={{ width: "400px" }}
+            style={{ width: "600px" }}
           >
             <input
               type="file"
@@ -341,7 +341,7 @@ const EditPostPage = (props: Props) => {
             )}
           </div>
           <p className="text-amber-500">
-            ขนาดแนะนำ: จัตุรัส ไม่เกิน 400 x 400 px (Ratios 1:1)
+            ขนาดแนะนำ: ผืนผ้า ไม่เกิน 600 x 400 px (Ratios 3:2)
           </p>
         </div>
 

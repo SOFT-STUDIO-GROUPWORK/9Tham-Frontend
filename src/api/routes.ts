@@ -28,5 +28,12 @@ export const TAG_PUT_URL = "api/Tags/:id"; // put
 export const TAG_DELETE_URL = "api/Tags/:id"; // delete
 
 //Photo
-export const FILE_POST_URL = "api/FileUpload/picture"
-export const FILE_DELETE_URL = "api/FileUpload/picture"
+export const FILE_POST_URL = "api/FileUpload/picture";
+export const FILE_DELETE_URL = "api/FileUpload/picture";
+
+//Comment
+export const COMMENT_GET_URL = "api/Comments";
+export const COMMENT_POST_URL = "api/Comments";
+export const COMMENT_GETID_URL = "api/Comments/:id";
+export const COMMENT_PUT_URL = "api/Comments/:id";
+export const COMMENT_DELETE_URL = "api/Comments/:id";

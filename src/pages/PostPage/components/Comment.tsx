@@ -1,4 +1,12 @@
 import ProfileTopBar from "./ProfileTopBar";
+import {
+  getComment,
+  getCommentId,
+  deleteComment,
+  updateComment,
+  addComment,
+} from "../../../services/commentService";
+import IComment from "../../../interfaces/IComment";
 type Props = {
   username: string;
   firstname: string;

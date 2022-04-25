@@ -67,7 +67,7 @@ done...
 ## Authors
 - [@Sirawit Sukwattanavit (62010948)](https://github.com/sirawit-suk)
 - [@Pufa Chantarapatana (62010713)](https://github.com/pufask137)
-- Add yours
+- [@Pudinan Pensuk (62010710)](https://github.com/gutpdn)
 
 # Getting Started with Create React App
 

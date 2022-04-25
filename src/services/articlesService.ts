@@ -1,4 +1,4 @@
-import axios, { config } from "../../../api/axios";
+import axios, { config } from "../api/axios";
 import {
     ARTICLES_GETALL_URL,
     ARTICLES_GET_PAGE_URL,
@@ -7,9 +7,9 @@ import {
     ARTICLE_POST_URL,
     ARTICLE_PUT_URL,
     ARTICLE_DELETE_URL,
-} from "../../../api/routes";
-import IArticle from "../../../interfaces/IArticle";
-import IPagination from "../../../interfaces/IPagination";
+} from "../api/routes";
+import IArticle from "../interfaces/IArticle";
+import IPagination from "../interfaces/IPagination";
 
 
 type getArticlesProps = {
@@ -112,13 +112,20 @@ export const getSearchArticles = async ({ setIsLoading, setArticles, pagination,
 type getArticleProps = {
     setIsLoading: any;
     articleId: number;
+    setArticle: any;
+    setPostAccount:any;
+    setComments:any;
 }
-export const getArticle = async ({ setIsLoading, articleId }: getArticleProps) => {
+export const getArticle = async ({ setIsLoading, articleId, setArticle, setPostAccount, setComments }: getArticleProps) => {
     setIsLoading(true);
     let response = null;
     await axios.get(ARTICLE_GET_URL.replace(":id", articleId.toString()))
         .then((res) => {
             response = res.data;
+            setArticle(response)
+            setPostAccount(response.blogger)
+            setComments(response.comments)
+            //setComment()
         }).catch((err) => {
             console.error(`Articles getArticle(): ${err.status}:` + err);
         }).finally(() => {

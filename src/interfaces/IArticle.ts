@@ -1,4 +1,5 @@
 export default interface IArticle {
+    id?: number
     bloggerId: number
     title: string,
     content: string,

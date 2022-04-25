@@ -101,7 +101,7 @@ const ProfilePage = (props: Props) => {
                   : "w-full content"
               }
             >
-              <Card
+              {/* <Card
                 title="เข้าวัดทำบุญ ได้อะไร"
                 description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
                 type="ความรู้ธรรมะ"
@@ -115,7 +115,7 @@ const ProfilePage = (props: Props) => {
                 title="เข้าวัดทำบุญ ได้อะไร"
                 description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
                 type="ความรู้ธรรมะ"
-              />
+              /> */}
             </div>
 
             <div

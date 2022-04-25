@@ -17,3 +17,13 @@ export const initialPagination = {
     total: 0,
     search: "",
 };
+
+export const initialPaginationHomePage = {
+    firstPage: 1,
+    lastPage: 1,
+    currentPage: 1,
+    perPage: 8,
+    currentTotal: 0,
+    total: 0,
+    search: "",
+};

@@ -1,3 +1,5 @@
+import ICommentLike from "./ICommentLike";
+
 export default interface IComment {
   id: number;
   published: string;
@@ -7,7 +9,7 @@ export default interface IComment {
   bloggerId: number;
   article?: any;
   articleId: number;
-  commentLikes?: any;
+  commentLikes?: ICommentLike[];
 }
 //   content: string;
 //   visible: true;

@@ -1,18 +1,33 @@
-// for admin pufa
-
-// load extention ES7 + React/Redux/React-Native snippets
-// type "tsrafce" and enter... it will create structure
-// (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
-// by Pop (delete if already read)
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../HomePage/components/Card";
 import { Link } from "react-router-dom";
 import "./ProfilePage.css";
+import { getArticles } from "../../services/articlesService";
+import IArticle from "../../interfaces/IArticle";
+
+import { useAuth } from "../../contexts/AuthContext";
+import { BsPersonCircle } from "react-icons/bs";
 
 type Props = {};
 const ProfilePage = (props: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [toggleState, setToggleState] = useState(1);
+
+  const [articles, setArticles] = useState<IArticle[]>([]);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    getArticles({
+      setIsLoading,
+    }).then((res) => {
+      if (res === null) {
+        console.error("Cannot load article");
+        return;
+      }
+      setArticles(res);
+    });
+  }, []);
 
   const toggleTab = (index: any) => {
     setToggleState(index);
@@ -27,15 +42,21 @@ const ProfilePage = (props: Props) => {
             alt="cover"
           />
           <div className="absolute -bottom-6">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXLvPB9Xy8_K4eyl8Lcx7daoExzr6l0spSdA&usqp=CAU"
-              className="object-cover border-4 border-amber-600 w-full h-full rounded-full"
-              alt="cover"
-            />
+            {user?.imageUrl ? (
+              <img
+                id="img-preview"
+                src={user?.imageUrl}
+                className="object-cover w-48 h-48 mr-2 rounded-full border-4 border-amber-600"
+                alt=""
+              />
+            ) : (
+              <BsPersonCircle className="w-8 h-8 mr-2" />
+            )}
+
           </div>
         </div>
         <div className="text-center mt-6 text-3xl font-bold text-fBlack">
-          จารย์แดง
+          {user?.firstName} {user?.lastName}
         </div>
         <div className="border border-fGrey mt-6 border-opacity-10" />
         <div className="flex justify-between px-10">
@@ -81,13 +102,21 @@ const ProfilePage = (props: Props) => {
         <div className="container px-96 pt-10">
           <div className="bloc-tabs">
             <button
-              className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+              className={
+                toggleState === 1
+                  ? "tabs active-tabs rounded-t"
+                  : "tabs rounded-t"
+              }
               onClick={() => toggleTab(1)}
             >
               บทความ
             </button>
             <button
-              className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+              className={
+                toggleState === 2
+                  ? "tabs active-tabs rounded-t"
+                  : "tabs rounded-t"
+              }
               onClick={() => toggleTab(2)}
             >
               ฉบับร่าง
@@ -97,33 +126,67 @@ const ProfilePage = (props: Props) => {
             <div
               className={
                 toggleState === 1
-                  ? "w-full content  active-content"
-                  : "w-full content"
+                  ? "w-full content  active-content rounded-b"
+                  : "w-full content rounded-b"
               }
             >
-              {/* <Card
-                title="เข้าวัดทำบุญ ได้อะไร"
-                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-                type="ความรู้ธรรมะ"
-              />
-              <Card
-                title="เข้าวัดทำบุญ ได้อะไร"
-                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-                type="ความรู้ธรรมะ"
-              />
-              <Card
-                title="เข้าวัดทำบุญ ได้อะไร"
-                description="การเข้าวัดทำบุญ เป็นสิ่งที่ดี ในการทำให้เราเข้าใจถึงแก่นแท้..."
-                type="ความรู้ธรรมะ"
-              /> */}
+              {isLoading ? (
+                <>Loading</>
+              ) : (
+                <>
+                  {articles.filter((article) => article.visible === true)
+                    .length === 0 ? (
+                    <div className="flex flex-row justify-center items-center m-16">
+                      ไม่มีเนื้อหา Post สาธารณะ
+                    </div>
+                  ) : (
+                    <>
+                      {articles
+                        .filter((article) => article.visible === true)
+                        .map((article, index) => {
+                          return (
+                            <React.Fragment key={index}>
+                              <Card article={article} />
+                            </React.Fragment>
+                          );
+                        })}
+                    </>
+                  )}
+                </>
+              )}
             </div>
 
             <div
               className={
-                toggleState === 2 ? "content  active-content" : "content"
+                toggleState === 2
+                  ? "content  active-content rounded-b"
+                  : "content rounded-b"
               }
             >
-              <h2>Content 2</h2>
+              {isLoading ? (
+                <>Loading</>
+              ) : (
+                <>
+                  {articles.filter((article) => article.visible === false)
+                    .length === 0 ? (
+                    <div className="flex flex-row justify-center items-center m-16 text-white">
+                      ไม่มีเนื้อหา Post ฉบับร่าง
+                    </div>
+                  ) : (
+                    <>
+                      {articles
+                        .filter((article) => article.visible === false)
+                        .map((article, index) => {
+                          return (
+                            <React.Fragment key={index}>
+                              <Card article={article} />
+                            </React.Fragment>
+                          );
+                        })}
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

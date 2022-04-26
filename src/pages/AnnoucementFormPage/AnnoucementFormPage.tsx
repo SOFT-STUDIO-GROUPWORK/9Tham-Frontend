@@ -23,22 +23,62 @@ type Props = {};
 const AnnoucementFormPage = (props: Props) => {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [photoList, setPhotoList] = useState<string[]>([""]);
+  const [photoList, setPhotoList] = useState<string[]>([]);
     // Cover Image
   const [selectCoverImage, setSelectCoverImage] = useState<Blob[]>([]);
 
-  // useEffect(() => {
-  //   console.log(photoList);
+  useEffect(() => {
+    getAnnouncement({setIsLoading}).then(
+      async (res: any) => {
+        let list:any = ["","","","","",""];
+        // let listCover:any = [null,null,null,null,null,null]
+      res.map(async (e: any, id:number) => {
+        let file = await urlToObjectFile(e.imageUrl);
+        console.log(e.imageUrl);
+        // console.log(file);
+        list[id] = e.imageUrl;
+        // listCover[id] = file;
+        console.log(list);
+        // setPhotoList([...photoList,e.imageUrl]);
+        setSelectCoverImage([...selectCoverImage, file]);
+      })
+      setPhotoList(list);
+      // setSelectCoverImage(listCover);
+      // console.log("photoList");
+      // console.log(photoList);
+      // console.log("selectCoverImage");
+      // console.log(selectCoverImage);
+      }
+    );
+  }, [])
 
-  // }, [photoList])
+  // useEffect(() => {
+  //   console.log("Photo");
+  //   console.log(photoList);
+  //   console.log("Cover");
+  //   console.log(selectCoverImage);
+  // }, [selectCoverImage])
+
+  const urlToObjectFile = async (url: string) => {
+    const min = 1;
+    const max = 99999999;
+    const rand = Math.round(min + Math.random() * (max - min));
+
+    let file = await fetch(url)
+      .then((res) => res.blob())
+      .then((blob) => new File([blob], rand.toString(), { type: blob.type }));
+    return file;
+  };
 
   const handlePhotoAdd = () => {
     
     //service
-    photoList.map(async (imageUrl) => {
-      let content = ""
-      await addAnnouncement({ setIsLoading, imageUrl, content });
-    })
+    // photoList.map(async (imageUrl) => {
+    //   let content = ""
+    //   if (imageUrl !== ""){
+    //     await addAnnouncement({ setIsLoading, imageUrl, content });
+    //   }
+    // })
 
     setPhotoList([...photoList, ""]);
   };
@@ -47,7 +87,6 @@ const AnnoucementFormPage = (props: Props) => {
 
   const handlePhotoRemove = async (AnnouncementId: number) => {
     //service
-    console.log(AnnouncementId);
     let result = await deleteAnnouncement({setIsLoading, AnnouncementId });
     if (result === false) {
       return;
@@ -87,16 +126,13 @@ const AnnoucementFormPage = (props: Props) => {
         // previewCoverImageBufferUrl = await urlToObjectFile(
         //   previewCoverImage
         let file: Blob[] = selectCoverImage;
-        file.map(async (file) => {
+        file.map(async (file, index:number) => {
           let res = await fileUploadHandler({ token, file });
           let content = "";
           let imageUrl = res;
-          photoList.map(async (url, editAnnouncementID) => {
-            await updateAnnouncement({setIsLoading, editAnnouncementID, imageUrl, content})
-          })
-          console.log(file)
+          let editAnnouncementID = index+1;
+          await updateAnnouncement({setIsLoading, editAnnouncementID, imageUrl, content})
           
-          console.log(imageUrl);
         })
         
       }
@@ -162,8 +198,8 @@ const AnnoucementFormPage = (props: Props) => {
                       onChange={(e) => imageHandler(e, index)}
                     />
                     <div className="w-full mt-1"></div>
-                    <h4 className="text-amber-500 m-2">ขนาดแนะนำ 1200 x 800</h4>
-                  </div>
+                      <h4 className="text-amber-500 m-2">ขนาดแนะนำ 1200 x 800</h4>
+                    </div>
                   {photoList.length > 1 && (
                     <div className="flex justify-center">
                       <Button

@@ -1,11 +1,23 @@
 import { BsPersonCircle } from "react-icons/bs";
+import IAccount from "../interfaces/IAccount";
 
-type Props = {};
+type Props = {
+  account: IAccount;
+};
 
-const NewComment = (props: Props) => {
+const NewComment = ({account}: Props) => {
   return (
     <div className="flex flex-row w-full border-0 border-green-600 py-4">
-      <BsPersonCircle className="w-14 h-full ml-1" />
+      {account?.imageUrl ? (
+        <img
+          id="img-preview"
+          src={account?.imageUrl}
+          className="object-cover w-14 h-14 rounded-full border-2 border-amber-500"
+          alt=""
+        />
+      ) : (
+        <BsPersonCircle className="w-14 h-full " />
+      )}
       <input
         type="text"
         className="shadow appearance-none border rounded w-full py-2 px-3 mx-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

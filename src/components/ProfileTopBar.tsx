@@ -53,13 +53,13 @@ const ProfileTopBar = ({
 
   const navigate = useNavigate();
 
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [isMore, setIsMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comment, setComment] = useState<IComment | null>();
   const [isLike, setIsLike] = useState<boolean>(false);
   const [likeAmounts, setLikeAmounts] = useState<number>(0);
-
+  const [isUser, setIsUser] = useState<boolean>(false);
   const [dateFormat, setDateFormat] = useState<string>("");
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const ProfileTopBar = ({
         (commentLike) =>
           commentLike.bloggerId === userId && commentLike.commentId === x.id
       );
-      setLikeAmounts(x.commentLikes?.length!)
+      setLikeAmounts(x.commentLikes?.length!);
       console.log(www);
       if (www?.length !== 0) {
         setIsLike(true);
@@ -86,13 +86,18 @@ const ProfileTopBar = ({
         setIsLike(false);
       }
 
-
       setComment(res);
       if (isComment === true) {
         let x: IComment = res;
         setDateFormat(Moment(x.published?.split(".")[0]).fromNow());
       }
     });
+
+    if (user.role === 0) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
   }, [article?.published, commentId, isComment]);
 
   const handleLike = async () => {
@@ -102,19 +107,35 @@ const ProfileTopBar = ({
     // console.log(com)
     toggleCommentLike({ setIsLoading, commentId, bloggerId: userId, token });
 
-    if(isLike === true){
-      if (likeAmounts > 0)
-      setLikeAmounts(likeAmounts - 1)
-    }else if (isLike === false){
-      setLikeAmounts(likeAmounts + 1)
+    if (isLike === true) {
+      if (likeAmounts > 0) setLikeAmounts(likeAmounts - 1);
+    } else if (isLike === false) {
+      setLikeAmounts(likeAmounts + 1);
     }
-    setIsLike(!isLike)
+    setIsLike(!isLike);
     //navigate(0);
     // getCommentId({ setIsLoading, commentId }).then((res) => {
     //   setComment(res);
     // });
     // console.log(comment)
     console.log(comment);
+  };
+
+  const handlemeatballcomment = async () => {
+    if (user.role === 0 && userId === comment?.bloggerId) {
+      console.log(isMore);
+      setIsMore(!isMore);
+    } else if (user.role === 1) {
+      console.log(isMore);
+      setIsMore(!isMore);
+    }
+  };
+
+  const handlemeatballpost = async () => {
+    if (user.role === 1) {
+      console.log(isMore);
+      setIsMore(!isMore);
+    }
   };
 
   return (
@@ -214,16 +235,15 @@ const ProfileTopBar = ({
             </button>
           </div>
         )}
-
-        <button
-          className="ml-2 w-6 h-6"
-          onClick={() => {
-            console.log(isMore);
-            setIsMore(!isMore);
-          }}
-        >
-          <FiMoreHorizontal className="w-6 h-6" />
-        </button>
+        {isComment === true ? (
+          <button className="ml-2 w-6 h-6" onClick={handlemeatballcomment}>
+            <FiMoreHorizontal className="w-6 h-6" />
+          </button>
+        ) : (
+          <button className="ml-2 w-6 h-6" onClick={handlemeatballpost}>
+            <FiMoreHorizontal className="w-6 h-6" />
+          </button>
+        )}
       </div>
     </div>
   );

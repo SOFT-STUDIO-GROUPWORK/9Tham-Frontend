@@ -15,6 +15,8 @@ import NewComment from "../../components/NewComment";
 
 import { deleteArticle } from "../../services/articlesService";
 
+import IComment from "../../interfaces/IComment";
+
 type Props = {};
 
 const PostPage = (props: Props) => {
@@ -28,7 +30,10 @@ const PostPage = (props: Props) => {
   // who post this post
   const [article, setArticle] = useState<IArticle | undefined>(undefined);
   const [postAccount, setPostAccount] = useState(initialAccount);
-  const [comments, setComments] = useState();
+  //const [comments, setComments] = useState();
+
+  const [comments, setComments] = useState<IComment[] | undefined>();
+  //let allComment = {comments};
 
   useEffect(() => {
     getArticle({
@@ -38,6 +43,7 @@ const PostPage = (props: Props) => {
       setPostAccount,
       setComments,
     });
+
     console.log(article);
   }, [articleId]);
 
@@ -99,11 +105,12 @@ const PostPage = (props: Props) => {
               </div>
               <hr className="w-full" />
               <div className="w-full">
-                {MOCK_COMMENTS.map((c) => {
-                  return <Comment account={user} comment={""} />;
+                {comments?.map((comment) => {
+                  return <Comment comment={comment} />;
                 })}
+                {/* <Comment account={user} comment={comments} />; */}
               </div>
-              <NewComment account={user} />
+              <NewComment account={user} articleId={articleId} />
             </div>
           </div>
         </>

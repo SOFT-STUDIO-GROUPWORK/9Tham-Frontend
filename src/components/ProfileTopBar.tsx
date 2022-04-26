@@ -14,6 +14,7 @@ import {
 import { BsTrash } from "react-icons/bs";
 import IArticle from "../interfaces/IArticle";
 import IAccount from "../interfaces/IAccount";
+import IBlogger from "../interfaces/IBlogger";
 
 type Props = {
   account: IAccount;
@@ -80,7 +81,7 @@ const ProfileTopBar = ({
             <p>100</p>
           </>
         )}
-        {isMore === true && isComment === false && (
+        {isMore === true && (
           <div className="absolute top-0 -right-36 bg-white border rounded border-gray-400 w-32">
             <button
               onClick={handleEditOnClick}

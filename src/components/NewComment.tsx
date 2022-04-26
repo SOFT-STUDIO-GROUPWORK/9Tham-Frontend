@@ -1,11 +1,43 @@
+import { useState } from "react";
 import { BsPersonCircle } from "react-icons/bs";
+import { useAuth } from "../contexts/AuthContext";
 import IAccount from "../interfaces/IAccount";
+import IArticle from "../interfaces/IArticle";
+import IComment from "../interfaces/IComment";
+import { useNavigate } from "react-router-dom";
 
+import {
+  getComment,
+  getCommentId,
+  DeleteComment,
+  updateComment,
+  addComment,
+} from "../services/commentService";
 type Props = {
   account: IAccount;
+  articleId: number;
 };
 
-const NewComment = ({account}: Props) => {
+const NewComment = ({ account, articleId }: Props) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [Newcomment, setNewComment] = useState("");
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  let addData = {
+    content: Newcomment,
+    visible: true,
+    bloggerId: account?.id!,
+    articleId: articleId,
+  };
+
+  const handleSubmitComment = async () => {
+    addComment({ setIsLoading, token, addData });
+    //getCommentId({ setIsLoading,res });
+    console.log(addData.bloggerId);
+    alert("คอมเมนต์สำเร็จ");
+    //navigate(0);
+  };
   return (
     <div className="flex flex-row w-full border-0 border-green-600 py-4">
       {account?.imageUrl ? (
@@ -24,8 +56,12 @@ const NewComment = ({account}: Props) => {
         id="username"
         placeholder="เขียนความคิดเห็น..."
         autoComplete="off"
+        onChange={(e) => setNewComment(e.target.value)}
       />
-      <button className="btn py-2 px-4 w-20 bg-amber-500 text-white   rounded shadow-sm hover:bg-amber-600 hover:shadow-lg focus:bg-amber-600  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-amber-700 active:shadow-lg transition duration-150 ease-in-out ">
+      <button
+        onClick={handleSubmitComment}
+        className="btn py-2 px-4 w-20 bg-amber-500 text-white   rounded shadow-sm hover:bg-amber-600 hover:shadow-lg focus:bg-amber-600  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-amber-700 active:shadow-lg transition duration-150 ease-in-out "
+      >
         ส่ง
       </button>
     </div>

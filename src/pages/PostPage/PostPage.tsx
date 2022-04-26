@@ -23,6 +23,7 @@ import {
   addComment,
 } from "../../services/commentService";
 import IComment from "../../interfaces/IComment";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 type Props = {};
 
@@ -37,12 +38,7 @@ const PostPage = (props: Props) => {
   // who post this post
   const [article, setArticle] = useState<IArticle | undefined>(undefined);
   const [postAccount, setPostAccount] = useState(initialAccount);
-  //const [comments, setComments] = useState();
-
   const [comments, setComments] = useState<IComment[] | undefined>();
-  //let allComment = {comments};
-  const [allcomments, setAllComments] = useState<IComment[] | undefined>();
-  //const allComments = getComment({ setIsLoading });
 
   useEffect(() => {
     getArticle({
@@ -52,15 +48,7 @@ const PostPage = (props: Props) => {
       setPostAccount,
       setComments,
     });
-
-    console.log(article);
-    getComment({ setIsLoading }).then((res: any) => {
-      if (res === null) return;
-      setAllComments(res);
-    });
-    //const allComment = getComment({ setIsLoading });
   }, [articleId]);
-
   const handleDeletePost = async () => {
     let articleId = article?.id!;
     deleteArticle({ token, setIsLoading, articleId })
@@ -119,7 +107,7 @@ const PostPage = (props: Props) => {
               </div>
               <hr className="w-full" />
               <div className="w-full">
-                {allcomments?.map((comment) => {
+                {comments?.map((comment) => {
                   return <Comment comment={comment} />;
                 })}
                 {/* <Comment account={user} comment={comments} />; */}

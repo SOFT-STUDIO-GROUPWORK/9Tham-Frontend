@@ -2,11 +2,12 @@ import axios, { config } from "../api/axios";
 import {
     ARTICLES_GETALL_URL,
     ARTICLES_GET_PAGE_URL,
-    ARTICLES_SEARCH_PAGE_URL,
     ARTICLE_GET_URL,
     ARTICLE_POST_URL,
     ARTICLE_PUT_URL,
     ARTICLE_DELETE_URL,
+    ARTICLES_REVERT_GET_PAGE_URL,
+    ARTICLES_SEARCH_PAGE_URL,
 } from "../api/routes";
 import IArticle from "../interfaces/IArticle";
 import IPagination from "../interfaces/IPagination";
@@ -30,6 +31,7 @@ export const getArticles = async ({ setIsLoading }: getArticlesProps) => {
 }
 
 
+// NEWEST QUERY
 type getPageAndSearchArticlesProps = {
     setIsLoading: any;
     setArticles: any;
@@ -39,7 +41,7 @@ type getPageAndSearchArticlesProps = {
 export const getPageArticles = async ({ setIsLoading, setArticles, pagination, setPagination }: getPageAndSearchArticlesProps) => {
     setIsLoading(true);
     await axios
-        .get(ARTICLES_GET_PAGE_URL
+        .get(ARTICLES_REVERT_GET_PAGE_URL
             .replace(":page", pagination.currentPage.toString())
             .replace(":perPage", pagination.perPage.toString()))
         .then(async (res) => {
@@ -54,16 +56,7 @@ export const getPageArticles = async ({ setIsLoading, setArticles, pagination, s
                     total: res.data.totalArticles
                 })
             )
-            // await getArticles({ setIsLoading }).then((res: any) => {
-            //     setPagination((prev: IPagination) => (
-            //         {
-            //             ...prev,
-            //             total: res.length
-            //         })
-            //     )
-            // }).catch((err) => {
-            //     console.error(`Articles getPageArticles2(): ${err.status}:` + err);
-            // })
+
         })
         .catch((err) => {
             console.error(`Articles getPageArticles1(): ${err.status}:` + err);
@@ -72,6 +65,9 @@ export const getPageArticles = async ({ setIsLoading, setArticles, pagination, s
             setIsLoading(false);
         });
 };
+// OLDNEST QUERY
+
+
 
 export const getSearchArticles = async ({ setIsLoading, setArticles, pagination, setPagination }: getPageAndSearchArticlesProps) => {
     setIsLoading(true);
@@ -92,16 +88,7 @@ export const getSearchArticles = async ({ setIsLoading, setArticles, pagination,
                     total: res.data.totalArticles
                 })
             )
-            // await getArticles({setIsLoading}).then((res: any) => {
-            //     setPagination((prev: IPagination) => (
-            //         {
-            //             ...prev,
-            //             total: res.length
-            //         })
-            //     )
-            // }).catch((err) => {
-            //     console.error(`Articles getSearchArticles2(): ${err.response.status}:` + err);
-            // })
+
         })
         .catch((err) => {
             console.error(`Articles getSearchArticles1(): ${err.response.status}:` + err);
@@ -115,8 +102,8 @@ type getArticleProps = {
     setIsLoading: any;
     articleId: number;
     setArticle?: any;
-    setPostAccount?:any;
-    setComments:any;
+    setPostAccount?: any;
+    setComments: any;
 }
 export const getArticle = async ({ setIsLoading, articleId, setArticle, setPostAccount, setComments }: getArticleProps) => {
     setIsLoading(true);

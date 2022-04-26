@@ -28,16 +28,18 @@ export const TAG_PUT_URL = "api/Tags/:id"; // put
 export const TAG_DELETE_URL = "api/Tags/:id"; // delete
 
 //Photo
-export const FILE_POST_URL = "api/FileUpload/picture"
-export const FILE_DELETE_URL = "api/FileUpload/picture"
+export const FILE_POST_URL = "api/FileUpload/picture";
+export const FILE_DELETE_URL = "api/FileUpload/picture";
 
 //Articles
-export const ARTICLES_GETALL_URL = "api/Articles"
-export const ARTICLES_GET_PAGE_URL = "api/Articles/:page/:perPage"
-export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage"
+export const ARTICLES_GETALL_URL = "api/Articles";
 
-// export const ARTICLES_REVERT_GET_PAGE_URL = "api/Articles/reverse/:page/:perPage"
-// export const ARTICLES_REVERT_SEARCH_PAGE_URL = "api/Articles/:search/reverse/:page/:perPage"
+// old but work
+export const ARTICLES_GET_PAGE_URL = "api/Articles/:page/:perPage";
+export const ARTICLES_REVERT_GET_PAGE_URL = "api/Articles/reverse/:page/:perPage"
+
+export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage";
+export const ARTICLES_REVERT_SEARCH_PAGE_URL = "api/Articles/:search/reverse/:page/:perPage"
 
 export const ARTICLE_GET_URL = "api/Articles/:id"
 export const ARTICLE_POST_URL = "api/Articles"
@@ -71,3 +73,10 @@ export const LIKE_POST_URL = "api/Likes";
 export const LIKE_GETID_URL = "api/Likes/:id";
 export const LIKE_PUT_URL = "api/Likes/:id";
 export const LIKE_DELETE_URL = "api/Likes/:id";
+
+//Announcement
+export const ANNOUNCEMENT_GET_URL = "api/Announcement";
+export const ANNOUNCEMENT_POST_URL = "api/Announcement";
+export const ANNOUNCEMENT_GETID_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_PUT_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_DELETE_URL = "api/Announcement/:id";

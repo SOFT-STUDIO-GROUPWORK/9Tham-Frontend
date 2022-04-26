@@ -1,6 +1,9 @@
+import ITag from "../../../interfaces/ITag";
+
 type Props = {
   title?: string;
-  options: any[];
+  value: string;
+  options:string[];
   onChange: any;
   isDefault?: boolean;
 };

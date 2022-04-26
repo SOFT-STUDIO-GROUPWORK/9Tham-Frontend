@@ -24,6 +24,7 @@ import { toggleCommentLike } from "../services/commentLikeService";
 
 import { getCommentId } from "../services/commentService";
 import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   account: IAccount;
@@ -49,25 +50,71 @@ const ProfileTopBar = ({
   handleDeleteOnClick,
 }: Props) => {
   Moment.locale("th");
-  const dateFormat = Moment(article?.published?.split(".")[0]).fromNow();
+
+  const navigate = useNavigate();
+
   const { token } = useAuth();
   const [isMore, setIsMore] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [comment, setComment] = useState<IComment | null>();
   const [isLike, setIsLike] = useState<boolean>(false);
+  const [likeAmounts, setLikeAmounts] = useState<number>(0);
+
+  const [dateFormat, setDateFormat] = useState<string>("");
 
   useEffect(() => {
+    // if (
+    //   comment.commentLikes.bloggerId === userId &&
+    //   comment.commentLikes.commentId === comment.id
+    // )
+    if (isComment === false) {
+      setDateFormat(Moment(article?.published?.split(".")[0]).fromNow());
+    }
     if (commentId === undefined) return;
     getCommentId({ setIsLoading, commentId }).then((res) => {
+      if (res === undefined || res === null) return;
+      let x: IComment = res;
+      const www = x.commentLikes?.filter(
+        (commentLike) =>
+          commentLike.bloggerId === userId && commentLike.commentId === x.id
+      );
+      setLikeAmounts(x.commentLikes?.length!)
+      console.log(www);
+      if (www?.length !== 0) {
+        setIsLike(true);
+      } else {
+        setIsLike(false);
+      }
+
+
       setComment(res);
+      if (isComment === true) {
+        let x: IComment = res;
+        setDateFormat(Moment(x.published?.split(".")[0]).fromNow());
+      }
     });
-  }, [commentId, comment?.commentLikes.length]);
+  }, [article?.published, commentId, isComment]);
 
   const handleLike = async () => {
     if (commentId === undefined) return;
     if (userId === undefined) return;
     //if (islike === false)
+    // console.log(com)
     toggleCommentLike({ setIsLoading, commentId, bloggerId: userId, token });
+
+    if(isLike === true){
+      if (likeAmounts > 0)
+      setLikeAmounts(likeAmounts - 1)
+    }else if (isLike === false){
+      setLikeAmounts(likeAmounts + 1)
+    }
+    setIsLike(!isLike)
+    //navigate(0);
+    // getCommentId({ setIsLoading, commentId }).then((res) => {
+    //   setComment(res);
+    // });
+    // console.log(comment)
+    console.log(comment);
   };
 
   return (
@@ -113,15 +160,22 @@ const ProfileTopBar = ({
       </div>
       <div className="relative flex flex-row gap-2 mr-2">
         {isComment === true && (
-          <>
-            <button
-              onClick={handleLike}
-              className="flex flex-row justify-around items-center w-full h-8 hover:bg-gray-100"
-            >
-              <AiFillLike className="w-auto h-1/2" />
-              {comment?.commentLikes.length}
-            </button>
-          </>
+          <button
+            onClick={handleLike}
+            className="flex flex-row justify-around items-center w-12 h-8"
+          >
+            {isLike ? (
+              <AiFillLike className="w-6 h-6" />
+            ) : (
+              <AiOutlineLike className="w-6 h-6" />
+            )}
+
+            {/* {comment?.commentLikes?.length === 0 && (
+              <AiOutlineLike className="w-6 h-6" />
+            )} */}
+
+            {likeAmounts}
+          </button>
         )}
         {isMore === true && (
           <div className="absolute top-0 -right-40 bg-white border rounded border-gray-400 w-36">
@@ -139,12 +193,12 @@ const ProfileTopBar = ({
               >
                 {article?.visible === true ? (
                   <>
-                    <AiOutlineEyeInvisible className="mx-2 h-ful" />
+                    <AiOutlineEyeInvisible className="mx-2 h-full" />
                     ซ่อนโพสต์
                   </>
                 ) : (
                   <>
-                    <AiOutlineEye className="mx-2 h-ful" />
+                    <AiOutlineEye className="mx-2 h-full" />
                     แสดงโพสต์
                   </>
                 )}
@@ -155,20 +209,20 @@ const ProfileTopBar = ({
               onClick={handleDeleteOnClick}
               className="flex flex-row items-center  w-full h-8 hover:bg-gray-100"
             >
-              <BsTrash className="mx-2 h-ful" />
+              <BsTrash className="mx-2 h-full" />
               {isComment === false ? "ลบโพสต์" : "ลบคอมเมนต์"}
             </button>
           </div>
         )}
 
         <button
-          className="ml-2 w-auto h-1/2"
+          className="ml-2 w-6 h-6"
           onClick={() => {
             console.log(isMore);
             setIsMore(!isMore);
           }}
         >
-          <FiMoreHorizontal className="w-full h-full" />
+          <FiMoreHorizontal className="w-6 h-6" />
         </button>
       </div>
     </div>

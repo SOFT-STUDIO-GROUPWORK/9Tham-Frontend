@@ -1,6 +1,7 @@
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineGlobal, AiOutlineLike } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { FiMoreHorizontal } from "react-icons/fi";
+import { VscLock } from "react-icons/vsc";
 
 import Moment from "moment";
 import "moment/locale/th";
@@ -14,6 +15,7 @@ import {
 import { BsTrash } from "react-icons/bs";
 import IArticle from "../interfaces/IArticle";
 import IAccount from "../interfaces/IAccount";
+import { Link } from "react-router-dom";
 import IBlogger from "../interfaces/IBlogger";
 
 type Props = {
@@ -64,9 +66,17 @@ const ProfileTopBar = ({
             {isNewPost === false && (
               <span className="text-sm text-gray-500">{dateFormat}</span>
             )}
-            {isComment === false && (
+            {isNewPost === false && isComment === false && (
               <div className="flex flex-row items-center text-sm text-gray-800 mt-1">
-                <AiOutlineEye className="mr-1" />
+                {article?.visible === true ? (
+                  <AiOutlineGlobal className="mr-1" />
+                ) : (
+                  <VscLock className="mr-1" />
+                )}
+                <span className="text-sm">
+                  {article?.visible === true ? "สาธารณะ" : "ส่วนตัว"}
+                </span>
+                <AiOutlineEye className="ml-3 mx-1" />
                 <span className="text-sm">ผู้เข้าชม {article?.viewCount}</span>
               </div>
             )}

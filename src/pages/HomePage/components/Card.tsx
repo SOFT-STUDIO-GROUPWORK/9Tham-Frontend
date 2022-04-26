@@ -43,7 +43,7 @@ const Card = ({ article }: Props) => {
             </h4>
             <p className="mb-3 text-gray-700 ">{article.description}</p>
             <button className="btn bg-amber-600 rounded-full text-white px-2 py-1 max-w-fit">
-              {article.articleTags?.[0].tag?.name}
+              {article.articleTags?.[0]?.tag?.name}
             </button>
           </div>
 

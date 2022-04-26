@@ -3,3 +3,9 @@ export default interface ITag {
     name: string;
     articleTags?: any;
 }
+
+export interface ITagMustHaveId {
+    id: number;
+    name: string;
+    articleTags?: any;
+}

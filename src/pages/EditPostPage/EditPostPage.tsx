@@ -9,10 +9,15 @@ import { AiOutlineGlobal } from "react-icons/ai";
 import { FiLock } from "react-icons/fi";
 
 import axios from "axios";
-import $ from "jquery";
+import $, { param } from "jquery";
 import Button from "../../components/Button";
 
-import { EditorState, convertToRaw, RawDraftContentState } from "draft-js";
+import {
+  EditorState,
+  convertToRaw,
+  RawDraftContentState,
+  ContentState,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
@@ -22,33 +27,53 @@ import { Link } from "react-router-dom";
 // import IPost from "../../interfaces/post";
 
 import { getTags } from "../../services/tagsService";
-import ITag from "../../interfaces/ITag";
+import ITag, { ITagMustHaveId } from "../../interfaces/ITag";
 import IArticle from "../../interfaces/IArticle";
 import { useAuth } from "../../contexts/AuthContext";
-import { addArticle } from "../../services/articlesService";
+import {
+  addArticle,
+  getArticle,
+  updateArticle,
+} from "../../services/articlesService";
 
 import { useNavigate } from "react-router-dom";
 import IAccount from "../../interfaces/IAccount";
-import { addArticleTag } from "../../services/articleTagsService";
-import IArticleTags from "../../interfaces/IArticleTags";
+import {
+  addArticleTag,
+  getArticleTag,
+  updateArticleTag,
+} from "../../services/articleTagsService";
+
 import ProfileTopBar from "../../components/ProfileTopBar";
+
+import { useParams } from "react-router-dom";
+import IComment from "../../interfaces/IComment";
+import IArticleTags from "../../interfaces/IArticleTags";
 
 type Props = {};
 
-// const defaultTag: ITag = {
-//   id: 0,
-//   name: "เลือกหมวดหมู่",
-// };
-
 const EditPostPage = (props: Props) => {
+  //general
+  const { token, user } = useAuth();
+  const [account, setAccount] = useState<IAccount>(user);
+
+  const navigate = useNavigate();
+  const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [articleId, setArticleId] = useState<number | null>(() => {
+    let result = null;
+    if (params.id !== undefined) {
+      result = parseInt(params.id);
+    }
+    return result;
+  });
 
   // Post Content
   // Header
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [articleTagId, setArticleTagId] = useState<number>(0);
-  const [articleTags, setArticleTags] = useState<ITag[]>([]);
+  const [tagId, setTagId] = useState<number>(0);
+  const [tags, setTags] = useState<ITag[]>([]);
   // Cover Image
   const [selectCoverImage, setSelectCoverImage] = useState<undefined | Blob>();
   const [previewCoverImage, setPreviewCoverImage] = useState<string>("");
@@ -62,15 +87,53 @@ const EditPostPage = (props: Props) => {
   const [visible, setVisible] = useState<boolean>(true);
   const [post, setPost] = useState<IArticle | undefined>(undefined);
 
-  const { token, user } = useAuth();
-  const [account, setAccount] = useState<IAccount>(user);
+  const [articleTagId, setArticleTagId] = useState<number | null>();
 
-  const navigate = useNavigate();
+  //Comment
+  const [comments, setComments] = useState<IComment[]>();
+
+  useEffect(() => {
+    console.log(articleId);
+    if (articleId !== null) {
+      getArticle({
+        setIsLoading,
+        articleId,
+        setComments,
+      }).then((res) => {
+        if (res != null) {
+          let article: IArticle = res;
+          console.log(article);
+          setTitle(article.title);
+          setDescription(article.description);
+          setPreviewCoverImage(article.thumbnailUrl);
+
+          if (article.articleTags === undefined) {
+            return;
+          }
+          let articleTagBuffer: IArticleTags = article.articleTags[0];
+          setTagId(articleTagBuffer.tagId);
+          setArticleTagId(articleTagBuffer.id);
+          /** Convert html string to draft JS */
+          const contentBlock = htmlToDraft(article.content);
+          const contentState = ContentState.createFromBlockArray(
+            contentBlock.contentBlocks
+          );
+          const editorState = EditorState.createWithContent(contentState);
+          setEditorState(editorState);
+          setVisible(article.visible);
+        } else {
+          alert("ไม่สามารถโหลดโพสต์ได้");
+          navigate("/post/" + articleId.toString());
+        }
+      });
+    }
+  }, [articleId]);
+
+  useEffect(() => {}, [visible]);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
-    getTags({ setIsLoading }).then((res: any) => setArticleTags(res));
-    //setArticleTags(mockDataOptions);
+    getTags({ setIsLoading }).then((res: any) => setTags(res));
   }, []);
 
   useEffect(() => {
@@ -95,26 +158,56 @@ const EditPostPage = (props: Props) => {
 
     if (post !== undefined) {
       let addFormData: IArticle = post;
-      console.log("HERE!");
-      console.log(articleTagId);
-      addArticle({ token, setIsLoading, addFormData })
-        .then(async (res) => {
-          if (res !== null) {
-            let addData: IArticleTags = {
-              articleId: res,
-              tagId: articleTagId,
-            };
-            console.log(addData);
-            await addArticleTag({ setIsLoading, token, addData });
-            alert("อัพโพสต์สำเร็จ ไปยังหน้าโพสต์");
-            navigate("/");
-          } else {
-            alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
-          }
+      //add new article
+      if (articleId === null) {
+        addArticle({ token, setIsLoading, addFormData })
+          .then(async (res) => {
+            if (res !== null) {
+              let addData: IArticleTags = {
+                articleId: res,
+                tagId: tagId,
+              };
+              console.log(addData);
+              await addArticleTag({ setIsLoading, token, addData });
+              alert("อัพโพสต์สำเร็จ ไปยังหน้าโพสต์");
+              navigate("/");
+            } else {
+              alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        // Update article
+        updateArticle({
+          token,
+          setIsLoading,
+          editArticleId: articleId,
+          editFormData: addFormData,
         })
-        .catch((err) => {
-          console.error(err);
-        });
+          .then(async (res) => {
+            if (res === true) {
+              let editData: IArticleTags = {
+                articleId: articleId,
+                tagId: tagId,
+              };
+              await updateArticleTag({
+                setIsLoading,
+                token,
+                editArticleTagsId: articleTagId!,
+                addData: editData,
+              });
+              alert("อัพเดตโพสต์สำเร็จ ไปยังหน้าโพสต์");
+              navigate("/post/" + articleId.toString());
+            } else {
+              alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
     // CreatePostApi here
   }, [post]);
@@ -149,7 +242,7 @@ const EditPostPage = (props: Props) => {
     if (
       title === "" ||
       description === "" ||
-      articleTagId === 0 ||
+      tagId === 0 ||
       content === undefined
     ) {
       // setError('Please fill out all fields.');
@@ -160,6 +253,8 @@ const EditPostPage = (props: Props) => {
     }
     console.log("every thing is fill requirement");
     console.log("begin try...");
+
+    setIsLoading(true);
 
     try {
       let previewCoverImageBufferUrl: string = "";
@@ -256,7 +351,11 @@ const EditPostPage = (props: Props) => {
               style={{ minHeight: "calc(100vh - 64px)" }}
             >
               <div className="mt-24"></div>
-              <ProfileTopBar account={account} isNewPost={true} isComment={false} />
+              <ProfileTopBar
+                account={account}
+                isNewPost={true}
+                isComment={false}
+              />
               <h2 className="w-full py-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600">
                 เพิ่มบทความใหม่
               </h2>
@@ -291,11 +390,12 @@ const EditPostPage = (props: Props) => {
                   <span className="text-amber-500">* </span>หมวดหมู่
                 </h4>
                 <div className="font-normal text-base mb-2">
-                  <span className={articleTagId === 0 ? "text-gray-700 " : ""}>
+                  <span className={tagId === 0 ? "text-gray-700 " : ""}>
                     <Selector
+                      value={tagId}
                       isDefault={true}
-                      onChange={(e: any) => setArticleTagId(e.target.value)}
-                      options={articleTags}
+                      onChange={(e: any) => setTagId(e.target.value)}
+                      options={tags}
                     />
                   </span>
                 </div>
@@ -318,7 +418,7 @@ const EditPostPage = (props: Props) => {
                   className="relative w-full rounded border bg-white shadow"
                   style={{ height: "400px", width: "600px" }}
                 >
-                  {selectCoverImage ? (
+                  {selectCoverImage || previewCoverImage !== "" ? (
                     <img
                       id="img-preview"
                       src={previewCoverImage}
@@ -391,11 +491,10 @@ const EditPostPage = (props: Props) => {
                       <input
                         className="sr-only peer"
                         type="radio"
-                        value={visible ? "1" : "0"}
                         name="visible"
                         id="private"
                         onChange={() => setVisible(false)}
-                        defaultChecked={visible === false}
+                        checked={visible === false}
                       />
                       <label
                         className="text-lg flex items-center py-2 px-4 rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"
@@ -408,11 +507,10 @@ const EditPostPage = (props: Props) => {
                       <input
                         className="sr-only peer"
                         type="radio"
-                        value={visible ? "1" : "0"}
                         name="visible"
                         id="public"
                         onChange={() => setVisible(true)}
-                        defaultChecked={visible === true}
+                        checked={visible === true}
                       />
                       <label
                         className="text-lg flex items-center py-2 px-4 bg-slate-50  rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:bg-amber-500 peer-checked:text-white peer-checked:border-transparent transition duration-150 ease-in-out"
@@ -423,7 +521,7 @@ const EditPostPage = (props: Props) => {
                     </li>
                   </ul>
                 </div>
-                <Button
+                {/* <Button
                   onClick={() => {
                     console.log(content);
                     console.log(convertToRaw(editorState.getCurrentContent()));
@@ -433,13 +531,23 @@ const EditPostPage = (props: Props) => {
                   children="ตัวอย่างโพสต์ที่แสดง"
                   color="amber"
                   mode="outline"
-                />
-                <Button
-                  onClick={createPost}
-                  className="w-2/5 rounded-full"
-                  children="โพสต์"
-                  color="amber"
-                />
+                /> */}
+                {articleId === null && (
+                  <Button
+                    onClick={createPost}
+                    className="w-2/5 py-3 rounded-full"
+                    children="โพสต์"
+                    color="amber"
+                  />
+                )}
+                {articleId !== null && (
+                  <Button
+                    onClick={createPost}
+                    className="w-2/5 py-3 rounded-full"
+                    children="อัพเดตโพสต์"
+                    color="green"
+                  />
+                )}
               </div>
             </div>
           </div>

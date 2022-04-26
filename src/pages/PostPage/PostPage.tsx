@@ -24,6 +24,7 @@ import {
 } from "../../services/commentService";
 import IComment from "../../interfaces/IComment";
 import React from "react";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 type Props = {};
 
@@ -38,12 +39,7 @@ const PostPage = (props: Props) => {
   // who post this post
   const [article, setArticle] = useState<IArticle | undefined>(undefined);
   const [postAccount, setPostAccount] = useState(initialAccount);
-  //const [comments, setComments] = useState();
-
   const [comments, setComments] = useState<IComment[] | undefined>();
-  //let allComment = {comments};
-  const [allcomments, setAllComments] = useState<IComment[] | undefined>();
-  //const allComments = getComment({ setIsLoading });
 
   useEffect(() => {
     getArticle({
@@ -57,8 +53,7 @@ const PostPage = (props: Props) => {
     console.log(article);
     getComment({ setIsLoading }).then((res: any) => {
       if (res === null) return;
-      console.log(allcomments)
-      setAllComments(res);
+      setComments(res);
     });
     //const allComment = getComment({ setIsLoading });
   }, [articleId]);
@@ -145,14 +140,13 @@ const PostPage = (props: Props) => {
               </div>
               <hr className="w-full" />
               <div className="w-full">
-                {allcomments?.map((comment, index) => {
+                {comments?.map((comment, index) => {
                   return (
                     <React.Fragment key={index}>
                       <Comment comment={comment} />
                     </React.Fragment>
                   );
                 })}
-                {/* <Comment account={user} comment={comments} />; */}
               </div>
               <NewComment account={user} articleId={articleId} />
             </div>

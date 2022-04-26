@@ -12,50 +12,58 @@ import {
 import IArticle from "../interfaces/IArticle";
 import IPagination from "../interfaces/IPagination";
 
-
 type getArticlesProps = {
     setIsLoading: any;
-}
+};
 export const getArticles = async ({ setIsLoading }: getArticlesProps) => {
     setIsLoading(true);
     let response = null;
-    await axios.get(ARTICLES_GETALL_URL).then((res) => {
-        response = res.data;
-    }).catch((err) => {
-        console.error(`Articles getArticles(): ${err.status}:` + err);
-    }).finally(() => {
-        setIsLoading(false);
-    });
-    console.log(response)
+    await axios
+        .get(ARTICLES_GETALL_URL)
+        .then((res) => {
+            response = res.data;
+        })
+        .catch((err) => {
+            console.error(`Articles getArticles(): ${err.status}:` + err);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    console.log(response);
     return response;
-}
-
+};
 
 // NEWEST QUERY
 type getPageAndSearchArticlesProps = {
     setIsLoading: any;
     setArticles: any;
     pagination: IPagination;
-    setPagination: any
-}
-export const getPageArticles = async ({ setIsLoading, setArticles, pagination, setPagination }: getPageAndSearchArticlesProps) => {
+    setPagination: any;
+};
+export const getPageArticles = async ({
+    setIsLoading,
+    setArticles,
+    pagination,
+    setPagination,
+}: getPageAndSearchArticlesProps) => {
     setIsLoading(true);
     await axios
-        .get(ARTICLES_REVERT_GET_PAGE_URL
-            .replace(":page", pagination.currentPage.toString())
-            .replace(":perPage", pagination.perPage.toString()))
+        .get(
+            ARTICLES_GET_PAGE_URL.replace(
+                ":page",
+                pagination.currentPage.toString()
+            ).replace(":perPage", pagination.perPage.toString())
+        )
         .then(async (res) => {
             setArticles(res.data.articles);
-            setPagination((prev: IPagination) => (
-                {
-                    ...prev,
-                    firstPage: res.data.firstPage,
-                    lastPage: res.data.lastPage,
-                    currentPage: res.data.currentPage,
-                    currentTotal: res.data.articles.length,
-                    total: res.data.totalArticles
-                })
-            )
+            setPagination((prev: IPagination) => ({
+                ...prev,
+                firstPage: res.data.firstPage,
+                lastPage: res.data.lastPage,
+                currentPage: res.data.currentPage,
+                currentTotal: res.data.articles.length,
+                total: res.data.totalArticles
+            }));
 
         })
         .catch((err) => {
@@ -69,29 +77,46 @@ export const getPageArticles = async ({ setIsLoading, setArticles, pagination, s
 
 
 
-export const getSearchArticles = async ({ setIsLoading, setArticles, pagination, setPagination }: getPageAndSearchArticlesProps) => {
+export const getSearchArticles = async ({
+    setIsLoading,
+    setArticles,
+    pagination,
+    setPagination,
+}: getPageAndSearchArticlesProps) => {
     setIsLoading(true);
     await axios
-        .get(ARTICLES_SEARCH_PAGE_URL
-            .replace(":search", pagination.search.toString())
-            .replace(":page", pagination.currentPage.toString())
-            .replace(":perPage", pagination.perPage.toString()))
+        .get(
+            ARTICLES_SEARCH_PAGE_URL.replace(":search", pagination.search.toString())
+                .replace(":page", pagination.currentPage.toString())
+                .replace(":perPage", pagination.perPage.toString())
+        )
         .then(async (res) => {
             setArticles(res.data.articles);
-            setPagination((prev: IPagination) => (
-                {
-                    ...prev,
-                    firstPage: res.data.firstPage,
-                    lastPage: res.data.lastPage,
-                    currentPage: res.data.currentPage,
-                    currentTotal: res.data.articles.length,
-                    total: res.data.totalArticles
+            setPagination((prev: IPagination) => ({
+                ...prev,
+                firstPage: res.data.firstPage,
+                lastPage: res.data.lastPage,
+                currentPage: res.data.currentPage,
+                currentTotal: res.data.articles.length,
+                total: res.data.totalArticles
+            }));
+            await getArticles({ setIsLoading })
+                .then((res: any) => {
+                    setPagination((prev: IPagination) => ({
+                        ...prev,
+                        total: res.length,
+                    }));
                 })
-            )
-
+                .catch((err) => {
+                    console.error(
+                        `Articles getSearchArticles2(): ${err.response.status}:` + err
+                    );
+                });
         })
         .catch((err) => {
-            console.error(`Articles getSearchArticles1(): ${err.response.status}:` + err);
+            console.error(
+                `Articles getSearchArticles1(): ${err.response.status}:` + err
+            );
         })
         .finally(() => {
             setIsLoading(false);
@@ -104,48 +129,63 @@ type getArticleProps = {
     setArticle?: any;
     setPostAccount?: any;
     setComments: any;
-}
-export const getArticle = async ({ setIsLoading, articleId, setArticle, setPostAccount, setComments }: getArticleProps) => {
+};
+export const getArticle = async ({
+    setIsLoading,
+    articleId,
+    setArticle,
+    setPostAccount,
+    setComments,
+}: getArticleProps) => {
     setIsLoading(true);
     let response = null;
-    await axios.get(ARTICLE_GET_URL.replace(":id", articleId.toString()))
+    await axios
+        .get(ARTICLE_GET_URL.replace(":id", articleId.toString()))
         .then((res) => {
             response = res.data;
-            setArticle(response)
-            setPostAccount(response.blogger)
-            setComments(response.comments)
+            setArticle(response);
+            setPostAccount(response.blogger);
+            setComments(response.comments);
             //setComment()
-        }).catch((err) => {
+        })
+        .catch((err) => {
             console.error(`Articles getArticle(): ${err.status}:` + err);
-        }).finally(() => {
+        })
+        .finally(() => {
             setIsLoading(false);
         });
-    console.log(response)
+    console.log(response);
     return response;
-}
-
-
+};
 
 type addArticleProps = {
     setIsLoading: any;
     token: string;
-    addFormData: IArticle
-}
-export const addArticle = async ({ token, setIsLoading, addFormData }: addArticleProps) => {
+    addFormData: IArticle;
+};
+export const addArticle = async ({
+    token,
+    setIsLoading,
+    addFormData,
+}: addArticleProps) => {
     setIsLoading(true);
     let result: any;
     await axios
-        .post(ARTICLE_POST_URL, {
-            bloggerId: addFormData.bloggerId,
-            title: addFormData.title,
-            description: addFormData.description,
-            thumbnailUrl: addFormData.thumbnailUrl,
-            content: addFormData.content,
-            visible: addFormData.visible,
-        }, config(token))
+        .post(
+            ARTICLE_POST_URL,
+            {
+                bloggerId: addFormData.bloggerId,
+                title: addFormData.title,
+                description: addFormData.description,
+                thumbnailUrl: addFormData.thumbnailUrl,
+                content: addFormData.content,
+                visible: addFormData.visible,
+            },
+            config(token)
+        )
         .then((res: any) => {
             console.log("add article complete!");
-            result = res.data
+            result = res.data;
         })
         .catch((err) => {
             console.error(`Articles addArticle(): ${err.response.status}:` + err);
@@ -155,7 +195,7 @@ export const addArticle = async ({ token, setIsLoading, addFormData }: addArticl
             setIsLoading(false);
         });
 
-    console.log(result)
+    console.log(result);
     return result;
 };
 
@@ -164,19 +204,28 @@ type updateUpdateProps = {
     token: string;
     editArticleId: number;
     editFormData: IArticle;
-}
-export const updateArticle = async ({ token, setIsLoading, editArticleId, editFormData }: updateUpdateProps) => {
+};
+export const updateArticle = async ({
+    token,
+    setIsLoading,
+    editArticleId,
+    editFormData,
+}: updateUpdateProps) => {
     setIsLoading(true);
     let result = false;
     await axios
-        .put(ARTICLE_PUT_URL.replace(":id", editArticleId.toString()), {
-            bloggerId: editFormData.bloggerId,
-            title: editFormData.title,
-            description: editFormData.description,
-            thumbnailUrl: editFormData.thumbnailUrl,
-            content: editFormData.content,
-            visible: editFormData.visible,
-        }, config(token))
+        .put(
+            ARTICLE_PUT_URL.replace(":id", editArticleId.toString()),
+            {
+                bloggerId: editFormData.bloggerId,
+                title: editFormData.title,
+                description: editFormData.description,
+                thumbnailUrl: editFormData.thumbnailUrl,
+                content: editFormData.content,
+                visible: editFormData.visible,
+            },
+            config(token)
+        )
         .then((res: any) => {
             console.log("update article complete!");
             result = true;
@@ -191,17 +240,23 @@ export const updateArticle = async ({ token, setIsLoading, editArticleId, editFo
     return result;
 };
 
-
 type deleteArticleProps = {
     setIsLoading: any;
     token: string;
-    articleId: number
-}
-export const deleteArticle = async ({ token, setIsLoading, articleId }: deleteArticleProps) => {
+    articleId: number;
+};
+export const deleteArticle = async ({
+    token,
+    setIsLoading,
+    articleId,
+}: deleteArticleProps) => {
     setIsLoading(true);
     let result = false;
     await axios
-        .delete(ARTICLE_DELETE_URL.replace(":id", articleId.toString()), config(token))
+        .delete(
+            ARTICLE_DELETE_URL.replace(":id", articleId.toString()),
+            config(token)
+        )
         .then((res: any) => {
             if (res.status === 200) {
                 console.log("delete article complete!");

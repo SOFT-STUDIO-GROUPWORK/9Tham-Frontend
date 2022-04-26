@@ -173,12 +173,13 @@ export const DeleteComment = async ({
       }
     })
     .catch((err) => {
-      alert("คุณไม่สามารถลบคอมเมนต์ได้");
+      alert("คุณไม่สามารถลบคอมเมนต์นี้ได้");
       console.error(`Comment deleteComment(): ${err.response.status}:` + err);
       result = false;
     })
     .finally(() => {
       setIsLoading(false);
     });
+  console.log(result);
   return result;
 };

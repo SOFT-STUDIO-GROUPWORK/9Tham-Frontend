@@ -23,6 +23,7 @@ import ITag from "../../interfaces/ITag";
 import { getTags } from "../../services/tagsService";
 import SelectorTags from "./components/SelectorTags";
 import SelectorPublishs from "./components/SelectorPublishs";
+import { getAnnouncement } from "../AnnoucementFormPage/services/announcementServices";
 
 type Props = {};
 const sortOptions: any[] = ["ล่าสุด", "เก่าสุด"];
@@ -43,6 +44,14 @@ const HomePage = (props: Props) => {
 
   const [tags, setTags] = useState<ITag[]>();
   const [selectSortTime, setSelectSortTime] = useState("ล่าสุด");
+  //test
+  const [banner, setBanner] = useState<any>([]);
+  useEffect(() => {
+    if (isLoading===false) {
+      setBanner(getAnnouncement({setIsLoading}));
+      }
+  },[])
+  console.log("banner is" + banner);
 
   //pagination
   const [pagination, setPagination] = useState<IPagination>(
@@ -119,13 +128,14 @@ const HomePage = (props: Props) => {
             showThumbs={false}
             showStatus={false}
           >
-            {MOCK_BANNER.map((obj) => {
+            {MOCK_BANNER.map((Obj) => {
+              // console.log(imageUrl);
               return (
                 <div className="h-60">
                   <img
                     className="object-cover h-60"
-                    src={obj.src}
-                    alt={obj.src}
+                    src={Obj.src}
+                    alt={Obj.src}
                   />
                 </div>
               );

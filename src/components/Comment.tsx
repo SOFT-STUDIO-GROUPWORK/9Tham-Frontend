@@ -21,22 +21,11 @@ const Comment = ({ comment }: Props) => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // const accountData = {
-  //   id: comment.bloggerId,
-  //   firstName: comment.blogger.firstName,
-  //   lastName: comment.blogger.lastName,
-  //   nickName: comment.blogger.nickName,
-  //   email: comment.blogger.email,
-  //   role: comment.blogger.role,
-  //   isBanned: comment.blogger.isBanned,
-  //   imageUrl: comment.blogger.imageUrl,
-  //   bannerUrl: comment.blogger.BannerUrl,
-  // };
   const handleDeleteComment = async () => {
     let commentId = comment?.id!;
-    DeleteComment({ token, setIsLoading, commentId });
-    navigate(0);
+    DeleteComment({ token, setIsLoading, commentId }).then((res: any) => {
+      navigate(0);
+    });
   };
 
   return (

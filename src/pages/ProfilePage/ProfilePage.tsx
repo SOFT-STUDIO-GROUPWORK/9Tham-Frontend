@@ -46,7 +46,7 @@ const ProfilePage = (props: Props) => {
               <img
                 id="img-preview"
                 src={user?.imageUrl}
-                className="object-cover w-48 h-48 mr-2 rounded-full border-4 border-amber-600"
+                className="object-cover w-48 h-48 mr-2 rounded-full border-2 border-amber-600"
                 alt=""
               />
             ) : (
@@ -136,7 +136,7 @@ const ProfilePage = (props: Props) => {
                 <>
                   {articles.filter((article) => article.visible === true)
                     .length === 0 ? (
-                    <div className="flex flex-row justify-center items-center m-16">
+                    <div className="flex flex-row justify-center items-center m-16 text-white">
                       ไม่มีเนื้อหา Post สาธารณะ
                     </div>
                   ) : (

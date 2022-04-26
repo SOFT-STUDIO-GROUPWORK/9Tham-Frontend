@@ -37,6 +37,8 @@ const HomePage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [articles, setArticles] = useState<IArticle[]>([]);
 
+  
+
   //pagination
   const [pagination, setPagination] = useState<IPagination>(
     initialPaginationHomePage

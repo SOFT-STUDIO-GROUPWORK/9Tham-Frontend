@@ -51,6 +51,7 @@ function App() {
               {/* Admin Only */}
               <Route element={<AuthAdminRoutes />}>
                 <Route path="/EditPost" element={<EditPostPage />} />
+                <Route path="/EditPost/:id" element={<EditPostPage />} />
                 <Route path="/ManageAccount" element={<ManageAccountPage />} />
                 <Route path="/TagEdit" element={<TagEditPage />} />
                 <Route

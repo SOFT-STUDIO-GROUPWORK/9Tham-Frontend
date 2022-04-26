@@ -36,6 +36,9 @@ export const ARTICLES_GETALL_URL = "api/Articles"
 export const ARTICLES_GET_PAGE_URL = "api/Articles/:page/:perPage"
 export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage"
 
+// export const ARTICLES_REVERT_GET_PAGE_URL = "api/Articles/reverse/:page/:perPage"
+// export const ARTICLES_REVERT_SEARCH_PAGE_URL = "api/Articles/:search/reverse/:page/:perPage"
+
 export const ARTICLE_GET_URL = "api/Articles/:id"
 export const ARTICLE_POST_URL = "api/Articles"
 export const ARTICLE_PUT_URL = "api/Articles/:id"

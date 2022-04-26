@@ -100,10 +100,7 @@ type updateArticleTagProps = {
   setIsLoading: any;
   token: string;
   editArticleTagsId: number;
-  addData: {
-    articleId: number;
-    tagId: number;
-  };
+  addData: IArticleTags
 };
 
 export const updateArticleTag = async ({

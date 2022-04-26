@@ -50,19 +50,20 @@ export const getPageArticles = async ({ setIsLoading, setArticles, pagination, s
                     firstPage: res.data.firstPage,
                     lastPage: res.data.lastPage,
                     currentPage: res.data.currentPage,
-                    currentTotal: res.data.articles.length
+                    currentTotal: res.data.articles.length,
+                    total: res.data.totalArticles
                 })
             )
-            await getArticles({ setIsLoading }).then((res: any) => {
-                setPagination((prev: IPagination) => (
-                    {
-                        ...prev,
-                        total: res.length
-                    })
-                )
-            }).catch((err) => {
-                console.error(`Articles getPageArticles2(): ${err.status}:` + err);
-            })
+            // await getArticles({ setIsLoading }).then((res: any) => {
+            //     setPagination((prev: IPagination) => (
+            //         {
+            //             ...prev,
+            //             total: res.length
+            //         })
+            //     )
+            // }).catch((err) => {
+            //     console.error(`Articles getPageArticles2(): ${err.status}:` + err);
+            // })
         })
         .catch((err) => {
             console.error(`Articles getPageArticles1(): ${err.status}:` + err);
@@ -87,19 +88,20 @@ export const getSearchArticles = async ({ setIsLoading, setArticles, pagination,
                     firstPage: res.data.firstPage,
                     lastPage: res.data.lastPage,
                     currentPage: res.data.currentPage,
-                    currentTotal: res.data.articles.length
+                    currentTotal: res.data.articles.length,
+                    total: res.data.totalArticles
                 })
             )
-            await getArticles({setIsLoading}).then((res: any) => {
-                setPagination((prev: IPagination) => (
-                    {
-                        ...prev,
-                        total: res.length
-                    })
-                )
-            }).catch((err) => {
-                console.error(`Articles getSearchArticles2(): ${err.response.status}:` + err);
-            })
+            // await getArticles({setIsLoading}).then((res: any) => {
+            //     setPagination((prev: IPagination) => (
+            //         {
+            //             ...prev,
+            //             total: res.length
+            //         })
+            //     )
+            // }).catch((err) => {
+            //     console.error(`Articles getSearchArticles2(): ${err.response.status}:` + err);
+            // })
         })
         .catch((err) => {
             console.error(`Articles getSearchArticles1(): ${err.response.status}:` + err);
@@ -112,8 +114,8 @@ export const getSearchArticles = async ({ setIsLoading, setArticles, pagination,
 type getArticleProps = {
     setIsLoading: any;
     articleId: number;
-    setArticle: any;
-    setPostAccount:any;
+    setArticle?: any;
+    setPostAccount?:any;
     setComments:any;
 }
 export const getArticle = async ({ setIsLoading, articleId, setArticle, setPostAccount, setComments }: getArticleProps) => {

@@ -13,7 +13,7 @@ import htmlToDraft from "html-to-draftjs";
 import ProfileTopBar from "../../components/ProfileTopBar";
 import NewComment from "../../components/NewComment";
 
-import { deleteArticle } from "../../services/articlesService";
+import { deleteArticle, updateArticle } from "../../services/articlesService";
 
 type Props = {};
 
@@ -40,6 +40,28 @@ const PostPage = (props: Props) => {
     });
     console.log(article);
   }, [articleId]);
+
+  const handleGoToEditPage = () => {
+    navigate("/editPost/" + articleId.toString());
+  };
+
+  const handleToggleVisible = async () => {
+    if (article === undefined) return;
+    let editArticleId = article.id!;
+    let editFormData: IArticle = {
+      ...article,
+      visible: !article.visible,
+    };
+    await updateArticle({ token, setIsLoading, editArticleId, editFormData });
+    alert("เปลี่ยนสถานะโพสต์สำเร็จ");
+    await getArticle({
+      articleId,
+      setIsLoading,
+      setArticle,
+      setPostAccount,
+      setComments,
+    });
+  };
 
   const handleDeletePost = async () => {
     let articleId = article?.id!;
@@ -71,6 +93,8 @@ const PostPage = (props: Props) => {
                   article={article}
                   isNewPost={false}
                   isComment={false}
+                  handleEditOnClick={handleGoToEditPage}
+                  handleHideOnClick={handleToggleVisible}
                   handleDeleteOnClick={handleDeletePost}
                 />
               </div>
@@ -80,7 +104,7 @@ const PostPage = (props: Props) => {
               </h2>
               <div className="w-full pb-6 pt-3">
                 <button className="btn bg-amber-600 rounded-full text-white px-2 py-1">
-                  {article?.articleTags?.[0].tag?.name}
+                  {article?.articleTags?.[0]?.tag?.name}
                 </button>
               </div>
 

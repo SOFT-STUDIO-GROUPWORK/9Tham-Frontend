@@ -106,7 +106,7 @@ type updateCommentProps = {
   editCommentId: number;
   addData: {
     content: string;
-    visible: true;
+    visible: boolean;
     bloggerId: number;
     articleId: number;
   };

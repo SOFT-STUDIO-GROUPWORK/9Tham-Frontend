@@ -143,7 +143,7 @@ const PostPage = (props: Props) => {
                 {comments?.map((comment, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <Comment comment={comment} />
+                      <Comment comment={comment} article={article!} />
                     </React.Fragment>
                   );
                 })}

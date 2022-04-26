@@ -8,6 +8,7 @@ import {
     ARTICLE_DELETE_URL,
     ARTICLES_REVERT_GET_PAGE_URL,
     ARTICLES_SEARCH_PAGE_URL,
+    ARTICLES_REVERT_SEARCH_PAGE_URL,
 } from "../api/routes";
 import IArticle from "../interfaces/IArticle";
 import IPagination from "../interfaces/IPagination";
@@ -40,7 +41,41 @@ type getPageAndSearchArticlesProps = {
     pagination: IPagination;
     setPagination: any;
 };
-export const getPageArticles = async ({
+export const getPageNewArticles = async ({
+    setIsLoading,
+    setArticles,
+    pagination,
+    setPagination,
+}: getPageAndSearchArticlesProps) => {
+    setIsLoading(true);
+    await axios
+        .get(
+            ARTICLES_REVERT_GET_PAGE_URL.replace(
+                ":page",
+                pagination.currentPage.toString()
+            ).replace(":perPage", pagination.perPage.toString())
+        )
+        .then(async (res) => {
+            setArticles(res.data.articles);
+            setPagination((prev: IPagination) => ({
+                ...prev,
+                firstPage: res.data.firstPage,
+                lastPage: res.data.lastPage,
+                currentPage: res.data.currentPage,
+                currentTotal: res.data.articles.length,
+                total: res.data.totalArticles
+            }));
+
+        })
+        .catch((err) => {
+            console.error(`Articles getPageArticles1(): ${err.status}:` + err);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
+// OLDNEST QUERY
+export const getPageOldArticles = async ({
     setIsLoading,
     setArticles,
     pagination,
@@ -73,11 +108,57 @@ export const getPageArticles = async ({
             setIsLoading(false);
         });
 };
-// OLDNEST QUERY
 
 
 
-export const getSearchArticles = async ({
+export const getSearchNewArticles = async ({
+    setIsLoading,
+    setArticles,
+    pagination,
+    setPagination,
+}: getPageAndSearchArticlesProps) => {
+    setIsLoading(true);
+    await axios
+        .get(
+            ARTICLES_REVERT_SEARCH_PAGE_URL.replace(":search", pagination.search.toString())
+                .replace(":page", pagination.currentPage.toString())
+                .replace(":perPage", pagination.perPage.toString())
+        )
+        .then(async (res) => {
+            setArticles(res.data.articles);
+            setPagination((prev: IPagination) => ({
+                ...prev,
+                firstPage: res.data.firstPage,
+                lastPage: res.data.lastPage,
+                currentPage: res.data.currentPage,
+                currentTotal: res.data.articles.length,
+                total: res.data.totalArticles
+            }));
+            await getArticles({ setIsLoading })
+                .then((res: any) => {
+                    setPagination((prev: IPagination) => ({
+                        ...prev,
+                        total: res.length,
+                    }));
+                })
+                .catch((err) => {
+                    console.error(
+                        `Articles getSearchArticles2(): ${err.response.status}:` + err
+                    );
+                });
+        })
+        .catch((err) => {
+            console.error(
+                `Articles getSearchArticles1(): ${err.response.status}:` + err
+            );
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
+
+
+export const getSearchOldArticles = async ({
     setIsLoading,
     setArticles,
     pagination,

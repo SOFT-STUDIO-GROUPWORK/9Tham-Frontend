@@ -25,7 +25,7 @@ const Card = ({ article }: Props) => {
 
   return (
     <Link to={"/post/" + article.id?.toString()}>
-      <div className="p-1 px-1.5 flex w-full items-center bg-white rounded-lg border shadow-sm flex-row hover:bg-gray-100 ">
+      <div className="p-1 px-1.5 flex w-full items-center bg-white rounded-lg border shadow-sm flex-row hover:bg-gray-100 mb-1">
         {/* left */}
         <div className="flex flex-col justify-between">
           <img

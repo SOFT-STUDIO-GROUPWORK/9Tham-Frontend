@@ -32,7 +32,7 @@ const Comment = ({ comment }: Props) => {
     <div className="w-full border-0 border-red-600 mt-6">
       <ProfileTopBar
         account={comment.blogger}
-        userId={user.id}
+        userId={user?.id}
         commentId={comment?.id}
         isNewPost={false}
         isComment={true}

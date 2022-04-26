@@ -135,8 +135,8 @@ const PostPage = (props: Props) => {
               )}
 
               <hr className="w-full" />
-              <div className="w-full py-4 px-9">
-                <h4>แสดงความคิดเห็น 5 รายการ</h4>
+              <div className="w-full py-4 pl-2">
+                <h4>แสดงความคิดเห็น {comments?.length} รายการ</h4>
               </div>
               <hr className="w-full" />
               <div className="w-full">

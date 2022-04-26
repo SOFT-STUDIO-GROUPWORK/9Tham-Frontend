@@ -66,6 +66,8 @@ export const COMMENTLIKE_POST_URL = "api/CommentLikes";
 export const COMMENTLIKE_GETID_URL = "api/CommentLikes/:id";
 export const COMMENTLIKE_PUT_URL = "api/CommentLikes/:id";
 export const COMMENTLIKE_DELETE_URL = "api/CommentLikes/:id";
+export const COMMENTLIKE_TOGGLE_URL =
+  "api/CommentLikes/toggleLikes/:commentId/:bloggerId";
 
 //Like
 export const LIKE_GET_URL = "api/Likes";

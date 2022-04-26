@@ -6,6 +6,7 @@ import {
   COMMENTLIKE_GETID_URL,
   COMMENTLIKE_PUT_URL,
   COMMENTLIKE_DELETE_URL,
+  COMMENTLIKE_TOGGLE_URL,
 } from "../api/routes";
 
 type getCommentLikeProps = {
@@ -177,4 +178,42 @@ export const deleteCommentLike = async ({
       setIsLoading(false);
     });
   return result;
+};
+
+type toggleCommentLikeProps = {
+  setIsLoading: any;
+  commentId: number;
+  bloggerId: number;
+  token: string;
+};
+
+export const toggleCommentLike = async ({
+  setIsLoading,
+  commentId,
+  bloggerId,
+  token,
+}: toggleCommentLikeProps) => {
+  setIsLoading(true);
+  let response = null;
+  await axios
+    .get(
+      COMMENTLIKE_TOGGLE_URL.replace(
+        ":commentId",
+        commentId.toString()
+      ).replace(":bloggerId", bloggerId.toString()),
+      config(token)
+    )
+    .then((res) => {
+      response = res.data;
+    })
+    .catch((err) => {
+      console.error(
+        `CommentLikeId getCommentLikeId(): ${err.response.status}:` + err
+      );
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+  console.log(response);
+  return response;
 };

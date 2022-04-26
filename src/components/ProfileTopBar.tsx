@@ -17,10 +17,19 @@ import IArticle from "../interfaces/IArticle";
 import IAccount from "../interfaces/IAccount";
 import { Link } from "react-router-dom";
 import IBlogger from "../interfaces/IBlogger";
+import IComment from "../interfaces/IComment";
+import ICommentLike from "../interfaces/ICommentLike";
+
+import { toggleCommentLike } from "../services/commentLikeService";
+
+import { getCommentId } from "../services/commentService";
+import { useAuth } from "../contexts/AuthContext";
 
 type Props = {
   account: IAccount;
+  userId?: number;
   article?: IArticle;
+  commentId?: number;
   isNewPost: boolean;
   isComment: boolean;
   handleEditOnClick?: () => any;
@@ -30,17 +39,36 @@ type Props = {
 
 const ProfileTopBar = ({
   account,
+  userId,
+  article,
+  commentId,
   isNewPost,
   isComment,
-  article,
   handleHideOnClick,
   handleEditOnClick,
   handleDeleteOnClick,
 }: Props) => {
   Moment.locale("th");
   const dateFormat = Moment(article?.published?.split(".")[0]).fromNow();
-
+  const { token } = useAuth();
   const [isMore, setIsMore] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [comment, setComment] = useState<IComment | null>();
+  const [isLike, setIsLike] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (commentId === undefined) return;
+    getCommentId({ setIsLoading, commentId }).then((res) => {
+      setComment(res);
+    });
+  }, [commentId, comment?.commentLikes.length]);
+
+  const handleLike = async () => {
+    if (commentId === undefined) return;
+    if (userId === undefined) return;
+    //if (islike === false)
+    toggleCommentLike({ setIsLoading, commentId, bloggerId: userId, token });
+  };
 
   return (
     <div className="flex flex-row justify-between w-full h-12 mb-4 border-0 border-blue-600">
@@ -86,9 +114,13 @@ const ProfileTopBar = ({
       <div className="relative flex flex-row gap-2 mr-2">
         {isComment === true && (
           <>
-            {" "}
-            <AiFillLike className="w-auto h-1/2" />
-            <p>100</p>
+            <button
+              onClick={handleLike}
+              className="flex flex-row justify-around items-center w-full h-8 hover:bg-gray-100"
+            >
+              <AiFillLike className="w-auto h-1/2" />
+              {comment?.commentLikes.length}
+            </button>
           </>
         )}
         {isMore === true && (

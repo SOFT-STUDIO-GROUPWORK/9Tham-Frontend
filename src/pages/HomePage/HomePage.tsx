@@ -38,6 +38,11 @@ function testClick() {
   console.log("test");
 }
 
+interface Iannouncement{
+  id: number,
+  imageUrl: string,
+  content: string,
+}
 const HomePage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [articles, setArticles] = useState<IArticle[]>([]);
@@ -62,14 +67,19 @@ const HomePage = (props: Props) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (pagination.search === "") {
-      getPageArticles({
-        setIsLoading,
-        setArticles,
-        pagination,
-        setPagination,
-      });
-    }
+    getAnnouncement({setIsLoading}).then(
+      async (res: any) => {
+        console.log(res);
+        setBanner(res);
+      }
+    );
+    console.log("banner");
+    console.log(banner);
+  }, [])
+
+  useEffect(() => {
+    if (pagination.search === "")
+      getPageArticles({ setIsLoading, setArticles, pagination, setPagination });
   }, [pagination.currentPage, pagination.search]);
 
   useEffect(() => {
@@ -128,18 +138,29 @@ const HomePage = (props: Props) => {
             showThumbs={false}
             showStatus={false}
           >
-            {MOCK_BANNER.map((Obj) => {
+            {banner.length > 0 ? (banner.map((Obj:any) => {
               // console.log(imageUrl);
               return (
                 <div className="h-60">
                   <img
                     className="object-cover h-60"
-                    src={Obj.src}
-                    alt={Obj.src}
+                    src={Obj.imageUrl}
+                    alt={Obj.imageUrl}
                   />
                 </div>
               );
-            })}
+            })) : (MOCK_BANNER.map((Obj:any) => {
+              // console.log(imageUrl);
+              return (
+                <div className="h-60">
+                  <img
+                    className="object-cover h-60"
+                    src={Obj.imageUrl}
+                    alt={Obj.imageUrl}
+                  />
+                </div>
+              );
+            }))}
           </Carousel>
         </div>
 
@@ -180,13 +201,11 @@ const HomePage = (props: Props) => {
                 </div>
               ) : (
                 <>
-                  {articles.map((article, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <Card article={article} />
-                      </React.Fragment>
-                    );
-                  })}
+                  {articles.map((article, index) => (
+                    <React.Fragment key={index}>
+                      <Card article={article} />
+                    </React.Fragment>
+                  ))}
                 </>
               )}
             </>

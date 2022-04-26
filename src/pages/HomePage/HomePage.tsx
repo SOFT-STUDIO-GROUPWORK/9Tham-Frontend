@@ -19,6 +19,7 @@ import IArticle from "../../interfaces/IArticle";
 import React from "react";
 import Searchbar from "../../components/Searchbar";
 import Pagination from "../../components/Pagination";
+import { getAnnouncement } from "../AnnoucementFormPage/services/announcementServices";
 
 type Props = {};
 const sortOptions: any[] = ["ล่าสุด", "เก่าสุด"];
@@ -36,6 +37,15 @@ function testClick() {
 const HomePage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [articles, setArticles] = useState<IArticle[]>([]);
+
+  //test
+  const [banner, setBanner] = useState<any>([]);
+  useEffect(() => {
+    if (isLoading===false) {
+      setBanner(getAnnouncement({setIsLoading}));
+      }
+  },[])
+  console.log("banner is" + banner);
 
   //pagination
   const [pagination, setPagination] = useState<IPagination>(
@@ -94,13 +104,14 @@ const HomePage = (props: Props) => {
             showThumbs={false}
             showStatus={false}
           >
-            {MOCK_BANNER.map((obj) => {
+            {MOCK_BANNER.map((Obj) => {
+              // console.log(imageUrl);
               return (
                 <div className="h-60">
                   <img
                     className="object-cover h-60"
-                    src={obj.src}
-                    alt={obj.src}
+                    src={Obj.src}
+                    alt={Obj.src}
                   />
                 </div>
               );

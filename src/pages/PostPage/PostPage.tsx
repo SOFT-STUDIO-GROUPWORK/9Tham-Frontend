@@ -13,7 +13,7 @@ import htmlToDraft from "html-to-draftjs";
 import ProfileTopBar from "../../components/ProfileTopBar";
 import NewComment from "../../components/NewComment";
 
-import { deleteArticle } from "../../services/articlesService";
+import { deleteArticle, updateArticle } from "../../services/articlesService";
 
 import {
   getComment,
@@ -23,6 +23,7 @@ import {
   addComment,
 } from "../../services/commentService";
 import IComment from "../../interfaces/IComment";
+import React from "react";
 import { convertCompilerOptionsFromJson } from "typescript";
 
 type Props = {};
@@ -48,7 +49,37 @@ const PostPage = (props: Props) => {
       setPostAccount,
       setComments,
     });
+
+    console.log(article);
+    getComment({ setIsLoading }).then((res: any) => {
+      if (res === null) return;
+      setComments(res);
+    });
+    //const allComment = getComment({ setIsLoading });
   }, [articleId]);
+
+  const handleGoToEditPage = () => {
+    navigate("/editPost/" + articleId.toString());
+  };
+
+  const handleToggleVisible = async () => {
+    if (article === undefined) return;
+    let editArticleId = article.id!;
+    let editFormData: IArticle = {
+      ...article,
+      visible: !article.visible,
+    };
+    await updateArticle({ token, setIsLoading, editArticleId, editFormData });
+    alert("เปลี่ยนสถานะโพสต์สำเร็จ");
+    await getArticle({
+      articleId,
+      setIsLoading,
+      setArticle,
+      setPostAccount,
+      setComments,
+    });
+  };
+
   const handleDeletePost = async () => {
     let articleId = article?.id!;
     deleteArticle({ token, setIsLoading, articleId })
@@ -79,6 +110,8 @@ const PostPage = (props: Props) => {
                   article={article}
                   isNewPost={false}
                   isComment={false}
+                  handleEditOnClick={handleGoToEditPage}
+                  handleHideOnClick={handleToggleVisible}
                   handleDeleteOnClick={handleDeletePost}
                 />
               </div>
@@ -88,7 +121,7 @@ const PostPage = (props: Props) => {
               </h2>
               <div className="w-full pb-6 pt-3">
                 <button className="btn bg-amber-600 rounded-full text-white px-2 py-1">
-                  {article?.articleTags?.[0].tag?.name}
+                  {article?.articleTags?.[0]?.tag?.name}
                 </button>
               </div>
 
@@ -102,13 +135,17 @@ const PostPage = (props: Props) => {
               )}
 
               <hr className="w-full" />
-              <div className="w-full py-4 px-9">
-                <h4>แสดงความคิดเห็น 5 รายการ</h4>
+              <div className="w-full py-4 pl-2">
+                <h4>แสดงความคิดเห็น {comments?.length} รายการ</h4>
               </div>
               <hr className="w-full" />
               <div className="w-full">
-                {comments?.map((comment) => {
-                  return <Comment comment={comment} />;
+                {comments?.map((comment, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <Comment comment={comment} />
+                    </React.Fragment>
+                  );
                 })}
               </div>
               <NewComment account={user} articleId={articleId} />

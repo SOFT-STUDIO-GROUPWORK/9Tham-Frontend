@@ -38,7 +38,7 @@ const AnnoucementFormPage = (props: Props) => {
         // console.log(file);
         list[id] = e.imageUrl;
         // listCover[id] = file;
-        console.log(list);
+        // console.log(list);
         // setPhotoList([...photoList,e.imageUrl]);
         setSelectCoverImage([...selectCoverImage, file]);
       })

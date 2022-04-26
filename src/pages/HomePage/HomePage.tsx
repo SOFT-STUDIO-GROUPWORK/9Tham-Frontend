@@ -1,4 +1,4 @@
-import Selector from "./components/Selector";
+import Selector from "./components/SelectorTags";
 import Card from "./components/Card";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -19,6 +19,10 @@ import IArticle from "../../interfaces/IArticle";
 import React from "react";
 import Searchbar from "../../components/Searchbar";
 import Pagination from "../../components/Pagination";
+import ITag from "../../interfaces/ITag";
+import { getTags } from "../../services/tagsService";
+import SelectorTags from "./components/SelectorTags";
+import SelectorPublishs from "./components/SelectorPublishs";
 import { getAnnouncement } from "../AnnoucementFormPage/services/announcementServices";
 
 type Props = {};
@@ -43,6 +47,17 @@ const HomePage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [articles, setArticles] = useState<IArticle[]>([]);
 
+  const [tags, setTags] = useState<ITag[]>();
+  const [selectSortTime, setSelectSortTime] = useState("ล่าสุด");
+  //test
+  const [banner, setBanner] = useState<any>([]);
+  useEffect(() => {
+    if (isLoading===false) {
+      setBanner(getAnnouncement({setIsLoading}));
+      }
+  },[])
+  console.log("banner is" + banner);
+
   //pagination
   const [pagination, setPagination] = useState<IPagination>(
     initialPaginationHomePage
@@ -50,9 +65,6 @@ const HomePage = (props: Props) => {
 
   //search
   const [search, setSearch] = useState("");
-
-
-  const [banner, setBanner] = useState<any>([]);
 
   useEffect(() => {
     getAnnouncement({setIsLoading}).then(
@@ -70,6 +82,13 @@ const HomePage = (props: Props) => {
       getPageArticles({ setIsLoading, setArticles, pagination, setPagination });
   }, [pagination.currentPage, pagination.search]);
 
+  useEffect(() => {
+    getTags({ setIsLoading }).then((res) => {
+      if (res === null) return;
+      setTags(res);
+    });
+  }, []);
+
   //Pagination
   const handlePagination = (value: number) => {
     setPagination((prev: IPagination) => ({ ...prev, currentPage: value }));
@@ -86,7 +105,12 @@ const HomePage = (props: Props) => {
 
   const handleSearchOnClick = (event: any) => {
     if (pagination.search === "") {
-      getPageArticles({ setIsLoading, setArticles, pagination, setPagination });
+      getPageArticles({
+        setIsLoading,
+        setArticles,
+        pagination,
+        setPagination,
+      });
     } else {
       getSearchArticles({
         setIsLoading,
@@ -149,16 +173,17 @@ const HomePage = (props: Props) => {
             handleOnChange={handleSearchFormData}
           />
           {/* Sort by */}
-          <Selector
+          <SelectorPublishs
             title="เรียงตาม:"
-            onChange={(e: any) => e.target.value}
+            value={selectSortTime}
+            onChange={(e: any) => setSelectSortTime(e.target.value)}
             options={sortOptions}
           />
           {/* Types */}
-          <Selector
+          <SelectorTags
             title="หมวดหมู่:"
             onChange={(e: any) => e.target.value}
-            options={typeOptions}
+            options={tags}
           />
         </div>
         {/* TopBar end*/}

@@ -32,6 +32,8 @@ const NewComment = ({ account, articleId }: Props) => {
   };
 
   const handleSubmitComment = async () => {
+    console.log("ssss")
+    console.log(addData)
     addComment({ setIsLoading, token, addData });
     //getCommentId({ setIsLoading,res });
     console.log(addData.bloggerId);

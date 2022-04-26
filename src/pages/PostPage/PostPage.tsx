@@ -110,7 +110,6 @@ const PostPage = (props: Props) => {
                 {comments?.map((comment) => {
                   return <Comment comment={comment} />;
                 })}
-                {/* <Comment account={user} comment={comments} />; */}
               </div>
               <NewComment account={user} articleId={articleId} />
             </div>

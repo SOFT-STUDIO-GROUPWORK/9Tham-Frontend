@@ -68,3 +68,18 @@ export const LIKE_POST_URL = "api/Likes";
 export const LIKE_GETID_URL = "api/Likes/:id";
 export const LIKE_PUT_URL = "api/Likes/:id";
 export const LIKE_DELETE_URL = "api/Likes/:id";
+
+//ArticleTags
+export const ARTICLETAGS_GET_URL = "api/ArticleTags";
+export const ARTICLETAGS_POST_URL = "api/ArticleTags";
+export const ARTICLETAGS_GETID_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_PUT_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_DELETE_URL = "api/ArticleTags/:id";
+
+//Announcement
+export const ANNOUNCEMENT_GET_URL = "api/Announcement";
+export const ANNOUNCEMENT_POST_URL = "api/Announcement";
+export const ANNOUNCEMENT_GETID_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_PUT_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_DELETE_URL = "api/Announcement/:id";
+

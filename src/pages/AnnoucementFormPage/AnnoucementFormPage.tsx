@@ -5,41 +5,99 @@
 // (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
 // by Pop (delete if already read)
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsFillImageFill } from "react-icons/bs";
 import Button from "../../components/Button";
-
-type Props = {};
+import { useAuth } from "../../contexts/AuthContext";
+import { addAnnouncement, deleteAnnouncement, getAnnouncement, updateAnnouncement } from "./services/announcementServices";
+import { fileUploadHandler } from "./services/uploadServices";
 
 const mockProfileImage = undefined;
 const mockDay = "4 April 2022";
 
+
+
+type Props = {};
+
 const AnnoucementFormPage = (props: Props) => {
-  const [photoList, setPhotoList] = useState<any>([undefined]);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [photoList, setPhotoList] = useState<string[]>([""]);
+    // Cover Image
+    const [selectCoverImage, setSelectCoverImage] = useState<Blob[]>([]);
 
   const handlePhotoAdd = () => {
-    setPhotoList([...photoList, undefined]);
+    
+    //service
+    photoList.map(async (imageUrl) => {
+      let content = ""
+      await addAnnouncement({ setIsLoading, imageUrl, content });
+    })
+
+    setPhotoList([...photoList, ""]);
   };
 
-  const handlePhotoRemove = (index: number) => {
+  const { token, getUserMySelf } = useAuth();
+
+  const handlePhotoRemove = async (AnnouncementId: number) => {
+    //service
+    console.log(AnnouncementId);
+    let result = await deleteAnnouncement({setIsLoading, AnnouncementId });
+    if (result === false) {
+      return;
+    }
+
     const list = [...photoList];
-    list.splice(index, 1);
+    list.splice(AnnouncementId, 1);
     setPhotoList(list);
   };
 
   const imageHandler = (e: any, index: number) => {
     e.preventDefault();
     const reader = new FileReader();
-    let oldlist = [...photoList];
+    let oldList:any = [...photoList];
+    if (!e.target.files[0] || e.target.files[0] === 0) {
+      setPhotoList(oldList);
+      return;
+    }
 
     reader.onload = () => {
       if (reader.readyState === 2) {
-        oldlist[index] = reader.result;
-        setPhotoList(oldlist);
+        oldList[index] = reader.result;
+        setPhotoList(oldList);
       }
     };
+
+    let oldListBlob =  [...selectCoverImage];
+    setSelectCoverImage([...oldListBlob, e.target.files[0]]);
     reader.readAsDataURL(e.target.files[0]);
+  };
+  // Cover Image End
+
+  const handleOnClickUpload = async () => {
+    //let previewCoverImageBufferUrl: string = "";
+    try {
+      if (selectCoverImage !== []) {
+        // previewCoverImageBufferUrl = await urlToObjectFile(
+        //   previewCoverImage
+        let file: Blob[] = selectCoverImage;
+        file.map(async (file) => {
+          let res = await fileUploadHandler({ token, file });
+          console.log(res);
+        })
+        
+        
+        photoList.map(async (imageUrl, editAnnouncementID) => {
+          let content = ""
+          await updateAnnouncement({setIsLoading, editAnnouncementID, imageUrl, content})
+        })
+        
+        await getUserMySelf();
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -81,7 +139,7 @@ const AnnoucementFormPage = (props: Props) => {
                   <h2 className="mt-7">*รูปที่ {index + 1}</h2>
                   <div className="w-full h-60 bg-gray-100 border-2 border-gray-300 mt-2 flex flex-col justify-center items-center">
                     <div className="m-2 rounded-t-sm h-28 w-52 flex justify-center items-center">
-                      {photoList[index] == undefined ? (
+                      {photoList[index] == "" ? (
                         <BsFillImageFill className="w-full h-full text-gray-400" />
                       ) : (
                         <img
@@ -127,6 +185,9 @@ const AnnoucementFormPage = (props: Props) => {
                   )}
                 </div>
               ))}
+              <div className="flex justify-center">
+              <Button className="w-40" color={"green"} onClick={handleOnClickUpload}>Save</Button>
+              </div>
             </div>
           </div>
         </div>

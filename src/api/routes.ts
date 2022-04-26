@@ -68,3 +68,10 @@ export const ARTICLETAGS_POST_URL = "api/ArticleTags";
 export const ARTICLETAGS_GETID_URL = "api/ArticleTags/:id";
 export const ARTICLETAGS_PUT_URL = "api/ArticleTags/:id";
 export const ARTICLETAGS_DELETE_URL = "api/ArticleTags/:id";
+
+//Announcement
+export const ANNOUNCEMENT_GET_URL = "api/Announcement";
+export const ANNOUNCEMENT_POST_URL = "api/Announcement";
+export const ANNOUNCEMENT_GETID_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_PUT_URL = "api/Announcement/:id";
+export const ANNOUNCEMENT_DELETE_URL = "api/Announcement/:id";

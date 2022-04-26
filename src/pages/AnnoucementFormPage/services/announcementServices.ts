@@ -30,7 +30,7 @@ type getAnnouncementIdProps = {
     AnnouncementId: number;
   };
   
-  export const getArticleTagsId = async ({
+  export const getAnnouncementId = async ({
     setIsLoading,
     AnnouncementId,
   }: getAnnouncementIdProps) => {
@@ -104,17 +104,19 @@ export const addAnnouncement = async ({
   }: updateAnnouncementProps) => {
     setIsLoading(true);
     let result = false;
+    console.log(ANNOUNCEMENT_PUT_URL.replace(":id", editAnnouncementID.toString()));
     await axios
       .put(
         ANNOUNCEMENT_PUT_URL.replace(":id", editAnnouncementID.toString()),
         {
           imageUrl: imageUrl,
-          tagId: content,
+          content: content,
         },
       )
       .then((res: any) => {
         if (res.status === 200) {
           console.log("update Announcement complete!");
+          console.log((ANNOUNCEMENT_PUT_URL.replace(":id", editAnnouncementID.toString())))
           result = true;
         }
       })

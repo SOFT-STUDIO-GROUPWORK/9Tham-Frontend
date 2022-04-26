@@ -5,7 +5,7 @@
 // (mean "ts" = "typescript" , "rafce" = "react arrow function component export default")
 // by Pop (delete if already read)
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsFillImageFill } from "react-icons/bs";
 import Button from "../../components/Button";
@@ -25,7 +25,12 @@ const AnnoucementFormPage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [photoList, setPhotoList] = useState<string[]>([""]);
     // Cover Image
-    const [selectCoverImage, setSelectCoverImage] = useState<Blob[]>([]);
+  const [selectCoverImage, setSelectCoverImage] = useState<Blob[]>([]);
+
+  // useEffect(() => {
+  //   console.log(photoList);
+
+  // }, [photoList])
 
   const handlePhotoAdd = () => {
     
@@ -38,7 +43,7 @@ const AnnoucementFormPage = (props: Props) => {
     setPhotoList([...photoList, ""]);
   };
 
-  const { token, getUserMySelf } = useAuth();
+  const { token } = useAuth();
 
   const handlePhotoRemove = async (AnnouncementId: number) => {
     //service
@@ -84,16 +89,16 @@ const AnnoucementFormPage = (props: Props) => {
         let file: Blob[] = selectCoverImage;
         file.map(async (file) => {
           let res = await fileUploadHandler({ token, file });
-          console.log(res);
+          let content = "";
+          let imageUrl = res;
+          photoList.map(async (url, editAnnouncementID) => {
+            await updateAnnouncement({setIsLoading, editAnnouncementID, imageUrl, content})
+          })
+          console.log(file)
+          
+          console.log(imageUrl);
         })
         
-        
-        photoList.map(async (imageUrl, editAnnouncementID) => {
-          let content = ""
-          await updateAnnouncement({setIsLoading, editAnnouncementID, imageUrl, content})
-        })
-        
-        await getUserMySelf();
       }
     } catch (err) {
       console.error(err);

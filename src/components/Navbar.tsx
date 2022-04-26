@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
 
+import { BsPersonCircle } from "react-icons/bs";
+
 const Navbar = () => {
   const { isAuth, user, logout } = useAuth();
 
@@ -50,36 +52,40 @@ const Navbar = () => {
             >
               บทความ
             </Link>
-            <Link
-              to={"/editPost"}
-              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
-            >
-              แก้ไขบทความ
-            </Link>
-            <Link
-              to={"/profile"}
-              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
-            >
-              หน้าโปรไฟล์ Admin
-            </Link>
-            {/* <Link
-              to={"/detailAccount"}
-              className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white"
-            >
-              ข้อมูลส่วนตัว
-            </Link> */}
-
           </div>
-          <div className="text-gray-50 text-sm">
+          <div className="text-gray-50 text-sm flex flex-row items-center">
             {isAuth ? (
               <>
+                {user?.role === 1 && (
+                  <Link
+                    to={"/profile"}
+                    className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
+                  >
+                    หน้าบริหารจัดการ
+                  </Link>
+                )}
+                <Link to="/detailAccount">
+                  {user?.imageUrl ? (
+                    <img
+                      id="img-preview"
+                      src={user.imageUrl}
+                      className="object-cover w-10 h-10 mr-2 rounded-full border-2 border-amber-600"
+                      alt=""
+                    />
+                  ) : (
+                    <BsPersonCircle className="w-8 h-8 mr-2" />
+                  )}
+                </Link>
                 <span className="text-md mr-4">
-                  <Link to="detailAccount">
+                  <Link to="/detailAccount">
                     {user?.firstName} {user?.lastName}{" "}
                   </Link>{" "}
                 </span>
 
-                <button onClick={logout} className="inline-block text-sm px-2 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-amber-500 hover:bg-white mt-4 lg:mt-0">
+                <button
+                  onClick={logout}
+                  className="inline-block text-sm px-2 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-amber-500 hover:bg-white mt-4 lg:mt-0"
+                >
                   ออกจากระบบ
                 </button>
               </>

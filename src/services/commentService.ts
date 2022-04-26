@@ -61,7 +61,7 @@ type addCommentProps = {
   token: string;
   addData: {
     content: string;
-    visible: true;
+    visible: boolean;
     bloggerId: number;
     articleId: number;
   };
@@ -86,10 +86,8 @@ export const addComment = async ({
       config(token)
     )
     .then((res: any) => {
-      if (res.status === 200) {
-        console.log("add comment complete!");
-        response = res.data;
-      }
+      console.log("add comment complete!");
+      response = res.data;
     })
     .catch((err) => {
       console.error(`Comment addComment(): ${err.response.status}:` + err);
@@ -155,7 +153,7 @@ type deleteCommentProps = {
   commentId: number;
 };
 
-export const deleteComment = async ({
+export const DeleteComment = async ({
   token,
   setIsLoading,
   commentId,
@@ -170,15 +168,18 @@ export const deleteComment = async ({
     .then((res: any) => {
       if (res.status === 200) {
         console.log("delete comment complete!");
+        alert("ลบคอมเมนต์สำเร็จ");
         result = true;
       }
     })
     .catch((err) => {
+      alert("คุณไม่สามารถลบคอมเมนต์นี้ได้");
       console.error(`Comment deleteComment(): ${err.response.status}:` + err);
       result = false;
     })
     .finally(() => {
       setIsLoading(false);
     });
+  console.log(result);
   return result;
 };

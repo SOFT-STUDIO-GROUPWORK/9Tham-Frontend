@@ -1,7 +1,10 @@
+import IArticle from "./IArticle";
+import ITag from "./ITag";
+
 export default interface IArticleTags {
-  id: number;
-  article?: any;
+  id?: number;
   articleId: number;
-  tag?: any;
   tagId: number;
+  article?: IArticle;
+  tag?: ITag;
 }

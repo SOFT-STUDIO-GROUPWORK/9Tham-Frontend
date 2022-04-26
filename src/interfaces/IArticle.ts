@@ -1,3 +1,5 @@
+import IArticleTags from "./IArticleTags"
+
 export default interface IArticle {
     id?: number
     bloggerId: number
@@ -8,6 +10,7 @@ export default interface IArticle {
     description: string,
     published?: string
     viewCount?: number,
+    articleTags?: IArticleTags[],
 }
 
 export const initialArticle = {

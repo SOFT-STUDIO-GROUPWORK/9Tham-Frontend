@@ -22,7 +22,7 @@ export const getArticleTags = async ({ setIsLoading }: getArticleTagsProps) => {
     })
     .catch((err) => {
       console.error(
-        `ArticleTags getArticleTags(): ${err.response.status}:` + err
+        `ArticleTags getArticleTags(): ${err.status}:` + err
       );
     })
     .finally(() => {
@@ -32,15 +32,14 @@ export const getArticleTags = async ({ setIsLoading }: getArticleTagsProps) => {
   return response;
 };
 
-type getArticleTagsIdProps = {
+type getArticleTagProps = {
   setIsLoading: any;
   ArticleTagsId: number;
 };
-
-export const getArticleTagsId = async ({
+export const getArticleTag = async ({
   setIsLoading,
   ArticleTagsId,
-}: getArticleTagsIdProps) => {
+}: getArticleTagProps) => {
   setIsLoading(true);
   let response = null;
   await axios
@@ -50,7 +49,7 @@ export const getArticleTagsId = async ({
     })
     .catch((err) => {
       console.error(
-        `ArticleTagsId getArticleTagsId(): ${err.response.status}:` + err
+        `ArticleTags getArticleTag(): ${err.status}:` + err
       );
     })
     .finally(() => {
@@ -60,20 +59,17 @@ export const getArticleTagsId = async ({
   return response;
 };
 
-type addArticleTagsProps = {
+type addArticleTagProps = {
   setIsLoading: any;
   token: string;
-  addData: {
-    articleId: number;
-    tagId: number;
-  };
+  addData: IArticleTags
 };
 
-export const addArticleTags = async ({
+export const addArticleTag = async ({
   setIsLoading,
   token,
   addData,
-}: addArticleTagsProps) => {
+}: addArticleTagProps) => {
   setIsLoading(true);
   let response: any;
   await axios
@@ -86,13 +82,11 @@ export const addArticleTags = async ({
       config(token)
     )
     .then((res: any) => {
-      if (res.status === 200) {
-        console.log("add ArticleTags complete!");
-        response = res.data;
-      }
+      console.log("add ArticleTag complete!");
+      response = res.data;
     })
     .catch((err) => {
-      console.error(`ArticleTags addLike(): ${err.response.status}:` + err);
+      console.error(`ArticleTags addArticleTag(): ${err.status}:` + err);
       response = null;
     })
     .finally(() => {
@@ -102,7 +96,7 @@ export const addArticleTags = async ({
   return response;
 };
 
-type updateArticleTagsProps = {
+type updateArticleTagProps = {
   setIsLoading: any;
   token: string;
   editArticleTagsId: number;
@@ -112,12 +106,12 @@ type updateArticleTagsProps = {
   };
 };
 
-export const updateArticleTags = async ({
+export const updateArticleTag = async ({
   token,
   setIsLoading,
   editArticleTagsId,
   addData,
-}: updateArticleTagsProps) => {
+}: updateArticleTagProps) => {
   setIsLoading(true);
   let result = false;
   await axios
@@ -130,14 +124,12 @@ export const updateArticleTags = async ({
       config(token)
     )
     .then((res: any) => {
-      if (res.status === 200) {
-        console.log("update ArticleTags complete!");
-        result = true;
-      }
+      console.log("update ArticleTags complete!");
+      result = true;
     })
     .catch((err) => {
       console.error(
-        `ArticleTags updateArticleTags(): ${err.response.status}:` + err
+        `ArticleTags updateArticleTag(): ${err.response.status}:` + err
       );
       result = false;
     })
@@ -153,7 +145,7 @@ type deleteArticleTagsProps = {
   ArticleTagsId: number;
 };
 
-export const deleteArticleTags = async ({
+export const deleteArticleTag = async ({
   token,
   setIsLoading,
   ArticleTagsId,
@@ -166,14 +158,14 @@ export const deleteArticleTags = async ({
       config(token)
     )
     .then((res: any) => {
-      if (res.status === 200) {
-        console.log("delete ArticleTags complete!");
-        result = true;
-      }
+
+      console.log("delete ArticleTag complete!");
+      result = true;
+
     })
     .catch((err) => {
       console.error(
-        `ArticleTags deleteArticleTags(): ${err.response.status}:` + err
+        `ArticleTags deleteArticleTag(): ${err.response.status}:` + err
       );
       result = false;
     })

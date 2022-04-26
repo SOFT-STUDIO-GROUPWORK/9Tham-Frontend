@@ -36,7 +36,7 @@ const NewComment = ({ account, articleId }: Props) => {
     //getCommentId({ setIsLoading,res });
     console.log(addData.bloggerId);
     alert("คอมเมนต์สำเร็จ");
-    //navigate(0);
+    navigate(0);
   };
   return (
     <div className="flex flex-row w-full border-0 border-green-600 py-4">

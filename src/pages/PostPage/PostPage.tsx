@@ -15,6 +15,13 @@ import NewComment from "../../components/NewComment";
 
 import { deleteArticle } from "../../services/articlesService";
 
+import {
+  getComment,
+  getCommentId,
+  DeleteComment,
+  updateComment,
+  addComment,
+} from "../../services/commentService";
 import IComment from "../../interfaces/IComment";
 
 type Props = {};
@@ -34,6 +41,8 @@ const PostPage = (props: Props) => {
 
   const [comments, setComments] = useState<IComment[] | undefined>();
   //let allComment = {comments};
+  const [allcomments, setAllComments] = useState<IComment[] | undefined>();
+  //const allComments = getComment({ setIsLoading });
 
   useEffect(() => {
     getArticle({
@@ -45,6 +54,11 @@ const PostPage = (props: Props) => {
     });
 
     console.log(article);
+    getComment({ setIsLoading }).then((res: any) => {
+      if (res === null) return;
+      setAllComments(res);
+    });
+    //const allComment = getComment({ setIsLoading });
   }, [articleId]);
 
   const handleDeletePost = async () => {
@@ -105,7 +119,7 @@ const PostPage = (props: Props) => {
               </div>
               <hr className="w-full" />
               <div className="w-full">
-                {comments?.map((comment) => {
+                {allcomments?.map((comment) => {
                   return <Comment comment={comment} />;
                 })}
                 {/* <Comment account={user} comment={comments} />; */}

@@ -82,37 +82,39 @@ const ProfileTopBar = ({
           </>
         )}
         {isMore === true && (
-          <div className="absolute top-0 -right-36 bg-white border rounded border-gray-400 w-32">
+          <div className="absolute top-0 -right-40 bg-white border rounded border-gray-400 w-36">
             <button
               onClick={handleEditOnClick}
               className="flex flex-row items-center w-full h-8 hover:bg-gray-100"
             >
               <AiOutlineEdit className="mx-2 h-full" />
-              แก้ไขโพสต์
+              {isComment === false ? "แก้ไขโพสต์" : "แก้ไขคอมเมนต์"}
             </button>
-            <button
-              onClick={handleHideOnClick}
-              className="flex flex-row items-center  w-full h-8 hover:bg-gray-100"
-            >
-              {article?.visible === true ? (
-                <>
-                  <AiOutlineEyeInvisible className="mx-2 h-ful" />
-                  ซ่อนโพสต์
-                </>
-              ) : (
-                <>
-                  <AiOutlineEye className="mx-2 h-ful" />
-                  แสดงโพสต์
-                </>
-              )}
-            </button>
+            {isComment === false && (
+              <button
+                onClick={handleHideOnClick}
+                className="flex flex-row items-center  w-full h-8 hover:bg-gray-100"
+              >
+                {article?.visible === true ? (
+                  <>
+                    <AiOutlineEyeInvisible className="mx-2 h-ful" />
+                    ซ่อนโพสต์
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEye className="mx-2 h-ful" />
+                    แสดงโพสต์
+                  </>
+                )}
+              </button>
+            )}
             <hr />
             <button
               onClick={handleDeleteOnClick}
               className="flex flex-row items-center  w-full h-8 hover:bg-gray-100"
             >
               <BsTrash className="mx-2 h-ful" />
-              ลบโพส
+              {isComment === false ? "ลบโพสต์" : "ลบคอมเมนต์"}
             </button>
           </div>
         )}

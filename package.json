@@ -16,6 +16,7 @@
     "draftjs-to-html": "^0.9.1",
     "html-to-draftjs": "^1.5.0",
     "jquery": "^3.6.0",
+    "moment": "^2.29.3",
     "postcss": "^8.4.12",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

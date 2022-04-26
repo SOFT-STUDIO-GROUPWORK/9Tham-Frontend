@@ -41,6 +41,13 @@ export const ARTICLE_POST_URL = "api/Articles"
 export const ARTICLE_PUT_URL = "api/Articles/:id"
 export const ARTICLE_DELETE_URL = "api/Articles/:id"
 
+//ArticleTags
+export const ARTICLETAGS_GET_URL = "api/ArticleTags";
+export const ARTICLETAGS_POST_URL = "api/ArticleTags";
+export const ARTICLETAGS_GETID_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_PUT_URL = "api/ArticleTags/:id";
+export const ARTICLETAGS_DELETE_URL = "api/ArticleTags/:id";
+
 //Comment
 export const COMMENT_GET_URL = "api/Comments";
 export const COMMENT_POST_URL = "api/Comments";
@@ -75,3 +82,4 @@ export const ANNOUNCEMENT_POST_URL = "api/Announcement";
 export const ANNOUNCEMENT_GETID_URL = "api/Announcement/:id";
 export const ANNOUNCEMENT_PUT_URL = "api/Announcement/:id";
 export const ANNOUNCEMENT_DELETE_URL = "api/Announcement/:id";
+

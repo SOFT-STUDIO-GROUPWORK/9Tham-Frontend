@@ -46,8 +46,14 @@ const HomePage = (props: Props) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (pagination.search === "")
-      getPageArticles({ setIsLoading, setArticles, pagination, setPagination });
+    if (pagination.search === "") {
+      getPageArticles({
+        setIsLoading,
+        setArticles,
+        pagination,
+        setPagination,
+      });
+    }
   }, [pagination.currentPage, pagination.search]);
 
   //Pagination
@@ -144,11 +150,13 @@ const HomePage = (props: Props) => {
                 </div>
               ) : (
                 <>
-                  {articles.map((article, index) => (
-                    <React.Fragment key={index}>
-                      <Card article={article} />
-                    </React.Fragment>
-                  ))}
+                  {articles.map((article, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <Card article={article} />
+                      </React.Fragment>
+                    );
+                  })}
                 </>
               )}
             </>

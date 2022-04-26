@@ -1,13 +1,15 @@
-import IAccount from "../../../interfaces/IAccount";
-import ProfileTopBar from "./ProfileTopBar";
+import IAccount from "../interfaces/IAccount";
+
 import {
   getComment,
   getCommentId,
   deleteComment,
   updateComment,
   addComment,
-} from "../../../services/commentService";
-import IComment from "../../../interfaces/IComment";
+} from "../services/commentService";
+import IComment from "../interfaces/IComment";
+import ProfileTopBar from "./ProfileTopBar";
+
 type Props = {
   account: IAccount;
   comment: string;
@@ -16,7 +18,7 @@ type Props = {
 const Comment = ({ account, comment }: Props) => {
   return (
     <div className="w-full border-0 border-red-600 mt-6">
-      <ProfileTopBar account={account} isNewPost={false} />
+      <ProfileTopBar account={account} isNewPost={false} isComment={true} />
       <p className="pl-2">{comment}</p>
       <hr className="mt-8" />
     </div>

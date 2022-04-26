@@ -36,15 +36,17 @@ export const ARTICLES_GETALL_URL = "api/Articles";
 
 // old but work
 export const ARTICLES_GET_PAGE_URL = "api/Articles/:page/:perPage";
-export const ARTICLES_REVERT_GET_PAGE_URL = "api/Articles/reverse/:page/:perPage"
+export const ARTICLES_REVERT_GET_PAGE_URL =
+  "api/Articles/reverse/:page/:perPage";
 
 export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage";
-export const ARTICLES_REVERT_SEARCH_PAGE_URL = "api/Articles/:search/reverse/:page/:perPage"
+export const ARTICLES_REVERT_SEARCH_PAGE_URL =
+  "api/Articles/:search/reverse/:page/:perPage";
 
-export const ARTICLE_GET_URL = "api/Articles/:id"
-export const ARTICLE_POST_URL = "api/Articles"
-export const ARTICLE_PUT_URL = "api/Articles/:id"
-export const ARTICLE_DELETE_URL = "api/Articles/:id"
+export const ARTICLE_GET_URL = "api/Articles/:id";
+export const ARTICLE_POST_URL = "api/Articles";
+export const ARTICLE_PUT_URL = "api/Articles/:id";
+export const ARTICLE_DELETE_URL = "api/Articles/:id";
 
 //ArticleTags
 export const ARTICLETAGS_GET_URL = "api/ArticleTags";
@@ -75,6 +77,7 @@ export const LIKE_POST_URL = "api/Likes";
 export const LIKE_GETID_URL = "api/Likes/:id";
 export const LIKE_PUT_URL = "api/Likes/:id";
 export const LIKE_DELETE_URL = "api/Likes/:id";
+export const LIKE_TOGGLE_URL = "api/Likes/toggleLikes/:articleId/:bloggerId";
 
 //Announcement
 export const ANNOUNCEMENT_GET_URL = "api/Announcement";

@@ -6,6 +6,7 @@ import {
   LIKE_GETID_URL,
   LIKE_PUT_URL,
   LIKE_DELETE_URL,
+  LIKE_TOGGLE_URL,
 } from "../api/routes";
 
 type getLikeProps = {
@@ -167,4 +168,42 @@ export const deleteLike = async ({
       setIsLoading(false);
     });
   return result;
+};
+
+type toggleLikeProps = {
+  setIsLoading: any;
+  articleId: number;
+  bloggerId: number;
+  token: string;
+};
+
+export const toggleLike = async ({
+  setIsLoading,
+  articleId,
+  bloggerId,
+  token,
+}: toggleLikeProps) => {
+  setIsLoading(true);
+  let response = null;
+  await axios
+    .get(
+      LIKE_TOGGLE_URL.replace(":articleId", articleId.toString()).replace(
+        ":bloggerId",
+        bloggerId.toString()
+      ),
+      config(token)
+    )
+    .then((res) => {
+      response = res.data;
+    })
+    .catch((err) => {
+      console.error(
+        `CommentLikeId getCommentLikeId(): ${err.response.status}:` + err
+      );
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+  console.log(response);
+  return response;
 };

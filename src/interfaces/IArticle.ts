@@ -13,6 +13,7 @@ export default interface IArticle {
   articleTags?: IArticleTags[];
   blogger?: any;
   comments?: any;
+  likes?: any;
 }
 
 export const initialArticle = {

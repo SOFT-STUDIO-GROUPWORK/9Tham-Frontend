@@ -208,7 +208,7 @@ export const toggleCommentLike = async ({
     })
     .catch((err) => {
       console.error(
-        `CommentLikeId getCommentLikeId(): ${err.response.status}:` + err
+        `toggleCommentLike toggleCommentLike(): ${err.response.status}:` + err
       );
     })
     .finally(() => {

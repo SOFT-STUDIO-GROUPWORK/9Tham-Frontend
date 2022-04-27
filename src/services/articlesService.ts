@@ -9,6 +9,7 @@ import {
     ARTICLES_REVERT_GET_PAGE_URL,
     ARTICLES_SEARCH_PAGE_URL,
     ARTICLES_REVERT_SEARCH_PAGE_URL,
+    ARTICLES_TAG_PAGE_URL,
 } from "../api/routes";
 import IArticle from "../interfaces/IArticle";
 import IPagination from "../interfaces/IPagination";
@@ -203,6 +204,65 @@ export const getSearchOldArticles = async ({
             setIsLoading(false);
         });
 };
+
+
+
+
+// tags id quiry
+type getPageTagsArticlesProps = {
+    setIsLoading: any;
+    setArticles: any;
+    tagId: number;
+    pagination: IPagination;
+    setPagination: any;
+};
+export const getTagPageArticles = async ({
+    setIsLoading,
+    setArticles,
+    tagId,
+    pagination,
+    setPagination,
+}: getPageTagsArticlesProps) => {
+    setIsLoading(true);
+    await axios
+        .get(
+            ARTICLES_TAG_PAGE_URL.replace(":id", tagId.toString())
+                .replace(":page", pagination.currentPage.toString())
+                .replace(":perPage", pagination.perPage.toString())
+        )
+        .then(async (res) => {
+            setArticles(res.data.articles);
+            setPagination((prev: IPagination) => ({
+                ...prev,
+                firstPage: res.data.firstPage,
+                lastPage: res.data.lastPage,
+                currentPage: res.data.currentPage,
+                currentTotal: res.data.articles.length,
+                total: res.data.totalArticles
+            }));
+            await getArticles({ setIsLoading })
+                .then((res: any) => {
+                    setPagination((prev: IPagination) => ({
+                        ...prev,
+                        total: res.length,
+                    }));
+                })
+                .catch((err) => {
+                    console.error(
+                        `Articles getPageTagArticles2(): ${err.status}:` + err
+                    );
+                });
+        })
+        .catch((err) => {
+            console.error(
+                `Articles getPageTagArticles1(): ${err.status}:` + err
+            );
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
+
 
 type getArticleProps = {
     setIsLoading: any;

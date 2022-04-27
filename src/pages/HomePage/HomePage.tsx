@@ -15,6 +15,7 @@ import {
   getSearchOldArticles,
   getArticle,
   getPageOldArticles,
+  getTagPageArticles,
 } from "../../services/articlesService";
 import { useEffect, useState } from "react";
 import IArticle from "../../interfaces/IArticle";
@@ -52,6 +53,7 @@ const HomePage = (props: Props) => {
 
   const [tags, setTags] = useState<ITag[]>();
   const [selectSortTime, setSelectSortTime] = useState("ล่าสุด");
+  const [selectTagId, setSelectTagId] = useState<number | undefined>();
   //test
   const [banner, setBanner] = useState<any>([]);
   useEffect(() => {
@@ -164,6 +166,17 @@ const HomePage = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (selectTagId !== undefined)
+      getTagPageArticles({
+        setIsLoading,
+        setArticles,
+        tagId: selectTagId,
+        pagination,
+        setPagination,
+      });
+  }, [selectTagId]);
+
   return (
     <div className="container mx-auto">
       <div
@@ -248,7 +261,7 @@ const HomePage = (props: Props) => {
           {/* Types */}
           <SelectorTags
             title="หมวดหมู่:"
-            onChange={(e: any) => e.target.value}
+            onChange={(e: any) => setSelectTagId(e.target.value)}
             options={tags}
           />
         </div>

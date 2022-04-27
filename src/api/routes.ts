@@ -42,6 +42,8 @@ export const ARTICLES_REVERT_GET_PAGE_URL =
 export const ARTICLES_SEARCH_PAGE_URL = "api/Articles/:search/:page/:perPage";
 export const ARTICLES_REVERT_SEARCH_PAGE_URL =
   "api/Articles/:search/reverse/:page/:perPage";
+  export const ARTICLES_TAG_PAGE_URL =
+  "api/Tags/:id/:page/:perPage/articles";
 
 export const ARTICLE_GET_URL = "api/Articles/:id";
 export const ARTICLE_POST_URL = "api/Articles";

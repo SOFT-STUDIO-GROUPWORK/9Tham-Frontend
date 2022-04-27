@@ -24,6 +24,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage";
 //React Router v6 -> change "Switch" to "Routes"
 
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import AnnoucementPage from "./pages/AnnoucementPage/AnnoucementPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
 
             <Route path="/Profile" element={<ProfilePage />} />
             {/* /:id */}
+            <Route path="/Annoucement" element={<AnnoucementPage />} />
 
             <Route element={<AuthRoutes />}>
               <Route path="/DetailAccount" element={<DetailAccountPage />} />

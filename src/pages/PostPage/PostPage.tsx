@@ -70,7 +70,7 @@ const PostPage = (props: Props) => {
       visible: !article.visible,
     };
     await updateArticle({ token, setIsLoading, editArticleId, editFormData });
-    alert("เปลี่ยนสถานะโพสต์สำเร็จ");
+    alert("เปลี่ยนสถานะบทความสำเร็จ");
     await getArticle({
       articleId,
       setIsLoading,
@@ -84,11 +84,11 @@ const PostPage = (props: Props) => {
     let articleId = article?.id!;
     deleteArticle({ token, setIsLoading, articleId })
       .then((res) => {
-        alert("ลบโพสต์สำเร็จ");
+        alert("ลบบทความสำเร็จ");
         navigate(-1);
       })
       .catch((err) => {
-        alert("ไม่สามารถลบโพสต์ได้ กรุณาลองใหม่อีกครั้ง");
+        alert("ไม่สามารถลบบทความได้ กรุณาลองใหม่อีกครั้ง");
       });
   };
 

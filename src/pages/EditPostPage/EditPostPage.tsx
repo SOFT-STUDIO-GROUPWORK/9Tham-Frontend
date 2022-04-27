@@ -122,7 +122,7 @@ const EditPostPage = (props: Props) => {
           setEditorState(editorState);
           setVisible(article.visible);
         } else {
-          alert("ไม่สามารถโหลดโพสต์ได้");
+          alert("ไม่สามารถโหลดบทความได้");
           navigate("/post/" + articleId.toString());
         }
       });
@@ -169,10 +169,10 @@ const EditPostPage = (props: Props) => {
               };
               console.log(addData);
               await addArticleTag({ setIsLoading, token, addData });
-              alert("อัพโพสต์สำเร็จ ไปยังหน้าโพสต์");
+              alert("อัพบทความสำเร็จ ไปยังหน้าบทความ");
               navigate("/");
             } else {
-              alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+              alert("อัพบทความไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
             }
           })
           .catch((err) => {
@@ -198,10 +198,10 @@ const EditPostPage = (props: Props) => {
                 editArticleTagsId: articleTagId!,
                 addData: editData,
               });
-              alert("อัพเดตโพสต์สำเร็จ ไปยังหน้าโพสต์");
+              alert("อัพเดตบทความสำเร็จ ไปยังหน้าบทความ");
               navigate("/post/" + articleId.toString());
             } else {
-              alert("อัพโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+              alert("อัพบทความไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
             }
           })
           .catch((err) => {
@@ -485,7 +485,7 @@ const EditPostPage = (props: Props) => {
 
               <div className="w-full flex flex-col items-center gap-5">
                 <div className="w-full flex flex-col items-center my-8">
-                  <h4 className="mb-5">รูปแบบการโพสต์</h4>
+                  <h4 className="mb-5">รูปแบบบทความ</h4>
                   <ul className="flex flex-row gap-5">
                     <li className="relative">
                       <input
@@ -528,7 +528,7 @@ const EditPostPage = (props: Props) => {
                   }}
                   // onClick={fileUploadHandler}
                   className="w-2/5 rounded-full"
-                  children="ตัวอย่างโพสต์ที่แสดง"
+                  children="ตัวอย่างบทความที่แสดง"
                   color="amber"
                   mode="outline"
                 /> */}
@@ -536,7 +536,7 @@ const EditPostPage = (props: Props) => {
                   <Button
                     onClick={createPost}
                     className="w-2/5 py-3 rounded-full"
-                    children="โพสต์"
+                    children="บทความ"
                     color="amber"
                   />
                 )}
@@ -544,7 +544,7 @@ const EditPostPage = (props: Props) => {
                   <Button
                     onClick={createPost}
                     className="w-2/5 py-3 rounded-full"
-                    children="อัพเดตโพสต์"
+                    children="อัพเดตบทความ"
                     color="green"
                   />
                 )}

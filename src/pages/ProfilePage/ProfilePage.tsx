@@ -100,7 +100,7 @@ const ProfilePage = (props: Props) => {
               }
               onClick={() => toggleTab(1)}
             >
-              บทความ
+              บทความที่แสดง
             </button>
             <button
               className={
@@ -110,7 +110,7 @@ const ProfilePage = (props: Props) => {
               }
               onClick={() => toggleTab(2)}
             >
-              ฉบับร่าง
+              บทความที่ซ่อน
             </button>
           </div>
           <div className="w-full content-tabs">
@@ -161,7 +161,7 @@ const ProfilePage = (props: Props) => {
                   {articles.filter((article) => article.visible === false)
                     .length === 0 ? (
                     <div className="flex flex-row justify-center items-center m-16 text-white">
-                      ไม่มีเนื้อหา Post ฉบับร่าง
+                      ไม่มีเนื้อหา Post บทความที่ซ่อน
                     </div>
                   ) : (
                     <>

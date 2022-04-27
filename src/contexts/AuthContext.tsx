@@ -95,8 +95,14 @@ export const AuthProvider = ({ children }: Children) => {
             return isAuth;
           },
           (err) => {
+            console.log(err.response.status);
+            if (err.response.status) {
+              alert("บัญชีผู้ใช้ถูกแบน กรุณาติดต่อผู้ดูแลระบบ");
+            } else {
+              alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
+            }
             setIsAuth(false);
-            alert("ชื่อผู้ใช้งาน/รหัสผ่าน ไม่ถูกต้อง");
+
             throw Object.assign(new Error(`${err.response.status}:` + err));
           }
         );

@@ -76,7 +76,7 @@ const Navbar = () => {
                     <BsPersonCircle className="w-8 h-8 mr-2" />
                   )}
                 </Link>
-                <span className="text-md mr-4">
+                <span className=" mr-4 text-sm">
                   <Link to="/detailAccount">
                     {user?.firstName} {user?.lastName}{" "}
                   </Link>{" "}

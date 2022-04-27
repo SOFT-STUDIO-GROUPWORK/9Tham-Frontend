@@ -47,10 +47,10 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to={"/post"}
+              to={"/annoucement"}
               className=" mt-4 lg:inline-block lg:mt-0 text-gray-50 hover:text-white mr-4"
             >
-              บทความ
+              ประชาสัมพันธ์
             </Link>
           </div>
           <div className="text-gray-50 text-sm flex flex-row items-center">
@@ -76,7 +76,7 @@ const Navbar = () => {
                     <BsPersonCircle className="w-8 h-8 mr-2" />
                   )}
                 </Link>
-                <span className="text-md mr-4">
+                <span className=" mr-4 text-sm">
                   <Link to="/detailAccount">
                     {user?.firstName} {user?.lastName}{" "}
                   </Link>{" "}

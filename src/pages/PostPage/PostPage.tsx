@@ -70,7 +70,7 @@ const PostPage = (props: Props) => {
       visible: !article.visible,
     };
     await updateArticle({ token, setIsLoading, editArticleId, editFormData });
-    alert("เปลี่ยนสถานะโพสต์สำเร็จ");
+    alert("เปลี่ยนสถานะบทความสำเร็จ");
     await getArticle({
       articleId,
       setIsLoading,
@@ -84,11 +84,11 @@ const PostPage = (props: Props) => {
     let articleId = article?.id!;
     deleteArticle({ token, setIsLoading, articleId })
       .then((res) => {
-        alert("ลบโพสต์สำเร็จ");
+        alert("ลบบทความสำเร็จ");
         navigate(-1);
       })
       .catch((err) => {
-        alert("ไม่สามารถลบโพสต์ได้ กรุณาลองใหม่อีกครั้ง");
+        alert("ไม่สามารถลบบทความได้ กรุณาลองใหม่อีกครั้ง");
       });
   };
 
@@ -120,7 +120,7 @@ const PostPage = (props: Props) => {
                 {article?.title}
               </h2>
               <div className="w-full pb-6 pt-3">
-                <button className="btn bg-amber-600 rounded-full text-white px-2 py-1">
+                <button className="btn bg-amber-600 rounded-lg text-white px-2 py-1 max-w-fit" style={{minWidth:"80px"}}>
                   {article?.articleTags?.[0]?.tag?.name}
                 </button>
               </div>
@@ -143,7 +143,7 @@ const PostPage = (props: Props) => {
                 {comments?.map((comment, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <Comment comment={comment} />
+                      <Comment comment={comment} article={article!} />
                     </React.Fragment>
                   );
                 })}

@@ -52,14 +52,13 @@ const ProfilePage = (props: Props) => {
             ) : (
               <BsPersonCircle className="w-8 h-8 mr-2" />
             )}
-
           </div>
         </div>
         <div className="text-center mt-6 text-3xl font-bold text-fBlack">
           {user?.firstName} {user?.lastName}
         </div>
         <div className="border border-fGrey mt-6 border-opacity-10" />
-        <div className="flex justify-between px-10">
+        <div className="flex justify-center px-10">
           <div className="flex items-center space-x-4">
             <Link className="w-full min-w-fit" to={"/editPost"}>
               <button className="h-10 m-2 px-4 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
@@ -81,14 +80,6 @@ const ProfilePage = (props: Props) => {
                 จัดการหมวดหมู่
               </button>
             </Link>
-          </div>
-          <div className="flex items-center space-x-2">
-            <img
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/yl/r/tmaz0VO75BB.png?_nc_eui2=AeEuBM1eJuum2Q_T_tBTcfs0PeqkNBZWYnQ96qQ0FlZidMXgaqBeeoDM_h2m5VoxD9yhSPYbeUi25vsW0WHMMmlw"
-              alt=""
-              height="16"
-              width="16"
-            ></img>
             <Link className="w-full min-w-fit" to={"/detailAccount"}>
               <button className="w-36 h-10 bg-amber-600 hover:bg-amber-800 rounded-3xl text-white text-md">
                 แก้ไขโปรไฟล์
@@ -109,7 +100,7 @@ const ProfilePage = (props: Props) => {
               }
               onClick={() => toggleTab(1)}
             >
-              บทความ
+              บทความที่แสดง
             </button>
             <button
               className={
@@ -119,7 +110,7 @@ const ProfilePage = (props: Props) => {
               }
               onClick={() => toggleTab(2)}
             >
-              ฉบับร่าง
+              บทความที่ซ่อน
             </button>
           </div>
           <div className="w-full content-tabs">
@@ -170,7 +161,7 @@ const ProfilePage = (props: Props) => {
                   {articles.filter((article) => article.visible === false)
                     .length === 0 ? (
                     <div className="flex flex-row justify-center items-center m-16 text-white">
-                      ไม่มีเนื้อหา Post ฉบับร่าง
+                      ไม่มีเนื้อหา Post บทความที่ซ่อน
                     </div>
                   ) : (
                     <>

@@ -4,7 +4,7 @@ import { ANNOUNCEMENT_DELETE_URL, ANNOUNCEMENT_GETID_URL, ANNOUNCEMENT_GET_URL, 
 type getAnnouncementProps = {
     setIsLoading: any;
   };
-  
+
   export const getAnnouncement = async ({ setIsLoading }: getAnnouncementProps) => {
     setIsLoading(true);
     let response = null;
@@ -29,7 +29,7 @@ type getAnnouncementIdProps = {
     setIsLoading: any;
     AnnouncementId: number;
   };
-  
+
   export const getAnnouncementId = async ({
     setIsLoading,
     AnnouncementId,
@@ -103,6 +103,9 @@ export const addAnnouncement = async ({
     content,
   }: updateAnnouncementProps) => {
     setIsLoading(true);
+
+    console.log(editAnnouncementID,imageUrl,content)
+
     let result = false;
     console.log(ANNOUNCEMENT_PUT_URL.replace(":id", editAnnouncementID.toString()));
     await axios

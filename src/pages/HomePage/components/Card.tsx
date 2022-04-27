@@ -25,7 +25,7 @@ const Card = ({ article }: Props) => {
 
   return (
     <Link to={"/post/" + article.id?.toString()}>
-      <div className="p-1 px-1.5 flex w-full items-center bg-white rounded-lg border shadow-sm flex-row hover:bg-gray-100 ">
+      <div className="p-1 px-1.5 flex w-full items-center bg-white rounded-lg border shadow-sm flex-row hover:bg-gray-100 mb-1">
         {/* left */}
         <div className="flex flex-col justify-between">
           <img
@@ -42,7 +42,7 @@ const Card = ({ article }: Props) => {
               {article.title}
             </h4>
             <p className="mb-3 text-gray-700 ">{article.description}</p>
-            <button className="btn bg-amber-600 rounded-full text-white px-2 py-1 max-w-fit">
+            <button className="btn bg-amber-600 rounded-lg text-white px-2 py-1 max-w-fit" style={{minWidth:"80px"}}>
               {article.articleTags?.[0]?.tag?.name}
             </button>
           </div>

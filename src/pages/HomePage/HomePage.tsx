@@ -10,9 +10,12 @@ import IPagination, {
 } from "../../interfaces/IPagination";
 
 import {
-  getPageArticles,
-  getSearchArticles,
+  getPageNewArticles,
+  getSearchNewArticles,
+  getSearchOldArticles,
   getArticle,
+  getPageOldArticles,
+  getTagPageArticles,
 } from "../../services/articlesService";
 import { useEffect, useState } from "react";
 import IArticle from "../../interfaces/IArticle";
@@ -24,6 +27,7 @@ import { getTags } from "../../services/tagsService";
 import SelectorTags from "./components/SelectorTags";
 import SelectorPublishs from "./components/SelectorPublishs";
 import { getAnnouncement } from "../AnnoucementFormPage/services/announcementServices";
+import { Link } from "react-router-dom";
 
 type Props = {};
 const sortOptions: any[] = ["ล่าสุด", "เก่าสุด"];
@@ -38,10 +42,10 @@ function testClick() {
   console.log("test");
 }
 
-interface Iannouncement{
-  id: number,
-  imageUrl: string,
-  content: string,
+interface Iannouncement {
+  id: number;
+  imageUrl: string;
+  content: string;
 }
 const HomePage = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,14 +53,15 @@ const HomePage = (props: Props) => {
 
   const [tags, setTags] = useState<ITag[]>();
   const [selectSortTime, setSelectSortTime] = useState("ล่าสุด");
+  const [selectTagId, setSelectTagId] = useState<number | undefined>();
   //test
   const [banner, setBanner] = useState<any>([]);
   useEffect(() => {
-    if (isLoading===false) {
-      setBanner(getAnnouncement({setIsLoading}));
-      }
-  },[])
-  console.log("banner is" + banner);
+    if (isLoading === false) {
+      setBanner(getAnnouncement({ setIsLoading }));
+    }
+  }, []);
+  // console.log("banner is" + banner);
 
   //pagination
   const [pagination, setPagination] = useState<IPagination>(
@@ -67,19 +72,35 @@ const HomePage = (props: Props) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getAnnouncement({setIsLoading}).then(
-      async (res: any) => {
-        console.log(res);
-        setBanner(res);
-      }
-    );
-    console.log("banner");
-    console.log(banner);
-  }, [])
+    getAnnouncement({ setIsLoading }).then(async (res: any) => {
+      // console.log(res);
+      setBanner(res);
+    });
+    // console.log("banner");
+    // console.log(banner);
+  }, []);
 
   useEffect(() => {
-    if (pagination.search === "")
-      getPageArticles({ setIsLoading, setArticles, pagination, setPagination });
+    if (pagination.search === "") {
+      //not search
+      if (selectSortTime === "ล่าสุด") {
+        getPageNewArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("ล่าสุด ไม่ search");
+      } else {
+        getPageOldArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("เก่า ไม่ search");
+      }
+    }
   }, [pagination.currentPage, pagination.search]);
 
   useEffect(() => {
@@ -105,21 +126,56 @@ const HomePage = (props: Props) => {
 
   const handleSearchOnClick = (event: any) => {
     if (pagination.search === "") {
-      getPageArticles({
-        setIsLoading,
-        setArticles,
-        pagination,
-        setPagination,
-      });
+      //not search
+      if (selectSortTime === "ล่าสุด") {
+        getPageNewArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("ใหม่ ไม่ search");
+      } else {
+        getPageOldArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("เก่า ไม่ search");
+      }
     } else {
-      getSearchArticles({
-        setIsLoading,
-        setArticles,
-        pagination,
-        setPagination,
-      });
+      //search
+      if (selectSortTime === "ล่าสุด") {
+        getSearchNewArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("ใหม่ search");
+      } else {
+        getSearchOldArticles({
+          setIsLoading,
+          setArticles,
+          pagination,
+          setPagination,
+        });
+        console.log("เก่า ไม่ search");
+      }
     }
   };
+
+  useEffect(() => {
+    if (selectTagId !== undefined)
+      getTagPageArticles({
+        setIsLoading,
+        setArticles,
+        tagId: selectTagId,
+        pagination,
+        setPagination,
+      });
+  }, [selectTagId]);
 
   return (
     <div className="container mx-auto">
@@ -129,7 +185,7 @@ const HomePage = (props: Props) => {
       >
         {/* content start*/}
         {/* Banner */}
-        <div className="border-0 border-red-200 w-full h-60 mt-24">
+        <div className="border-0 border-red-200 w-full h-60 mt-20">
           <Carousel
             autoPlay
             infiniteLoop
@@ -138,29 +194,31 @@ const HomePage = (props: Props) => {
             showThumbs={false}
             showStatus={false}
           >
-            {banner.length > 0 ? (banner.map((Obj:any) => {
-              // console.log(imageUrl);
-              return (
-                <div className="h-60">
-                  <img
-                    className="object-cover h-60"
-                    src={Obj.imageUrl}
-                    alt={Obj.imageUrl}
-                  />
-                </div>
-              );
-            })) : (MOCK_BANNER.map((Obj:any) => {
-              // console.log(imageUrl);
-              return (
-                <div className="h-60">
-                  <img
-                    className="object-cover h-60"
-                    src={Obj.imageUrl}
-                    alt={Obj.imageUrl}
-                  />
-                </div>
-              );
-            }))}
+            {banner.length > 0
+              ? banner.map((Obj: any) => {
+                  // console.log(imageUrl);
+                  return (
+                    <div className="h-64">
+                      <img
+                        className="object-cover h-64"
+                        src={Obj.imageUrl}
+                        alt={Obj.imageUrl}
+                      />
+                    </div>
+                  );
+                })
+              : MOCK_BANNER.map((Obj: any) => {
+                  // console.log(imageUrl);
+                  return (
+                    <div className="h-64">
+                      <img
+                        className="object-cover h-64"
+                        src={Obj.imageUrl}
+                        alt={Obj.imageUrl}
+                      />
+                    </div>
+                  );
+                })}
           </Carousel>
         </div>
 
@@ -176,13 +234,32 @@ const HomePage = (props: Props) => {
           <SelectorPublishs
             title="เรียงตาม:"
             value={selectSortTime}
-            onChange={(e: any) => setSelectSortTime(e.target.value)}
+            onChange={(e: any) => {
+              if (e.target.value === "เก่าสุด") {
+                console.log("เก่าสุด");
+                getPageOldArticles({
+                  setIsLoading,
+                  setArticles,
+                  pagination,
+                  setPagination,
+                });
+              } else {
+                console.log("ล่าสุด");
+                getPageNewArticles({
+                  setIsLoading,
+                  setArticles,
+                  pagination,
+                  setPagination,
+                });
+              }
+              setSelectSortTime(e.target.value);
+            }}
             options={sortOptions}
           />
           {/* Types */}
           <SelectorTags
             title="หมวดหมู่:"
-            onChange={(e: any) => e.target.value}
+            onChange={(e: any) => setSelectTagId(e.target.value)}
             options={tags}
           />
         </div>

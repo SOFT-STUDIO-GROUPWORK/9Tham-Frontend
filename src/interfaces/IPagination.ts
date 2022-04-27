@@ -22,7 +22,7 @@ export const initialPaginationHomePage = {
     firstPage: 1,
     lastPage: 1,
     currentPage: 1,
-    perPage: 8,
+    perPage: 6,
     currentTotal: 0,
     total: 0,
     search: "",

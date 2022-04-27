@@ -59,7 +59,7 @@ const ProfileTopBar = ({
   const [comment, setComment] = useState<IComment | null>();
   const [isLike, setIsLike] = useState<boolean>(false);
   const [likeAmounts, setLikeAmounts] = useState<number>(0);
-  const [isUser, setIsUser] = useState<boolean>(false);
+  // const [isUser, setIsUser] = useState<boolean>(false);
   const [dateFormat, setDateFormat] = useState<string>("");
 
   useEffect(() => {
@@ -93,11 +93,11 @@ const ProfileTopBar = ({
       }
     });
 
-    if (user.role === 0) {
-      setIsUser(true);
-    } else {
-      setIsUser(false);
-    }
+    // if (user.role === 0) {
+    //   setIsUser(true);
+    // } else {
+    //   setIsUser(false);
+    // }
   }, [article?.published, commentId, isComment]);
 
   const handleLike = async () => {
@@ -205,7 +205,7 @@ const ProfileTopBar = ({
               className="flex flex-row items-center w-full h-8 hover:bg-gray-100"
             >
               <AiOutlineEdit className="mx-2 h-full" />
-              {isComment === false ? "แก้ไขโพสต์" : "แก้ไขคอมเมนต์"}
+              {isComment === false ? "แก้ไขบทความ" : "แก้ไขคอมเมนต์"}
             </button>
             {isComment === false && (
               <button
@@ -215,12 +215,12 @@ const ProfileTopBar = ({
                 {article?.visible === true ? (
                   <>
                     <AiOutlineEyeInvisible className="mx-2 h-full" />
-                    ซ่อนโพสต์
+                    ซ่อนบทความ
                   </>
                 ) : (
                   <>
                     <AiOutlineEye className="mx-2 h-full" />
-                    แสดงโพสต์
+                    แสดงบทความ
                   </>
                 )}
               </button>
@@ -231,7 +231,7 @@ const ProfileTopBar = ({
               className="flex flex-row items-center  w-full h-8 hover:bg-gray-100"
             >
               <BsTrash className="mx-2 h-full" />
-              {isComment === false ? "ลบโพสต์" : "ลบคอมเมนต์"}
+              {isComment === false ? "ลบบทความ" : "ลบคอมเมนต์"}
             </button>
           </div>
         )}

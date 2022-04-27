@@ -120,7 +120,7 @@ const PostPage = (props: Props) => {
                 {article?.title}
               </h2>
               <div className="w-full pb-6 pt-3">
-                <button className="btn bg-amber-600 rounded-full text-white px-2 py-1">
+                <button className="btn bg-amber-600 rounded-lg text-white px-2 py-1 max-w-fit" style={{minWidth:"80px"}}>
                   {article?.articleTags?.[0]?.tag?.name}
                 </button>
               </div>

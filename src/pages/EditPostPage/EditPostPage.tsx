@@ -49,6 +49,7 @@ import ProfileTopBar from "../../components/ProfileTopBar";
 import { useParams } from "react-router-dom";
 import IComment from "../../interfaces/IComment";
 import IArticleTags from "../../interfaces/IArticleTags";
+import ReactLoading from "react-loading";
 
 type Props = {};
 
@@ -342,7 +343,9 @@ const EditPostPage = (props: Props) => {
   return (
     <>
       {isLoading ? (
-        <>Loading</>
+        <div className="flex flex-row items-center justify-center h-screen w-screen">
+          <ReactLoading type={"bubbles"} height={'3%'} width={'3%'} color={"#f59e0b"} />
+        </div>
       ) : (
         <>
           <div className="container mx-auto ">

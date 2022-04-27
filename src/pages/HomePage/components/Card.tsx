@@ -42,7 +42,7 @@ const Card = ({ article }: Props) => {
               {article.title}
             </h4>
             <p className="mb-3 text-gray-700 ">{article.description}</p>
-            <button className="btn bg-amber-600 rounded-full text-white px-2 py-1 max-w-fit">
+            <button className="btn bg-amber-600 rounded-lg text-white px-2 py-1 max-w-fit" style={{minWidth:"80px"}}>
               {article.articleTags?.[0]?.tag?.name}
             </button>
           </div>

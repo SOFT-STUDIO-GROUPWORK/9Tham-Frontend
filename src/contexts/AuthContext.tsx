@@ -2,6 +2,7 @@ import { Result } from "postcss";
 import React, { ReactChild, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { config } from "../api/axios";
+import ReactLoading from "react-loading";
 import {
   saveLocalStorage,
   loadLocalStorage,
@@ -20,7 +21,7 @@ import {
   USER_CHANGEPASS_URL,
   USER_GETMYSELF_URL,
 } from "../api/routes";
-import IAccount, {initialAccount} from "../interfaces/IAccount";
+import IAccount, { initialAccount } from "../interfaces/IAccount";
 
 interface IAuthContext {
   isAuth: boolean;
@@ -241,8 +242,13 @@ export const AuthProvider = ({ children }: Children) => {
     <AuthContext.Provider value={passValue}>
       {isLoading ? (
         <>
-          <div className="flex flex-row items-center justify-center w-screen h-screen">
-            loading...
+          <div className="flex flex-row items-center justify-center h-screen w-screen">
+            <ReactLoading
+              type={"bubbles"}
+              height={"3%"}
+              width={"3%"}
+              color={"#f59e0b"}
+            />
           </div>
         </>
       ) : (

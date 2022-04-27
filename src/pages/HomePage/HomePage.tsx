@@ -83,14 +83,14 @@ const HomePage = (props: Props) => {
   useEffect(() => {
     if (pagination.search === "") {
       //not search
-      if (selectSortTime === "ใหม่สุด") {
+      if (selectSortTime === "ล่าสุด") {
         getPageNewArticles({
           setIsLoading,
           setArticles,
           pagination,
           setPagination,
         });
-        console.log("ใหม่ ไม่ search");
+        console.log("ล่าสุด ไม่ search");
       } else {
         getPageOldArticles({
           setIsLoading,
@@ -127,7 +127,7 @@ const HomePage = (props: Props) => {
   const handleSearchOnClick = (event: any) => {
     if (pagination.search === "") {
       //not search
-      if (selectSortTime === "ใหม่สุด") {
+      if (selectSortTime === "ล่าสุด") {
         getPageNewArticles({
           setIsLoading,
           setArticles,
@@ -146,7 +146,7 @@ const HomePage = (props: Props) => {
       }
     } else {
       //search
-      if (selectSortTime === "ใหม่สุด") {
+      if (selectSortTime === "ล่าสุด") {
         getSearchNewArticles({
           setIsLoading,
           setArticles,
@@ -186,42 +186,40 @@ const HomePage = (props: Props) => {
         {/* content start*/}
         {/* Banner */}
         <div className="border-0 border-red-200 w-full h-60 mt-24">
-          <Link to={"/annoucement"}>
-            <Carousel
-              autoPlay
-              infiniteLoop
-              swipeable
-              emulateTouch
-              showThumbs={false}
-              showStatus={false}
-            >
-              {banner.length > 0
-                ? banner.map((Obj: any) => {
-                    // console.log(imageUrl);
-                    return (
-                      <div className="h-60">
-                        <img
-                          className="object-cover h-60"
-                          src={Obj.imageUrl}
-                          alt={Obj.imageUrl}
-                        />
-                      </div>
-                    );
-                  })
-                : MOCK_BANNER.map((Obj: any) => {
-                    // console.log(imageUrl);
-                    return (
-                      <div className="h-60">
-                        <img
-                          className="object-cover h-60"
-                          src={Obj.imageUrl}
-                          alt={Obj.imageUrl}
-                        />
-                      </div>
-                    );
-                  })}
-            </Carousel>
-          </Link>
+          <Carousel
+            autoPlay
+            infiniteLoop
+            swipeable
+            emulateTouch
+            showThumbs={false}
+            showStatus={false}
+          >
+            {banner.length > 0
+              ? banner.map((Obj: any) => {
+                  // console.log(imageUrl);
+                  return (
+                    <div className="h-60">
+                      <img
+                        className="object-cover h-60"
+                        src={Obj.imageUrl}
+                        alt={Obj.imageUrl}
+                      />
+                    </div>
+                  );
+                })
+              : MOCK_BANNER.map((Obj: any) => {
+                  // console.log(imageUrl);
+                  return (
+                    <div className="h-60">
+                      <img
+                        className="object-cover h-60"
+                        src={Obj.imageUrl}
+                        alt={Obj.imageUrl}
+                      />
+                    </div>
+                  );
+                })}
+          </Carousel>
         </div>
 
         {/* TopBar start*/}
@@ -246,7 +244,7 @@ const HomePage = (props: Props) => {
                   setPagination,
                 });
               } else {
-                console.log("ใหม่สุด");
+                console.log("ล่าสุด");
                 getPageNewArticles({
                   setIsLoading,
                   setArticles,

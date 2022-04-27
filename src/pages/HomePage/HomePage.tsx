@@ -185,7 +185,7 @@ const HomePage = (props: Props) => {
       >
         {/* content start*/}
         {/* Banner */}
-        <div className="border-0 border-red-200 w-full h-60 mt-24">
+        <div className="border-0 border-red-200 w-full h-60 mt-20">
           <Carousel
             autoPlay
             infiniteLoop
@@ -198,9 +198,9 @@ const HomePage = (props: Props) => {
               ? banner.map((Obj: any) => {
                   // console.log(imageUrl);
                   return (
-                    <div className="h-60">
+                    <div className="h-64">
                       <img
-                        className="object-cover h-60"
+                        className="object-cover h-64"
                         src={Obj.imageUrl}
                         alt={Obj.imageUrl}
                       />
@@ -210,9 +210,9 @@ const HomePage = (props: Props) => {
               : MOCK_BANNER.map((Obj: any) => {
                   // console.log(imageUrl);
                   return (
-                    <div className="h-60">
+                    <div className="h-64">
                       <img
-                        className="object-cover h-60"
+                        className="object-cover h-64"
                         src={Obj.imageUrl}
                         alt={Obj.imageUrl}
                       />

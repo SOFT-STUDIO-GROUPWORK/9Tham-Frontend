@@ -54,6 +54,8 @@ const Comment = ({ comment, article }: Props) => {
       editCommentId: comment?.id!,
       addData,
     });
+    setIsEdit(false);
+    navigate(0)
   };
 
   return (
